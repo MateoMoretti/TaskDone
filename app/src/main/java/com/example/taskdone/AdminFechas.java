@@ -62,5 +62,22 @@ public class AdminFechas {
         return dateFormat.format(cal.getTime());
     }
 
+    public static String getFechaHoy(){
+
+        final Calendar c = Calendar.getInstance();
+
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        return year + "-" + twoDigits(month + 1) + "-" + twoDigits(day);
+
+    }
+
+
+    public static String twoDigits(int n) {
+        return (n <= 9) ? ("0" + n) : String.valueOf(n);
+    }
+
+
 }
 

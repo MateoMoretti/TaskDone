@@ -14,6 +14,7 @@
 
     <!-- FINANZAS -->
 
+    <string name="registrar_gasto">Registrar gasto</string>
     <string name="f_checkbox_escencial">Escencial</string>
     <string name="f_checkbox_ingreso">Es ingreso</string>
 
@@ -32,8 +33,8 @@
     </string-array>
 
 
-    <string-array name="tipo_monedas">
-        <item>2020</item>        <item>2021</item>        <item>2022</item>        <item>2023</item>
+    <string-array name="tipos_monedas">
+        <item>Pesos</item>        <item>Dólares</item>        <item>Euros</item>        <item>Bitcoin</item>
     </string-array>
 
 </resources>

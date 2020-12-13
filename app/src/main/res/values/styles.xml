@@ -12,6 +12,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.Finanzas">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorAccent">@color/verde</item>
+
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:fontFamily">@font/frijole</item>
     </style>
