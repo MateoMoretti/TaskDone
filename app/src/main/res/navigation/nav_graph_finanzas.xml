@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_finanzas"
+    app:startDestination="@id/principalFragment">
+    <fragment
+        android:id="@+id/principalFragment"
+        android:name="com.example.taskdone.Finanzas.PrincipalFragment"
+        android:label="fragment_finanzas_principal"
+        tools:layout="@layout/fragment_finanzas_principal" >
+        <action
+            android:id="@+id/action_principalFragment_to_statsFragment"
+            app:destination="@id/statsFragment" />
+        <action
+            android:id="@+id/action_principalFragment_to_historialFragment"
+            app:destination="@id/historialFragment" />
+        <action
+            android:id="@+id/action_principalFragment_self"
+            app:destination="@id/principalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historialFragment"
+        android:name="com.example.taskdone.Finanzas.HistorialFragment"
+        android:label="fragment_finanzas_historial"
+        tools:layout="@layout/fragment_finanzas_historial" >
+        <action
+            android:id="@+id/action_historialFragment_to_principalFragment"
+            app:destination="@id/principalFragment" />
+        <action
+            android:id="@+id/action_historialFragment_to_statsFragment"
+            app:destination="@id/statsFragment" />
+        <action
+            android:id="@+id/action_historialFragment_self"
+            app:destination="@id/historialFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.example.taskdone.Finanzas.StatsFragment"
+        android:label="fragment_finanzas_statsl"
+        tools:layout="@layout/fragment_finanzas_stats" >
+        <action
+            android:id="@+id/action_statsFragment_to_historialFragment"
+            app:destination="@id/historialFragment" />
+        <action
+            android:id="@+id/action_statsFragment_to_principalFragment"
+            app:destination="@id/principalFragment" />
+        <action
+            android:id="@+id/action_statsFragment_self"
+            app:destination="@id/statsFragment" />
+    </fragment>
+</navigation>

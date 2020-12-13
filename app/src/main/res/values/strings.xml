@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Task Done</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- PANTALLA INICIO -->
+
+    <string name="agenda">Agenda</string>
+    <string name="objetivos">Objetivos</string>
+    <string name="finanzas">Finanzas</string>
+    <string name="comidas">Comidas</string>
+    <string name="logros">Logros</string>
+    <string name="puntaje">Puntaje</string>
+
+
+    <!-- FINANZAS -->
+
+    <string name="f_checkbox_escencial">Escencial</string>
+    <string name="f_checkbox_ingreso">Es ingreso</string>
+
+
+    <string-array name="meses">
+        <item>Enero</item>  <item>Febrero</item>    <item>Marzo</item>  <item>Abril</item>
+        <item>Mayo</item>        <item>Junio</item>        <item>Julio</item>        <item>Agosto</item>
+        <item>Septiembre</item>        <item>Octubre</item>        <item>Noviembre</item>        <item>Diciembre</item>
+    </string-array>
+
+    <string-array name="anos">
+        <item>2020</item>        <item>2021</item>        <item>2022</item>        <item>2023</item>
+        <item>2024</item>        <item>2025</item>        <item>2026</item>        <item>2027</item>
+        <item>2028</item>        <item>2029</item>        <item>2030</item>        <item>2031</item>
+        <item>2032</item>        <item>2033</item>        <item>2034</item>        <item>2035</item>
+    </string-array>
+
+
+    <string-array name="tipo_monedas">
+        <item>2020</item>        <item>2021</item>        <item>2022</item>        <item>2023</item>
+    </string-array>
+
+</resources>

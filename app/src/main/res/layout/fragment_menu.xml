@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuFragment">
+
+    <ImageView
+        android:id="@+id/fondo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/fondo"
+        tools:srcCompat="@drawable/fondo"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/Agenda"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:background="@drawable/agenda_relieve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Logros"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.072" />
+
+    <TextView
+        android:id="@+id/agenda_txt"
+        style="@style/Titulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/agenda"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/Finanzas"
+        app:layout_constraintEnd_toStartOf="@+id/Objetivos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Agenda"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Objetivos"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:background="@drawable/objetivos_relieve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Agenda"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.072" />
+
+    <TextView
+        android:id="@+id/objetivos_txt"
+        style="@style/Titulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/objetivos"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/Finanzas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Agenda"
+        app:layout_constraintTop_toBottomOf="@+id/Agenda"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Finanzas"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:background="@drawable/finanzas_relieve"
+        app:layout_constraintBottom_toTopOf="@+id/Comidas"
+        app:layout_constraintEnd_toStartOf="@+id/Logros"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Agenda" />
+
+    <TextView
+        android:id="@+id/finanzas_txt"
+        style="@style/Titulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finanzas"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/Comidas"
+        app:layout_constraintEnd_toStartOf="@+id/Logros"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Finanzas"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Logros"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:background="@drawable/tasks_relieve"
+        app:layout_constraintBottom_toTopOf="@+id/Puntaje"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toEndOf="@+id/Finanzas"
+        app:layout_constraintTop_toBottomOf="@+id/Objetivos" />
+
+    <TextView
+        android:id="@+id/logros_txt"
+        style="@style/Titulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logros"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/Puntaje"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Finanzas"
+        app:layout_constraintTop_toBottomOf="@+id/Logros"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Comidas"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:background="@drawable/comidas_relieve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Puntaje"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fondo"
+        app:layout_constraintVertical_bias="0.876" />
+
+    <TextView
+        android:id="@+id/comidas_txt"
+        style="@style/Titulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comidas"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Puntaje"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Comidas"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Puntaje"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:background="@drawable/puntaje_relieve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toEndOf="@+id/Comidas"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.876" />
+
+    <TextView
+        android:id="@+id/puntaje_txt"
+        style="@style/Titulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/puntaje"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Comidas"
+        app:layout_constraintTop_toBottomOf="@+id/Puntaje"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
