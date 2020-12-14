@@ -1,28 +1,22 @@
 package com.example.taskdone.Finanzas;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.AdminFechas;
 import com.example.taskdone.DatePickerFragment;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
@@ -38,6 +32,7 @@ public class PrincipalFragment extends Fragment {
     NavController navController;
 
     private TextView fecha;
+    DataBaseFinanzas dataBaseFinanzas;
 
     @Override
     public View onCreateView(
@@ -47,9 +42,23 @@ public class PrincipalFragment extends Fragment {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
+        boolean info_cargada = Preferences.getPreferenceBoolean(requireContext(), Preferences.PREFERENCE_INFO_CARGADA);
+
+        if(!info_cargada){
+            Preferences.savePreferenceBoolean(requireContext(), true, Preferences.PREFERENCE_INFO_CARGADA);
+            Preferences.savePreferenceString(requireContext(), "56850", Preferences.PREFERENCE_PESOS);
+            Preferences.savePreferenceString(requireContext(), "300", Preferences.PREFERENCE_DOLARES);
+            Preferences.savePreferenceString(requireContext(), "0", Preferences.PREFERENCE_EUROS);
+        }
+
+
         binding.titulo.setText(AdminFechas.getDiaHoy());
         binding.fecha.setText(AdminFechas.getFechaHoy());
+
         binding.editFecha.setText(AdminFechas.getFechaHoy());
+        binding.pesos.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
+        binding.dolares.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
+        binding.euros.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
 
         ArrayAdapter<CharSequence> adapter_tipo = ArrayAdapter.createFromResource(requireContext(),
                 R.array.tipos_monedas, R.layout.spinner);
@@ -57,6 +66,11 @@ public class PrincipalFragment extends Fragment {
         binding.spinnerTipo.setAdapter(adapter_tipo);
 
         binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
+
+        dataBaseFinanzas = new DataBaseFinanzas(requireContext());
+
+        binding.ok.setOnClickListener(v -> addData());
+
 
         return binding.getRoot();
     }
@@ -80,5 +94,42 @@ public class PrincipalFragment extends Fragment {
 
         );
         newFragment.show(Objects.requireNonNull(requireActivity()).getSupportFragmentManager(), "datePicker");
+    }
+
+    public void addData(){
+        String escencial = "0";
+        String ingreso = "0";
+        if(binding.checkEscencial.isChecked()){
+            escencial = "1";
+        }
+        if(binding.checkIngreso.isChecked()){
+            ingreso = "1";
+        }
+        boolean insertData = dataBaseFinanzas.addData(binding.fecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
+
+        if(insertData){
+            Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+        }
+        cleanAndUpdate();
+    }
+
+    private void cleanAndUpdate(){
+        binding.editFecha.setText(AdminFechas.getFechaHoy());
+        binding.spinnerTipo.setSelection(0);
+        binding.editCantidad.setText("0");
+        binding.editMotivo.setText("");
+        binding.checkEscencial.setChecked(false);
+        binding.checkIngreso.setChecked(false);
+
+        binding.editFecha.setText(AdminFechas.getFechaHoy());
+        binding.pesos.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
+        binding.dolares.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
+        binding.euros.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
+
+        binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
+
     }
 }

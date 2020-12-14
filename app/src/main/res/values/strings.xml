@@ -17,6 +17,8 @@
     <string name="registrar_gasto">Registrar gasto</string>
     <string name="f_checkbox_escencial">Escencial</string>
     <string name="f_checkbox_ingreso">Es ingreso</string>
+    <string name="guardado_exito">Guardado con éxito !</string>
+    <string name="error_guardado">Error al guardar datos</string>
 
 
     <string-array name="meses">
@@ -34,7 +36,7 @@
 
 
     <string-array name="tipos_monedas">
-        <item>Pesos</item>        <item>Dólares</item>        <item>Euros</item>        <item>Bitcoin</item>
+        <item>Pesos</item>        <item>Dólares</item>        <item>Euros</item>
     </string-array>
 
 </resources>

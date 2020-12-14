@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintBase"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginTop="5dp" >
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/txt_fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2021/01/01"
+                android:textColor="@color/almost_black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/signo_ingreso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="+"
+                android:textColor="@color/verde_ingreso"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_tipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="U$D"
+                android:textColor="@color/verde_ingreso"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_cantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_weight="1"
+                android:text="5000"
+                android:textColor="@color/verde_ingreso"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_motivo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:text="Kesitas"
+                android:textColor="@color/almost_black"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

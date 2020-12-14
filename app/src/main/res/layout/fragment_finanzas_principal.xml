@@ -23,6 +23,7 @@
         tools:visibility="visible" />
 
     <ScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +49,6 @@
 
             <TextView
                 android:id="@+id/fecha"
-                style="@style/Titulos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -68,32 +68,32 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/pesos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="TextView"
+                    android:text="Pesos: "
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/dolares"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="TextView"
+                    android:text="Dolares: "
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/euros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="TextView"
+                    android:text="Euros: "
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="20sp" />
@@ -188,7 +188,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/edit_importe"
+                    android:id="@+id/edit_cantidad"
                     android:layout_width="135dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="10dp"
@@ -244,11 +244,9 @@
                 android:id="@+id/check_escencial"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="2"
                 android:background="@drawable/fondo_blanco_redondeado"
-                android:gravity="center"
                 android:paddingStart="5dp"
                 android:text="@string/f_checkbox_escencial"
                 android:textAlignment="textStart"
@@ -259,11 +257,9 @@
                 android:id="@+id/check_ingreso"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center"
                 android:layout_marginBottom="50dp"
                 android:layout_weight="2"
                 android:background="@drawable/fondo_blanco_redondeado"
-                android:gravity="center"
                 android:paddingStart="5dp"
                 android:text="@string/f_checkbox_ingreso"
                 android:textAlignment="textStart"

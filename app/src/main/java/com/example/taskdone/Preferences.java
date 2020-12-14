@@ -2,25 +2,22 @@ package com.example.taskdone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-public class Preferencias {
+public class Preferences {
 
-    private static final String STRING_PREFERENCES = "USUARIO";
+    private static final String STRING_PREFERENCES = "Finanzas";
 
-    public static final String PRIMERA_VEZ_AGENDA = "primera.vez.agenda";
-    public static final String PRIMERA_VEZ_OBJETIVOS = "primera.vez.objetivos";
-    public static final String PRIMERA_VEZ_FINANZAS = "primera.vez.finanzas";
-    public static final String PRIMERA_VEZ_COMIDAS = "primera.vez.comidas";
-    public static final String PRIMERA_VEZ_LOGROS = "primera.vez.logros";
-    public static final String PRIMERA_VEZ_PUNTAJE = "primera.vez.puntaje";
+    public static final String PREFERENCE_INFO_CARGADA = "INFO_CARGADA";
+    public static final String PREFERENCE_PESOS = "Pesos";
+    public static final String PREFERENCE_DOLARES = "Dolares";
+    public static final String PREFERENCE_EUROS = "Euros";
 
     public static void savePreferenceBoolean(Context c, boolean b, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         preferences.edit().putBoolean(key, b).apply();
     }
 
-    public static boolean obtenerPreferenceBoolean(Context c, String key) {
+    public static boolean getPreferenceBoolean(Context c, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getBoolean(key, false);//Si es que nunca se ha guardado nada en esta key pues retornara false
     }
@@ -30,10 +27,21 @@ public class Preferencias {
         preferences.edit().putString(key, b).apply();
     }
 
-    public static String obtenerPreferenceString(Context c, String key) {
+    public static String getPreferenceString(Context c, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getString(key, "");//Si es que nunca se ha guardado nada en esta key pues retornara una cadena vacia
     }
 
+    public static void deletePreferenceString(Context c, String key) {
+        SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
+        preferences.edit().remove(key).apply();
+    }
+
+    public static void deleteAllPreferenceString(Context c) {
+        SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
+        preferences.edit().clear().apply();
+    }
+
 }
+
 
