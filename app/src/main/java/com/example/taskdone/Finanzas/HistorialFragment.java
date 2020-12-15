@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class HistorialFragment extends Fragment {
             if(tipo_moneda.equals("Pesos")){
                 tipo_moneda = "$";
             }
-            else if(tipo_moneda.equals("Dolares")){
+            else if(tipo_moneda.equals("Dólares")){
                 tipo_moneda = "U$D";
             }
 
@@ -78,7 +79,7 @@ public class HistorialFragment extends Fragment {
             i.signo = ingreso;
             i.tipo = tipo_moneda;
             i.fecha = fecha;
-            i.cantidad = cantidad;
+            i.cantidad = Utils.formatoCantidad(cantidad);
             i.motivo = motivo;
 
             data_items.add(i);

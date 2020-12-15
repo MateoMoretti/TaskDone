@@ -1,6 +1,8 @@
 package com.example.taskdone.Finanzas;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.taskdone.AdminFechas;
+import com.example.taskdone.Utils;
 import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
@@ -52,13 +54,29 @@ public class PrincipalFragment extends Fragment {
         }
 
 
-        binding.titulo.setText(AdminFechas.getDiaHoy());
-        binding.fecha.setText(AdminFechas.getFechaHoy());
+        binding.titulo.setText(Utils.getDiaHoy());
+        binding.fecha.setText(Utils.getFechaHoy());
 
-        binding.editFecha.setText(AdminFechas.getFechaHoy());
-        binding.pesos.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
-        binding.dolares.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
-        binding.euros.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
+        binding.editFecha.setText(Utils.getFechaHoy());
+        binding.pesos.setText("Pesos: $ "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
+        binding.dolares.setText("Dólares: U$D "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
+        binding.euros.setText("Euros: € " + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
+
+        binding.editCantidad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                verificarCantidad();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter_tipo = ArrayAdapter.createFromResource(requireContext(),
                 R.array.tipos_monedas, R.layout.spinner);
@@ -75,10 +93,20 @@ public class PrincipalFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private boolean verificarCantidad(){
+            if (!binding.editCantidad.getText().toString().equals("") && !binding.editCantidad.getText().toString().equals("0")) {
+                if (binding.editCantidad.getText().toString().substring(0, 1).equals("0")) {
+                    binding.editCantidad.setText(binding.editCantidad.getText().toString().substring(1));
+                    binding.editCantidad.setSelection(binding.editCantidad.length());
+                }
+            }
+            return true;
+    }
+
     private void showDatePickerDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
 
-            String selectedDate = year + "-" + AdminFechas.twoDigits(month + 1) + "-" + AdminFechas.twoDigits(day);
+            String selectedDate = year + "-" + Utils.twoDigits(month + 1) + "-" + Utils.twoDigits(day);
                 if(selectedDate != null){
                     final Calendar h = Calendar.getInstance();
                     h.set(year,month,day);
@@ -87,7 +115,7 @@ public class PrincipalFragment extends Fragment {
                     int months = h.get(Calendar.MONTH);
                     int days = h.get(Calendar.DAY_OF_MONTH);
                 }else{
-                    selectedDate = year + "-" + AdminFechas.twoDigits(month + 1) + "-" + AdminFechas.twoDigits(day);
+                    selectedDate = year + "-" + Utils.twoDigits(month + 1) + "-" + Utils.twoDigits(day);
                 }
             binding.editFecha.setText(selectedDate);
             }
@@ -96,38 +124,41 @@ public class PrincipalFragment extends Fragment {
         newFragment.show(Objects.requireNonNull(requireActivity()).getSupportFragmentManager(), "datePicker");
     }
 
-    public void addData(){
-        String escencial = "0";
-        String ingreso = "0";
-        if(binding.checkEscencial.isChecked()){
-            escencial = "1";
-        }
-        if(binding.checkIngreso.isChecked()){
-            ingreso = "1";
-        }
-        boolean insertData = dataBaseFinanzas.addData(binding.fecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
+    public void addData() {
+        if (binding.editCantidad.getText().toString().equals("") || binding.editCantidad.getText().toString().equals("0")) {
+            Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show();
+        } else {
+            String escencial = "0";
+            String ingreso = "0";
+            if (binding.checkEscencial.isChecked()) {
+                escencial = "1";
+            }
+            if (binding.checkIngreso.isChecked()) {
+                ingreso = "1";
+            }
+            boolean insertData = dataBaseFinanzas.addData(binding.fecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
 
-        if(insertData){
-            Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+            if (insertData) {
+                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            }
+            cleanAndUpdate();
         }
-        else{
-            Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
-        }
-        cleanAndUpdate();
     }
 
     private void cleanAndUpdate(){
-        binding.editFecha.setText(AdminFechas.getFechaHoy());
+        binding.editFecha.setText(Utils.getFechaHoy());
         binding.spinnerTipo.setSelection(0);
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");
         binding.checkEscencial.setChecked(false);
         binding.checkIngreso.setChecked(false);
 
-        binding.editFecha.setText(AdminFechas.getFechaHoy());
-        binding.pesos.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
-        binding.dolares.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
-        binding.euros.setText(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
+        binding.editFecha.setText(Utils.getFechaHoy());
+        binding.pesos.setText("Pesos: $ "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
+        binding.dolares.setText("Dólares: U$D "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
+        binding.euros.setText("Euros: € " + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
 
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 

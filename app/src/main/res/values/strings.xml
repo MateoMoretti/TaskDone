@@ -18,7 +18,12 @@
     <string name="f_checkbox_escencial">Escencial</string>
     <string name="f_checkbox_ingreso">Es ingreso</string>
     <string name="guardado_exito">Guardado con éxito !</string>
+
+
+
+    <!-- ERRORES -->
     <string name="error_guardado">Error al guardar datos</string>
+    <string name="error_cantidad_null">Error: Debe ingresar cantidad</string>
 
 
     <string-array name="meses">

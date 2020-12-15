@@ -72,7 +72,7 @@ public class DataBaseFinanzas extends SQLiteOpenHelper {
                 case "Pesos":
                     Preferences.savePreferenceString(context, Integer.toString(cant), Preferences.PREFERENCE_PESOS);
                     break;
-                case "Dolares":
+                case "Dólares":
                     Preferences.savePreferenceString(context, Integer.toString(cant), Preferences.PREFERENCE_DOLARES);
                     break;
                 case "Euros":

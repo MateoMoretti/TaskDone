@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class AdminFechas {
+public class Utils {
 
 
     //BISIESTOS 2020-2024-2028
@@ -27,7 +27,7 @@ public class AdminFechas {
     public static List<String> diasOrdenadosPorMesAno(int mes, int año){
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        Date d = new Date();
+        Date d;
         d = new Date(año, mes, 1);
         String dia_elegido =  sdf.format(d);
 
@@ -76,6 +76,24 @@ public class AdminFechas {
 
     public static String twoDigits(int n) {
         return (n <= 9) ? ("0" + n) : String.valueOf(n);
+    }
+
+    public static String formatoCantidad(String c){
+        switch (c.length()){
+            case 4:
+                c = c.substring(0,1) + "." + c.substring(1,4);
+                break;
+            case 5:
+                c = c.substring(0,2) + "." + c.substring(2,5);
+                break;
+            case 6:
+                c = c.substring(0,3) + "." + c.substring(3,6);
+                break;
+            case 7:
+                c = c.substring(0,1) + "." + c.substring(1,4) + "." + c.substring(4,7);
+                break;
+        }
+        return c;
     }
 
 

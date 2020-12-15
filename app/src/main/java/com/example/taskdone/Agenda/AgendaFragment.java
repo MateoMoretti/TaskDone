@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,20 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.taskdone.AdminFechas;
-import com.example.taskdone.MenuFragment;
+import com.example.taskdone.Utils;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentAgendaBinding;
-import com.example.taskdone.databinding.FragmentMenuBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class AgendaFragment extends Fragment {
 
@@ -131,7 +124,7 @@ public class AgendaFragment extends Fragment {
             binding.recyclerDias.scrollToPosition(Integer.parseInt(fecha_hoy.substring(0,2)));
         }
 
-        generarListaDias(AdminFechas.diasOrdenadosPorMesAno(Integer.parseInt(ano), binding.meses.getSelectedItemPosition()+1), AdminFechas.diasMes(Integer.parseInt(ano), binding.meses.getSelectedItemPosition()+1));
+        generarListaDias(Utils.diasOrdenadosPorMesAno(Integer.parseInt(ano), binding.meses.getSelectedItemPosition()+1), Utils.diasMes(Integer.parseInt(ano), binding.meses.getSelectedItemPosition()+1));
     }
 
     private void generarListaDias(List<String> diasOrdenados, int cantidad_dias){
