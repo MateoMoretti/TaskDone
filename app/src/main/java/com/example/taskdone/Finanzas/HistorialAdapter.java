@@ -52,7 +52,6 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolderHistorial holder, int position) {
 
-        holder.fecha.setText(items.get(position).fecha);
         holder.signo.setText(items.get(position).signo);
         holder.tipo.setText(items.get(position).tipo);
         holder.cantidad.setText(items.get(position).cantidad);
@@ -86,7 +85,6 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
 
 
     public class ViewHolderHistorial extends RecyclerView.ViewHolder {
-        TextView fecha;
         TextView signo;
         TextView tipo;
         TextView cantidad;
@@ -95,7 +93,6 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
 
         public ViewHolderHistorial(@NonNull View itemView) {
             super(itemView);
-            fecha = itemView.findViewById(R.id.txt_fecha);
             signo = itemView.findViewById(R.id.signo_ingreso);
             tipo = itemView.findViewById(R.id.txt_tipo);
             cantidad = itemView.findViewById(R.id.txt_cantidad);

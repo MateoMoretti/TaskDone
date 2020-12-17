@@ -1,5 +1,6 @@
 package com.example.taskdone.Finanzas;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +37,7 @@ public class PrincipalFragment extends Fragment {
     private TextView fecha;
     DataBaseFinanzas dataBaseFinanzas;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -55,12 +57,11 @@ public class PrincipalFragment extends Fragment {
 
 
         binding.titulo.setText(Utils.getDiaHoy());
-        binding.fecha.setText(Utils.getFechaHoy());
 
         binding.editFecha.setText(Utils.getFechaHoy());
-        binding.pesos.setText("Pesos: $ "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
-        binding.dolares.setText("Dólares: U$D "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
-        binding.euros.setText("Euros: € " + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
+        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS)));
+        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES)));
+        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS)));
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,7 +137,7 @@ public class PrincipalFragment extends Fragment {
             if (binding.checkIngreso.isChecked()) {
                 ingreso = "1";
             }
-            boolean insertData = dataBaseFinanzas.addData(binding.fecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
+            boolean insertData = dataBaseFinanzas.addData(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
 
             if (insertData) {
                 Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
@@ -148,14 +149,12 @@ public class PrincipalFragment extends Fragment {
     }
 
     private void cleanAndUpdate(){
-        binding.editFecha.setText(Utils.getFechaHoy());
         binding.spinnerTipo.setSelection(0);
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");
         binding.checkEscencial.setChecked(false);
         binding.checkIngreso.setChecked(false);
 
-        binding.editFecha.setText(Utils.getFechaHoy());
         binding.pesos.setText("Pesos: $ "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
         binding.dolares.setText("Dólares: U$D "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
         binding.euros.setText("Euros: € " + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));

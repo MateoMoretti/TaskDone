@@ -1,17 +1,21 @@
 package com.example.taskdone.Finanzas;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskdone.R;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
 
@@ -36,16 +40,17 @@ public class HistorialFragment extends Fragment {
 
         dataBaseFinanzas = new DataBaseFinanzas(requireContext());
 
-        binding.historial.setLayoutManager(new LinearLayoutManager(getContext()));
         populateRecycler();
 
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     private void populateRecycler(){
         Cursor data = dataBaseFinanzas.getData();
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
+        ArrayList<String> fechas = new ArrayList<>();
 
 
         while (data.moveToNext()){
@@ -74,19 +79,40 @@ public class HistorialFragment extends Fragment {
                 tipo_moneda = "€";
             }
 
+            if(!fechas.contains(fecha)){
+                fechas.add(fecha);
+            }
+
             ItemHistorial i = new ItemHistorial();
             i.fecha = fecha;
             i.signo = ingreso;
             i.tipo = tipo_moneda;
-            i.fecha = fecha;
             i.cantidad = Utils.formatoCantidad(cantidad);
             i.motivo = motivo;
 
             data_items.add(i);
         }
 
-        HistorialAdapter adapter = new HistorialAdapter(data_items, requireContext());
-        binding.historial.setAdapter(adapter);
+        //LLENO LOS TITULOS DE FECHAS
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        for(int x=0;x!=fechas.size();x++){
+            ArrayList<ItemHistorial> data_items_fecha = new ArrayList<>();
+            for(ItemHistorial i:data_items){
+                if(i.fecha.equals(fechas.get(x))){
+                    data_items_fecha.add(i);
+                }
+            }
+            HistorialAdapter adapter = new HistorialAdapter(data_items_fecha, requireContext());
+            View view = inflater.inflate(R.layout.elementos_historial, null);
+            binding.layoutHistorial.addView(view);
+            TextView fecha = view.findViewById(R.id.fecha);
+            RecyclerView rec = view.findViewById(R.id.recycler);
+            rec.setLayoutManager(new LinearLayoutManager(getContext()));
+            fecha.setText(Utils.getDiaFormateado(fechas.get(x)));
+            rec.setAdapter(adapter);
+        }
+
 
     }
 }
