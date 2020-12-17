@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_principalFragment_self"
             app:destination="@id/principalFragment" />
+        <action
+            android:id="@+id/action_principalFragment_to_cargarDatosFinanzas"
+            app:destination="@id/cargarDatosFinanzas" />
     </fragment>
     <fragment
         android:id="@+id/historialFragment"
@@ -48,5 +51,14 @@
         <action
             android:id="@+id/action_statsFragment_self"
             app:destination="@id/statsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cargarDatosFinanzas"
+        android:name="com.example.taskdone.Finanzas.CargarDatosFinanzas"
+        android:label="fragment_cargar_datos_finanzas"
+        tools:layout="@layout/fragment_cargar_datos_finanzas" >
+        <action
+            android:id="@+id/action_cargarDatosFinanzas_to_principalFragment"
+            app:destination="@id/principalFragment" />
     </fragment>
 </navigation>

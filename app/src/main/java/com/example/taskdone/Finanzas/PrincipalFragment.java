@@ -1,6 +1,7 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,22 +47,29 @@ public class PrincipalFragment extends Fragment {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        boolean info_cargada = Preferences.getPreferenceBoolean(requireContext(), Preferences.PREFERENCE_INFO_CARGADA);
+        dataBaseFinanzas = new DataBaseFinanzas(requireContext());
 
-        if(!info_cargada){
-            Preferences.savePreferenceBoolean(requireContext(), true, Preferences.PREFERENCE_INFO_CARGADA);
-            Preferences.savePreferenceString(requireContext(), "56850", Preferences.PREFERENCE_PESOS);
-            Preferences.savePreferenceString(requireContext(), "300", Preferences.PREFERENCE_DOLARES);
-            Preferences.savePreferenceString(requireContext(), "0", Preferences.PREFERENCE_EUROS);
+        Cursor data = dataBaseFinanzas.getDataUser();
+        String info_cargada = "0";
+        int pesos = 0;
+        int dolares=0;
+        int euros = 0;
+        while (data.moveToNext()) {
+            pesos = data.getInt(1);
+            dolares = data.getInt(2);
+            euros = data.getInt(3);
+            info_cargada = data.getString(4);
         }
-
+        if(info_cargada.equals("0")){
+            navController.navigate(R.id.cargarDatosFinanzas);
+        }
 
         binding.titulo.setText(Utils.getDiaHoy());
 
         binding.editFecha.setText(Utils.getFechaHoy());
-        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS)));
-        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES)));
-        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS)));
+        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
+        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Integer.toString(dolares)));
+        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Integer.toString(euros)));
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -137,7 +145,7 @@ public class PrincipalFragment extends Fragment {
             if (binding.checkIngreso.isChecked()) {
                 ingreso = "1";
             }
-            boolean insertData = dataBaseFinanzas.addData(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
+            boolean insertData = dataBaseFinanzas.addDataGastos(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
 
             if (insertData) {
                 Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
@@ -148,6 +156,7 @@ public class PrincipalFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void cleanAndUpdate(){
         binding.spinnerTipo.setSelection(0);
         binding.editCantidad.setText("0");
@@ -155,9 +164,21 @@ public class PrincipalFragment extends Fragment {
         binding.checkEscencial.setChecked(false);
         binding.checkIngreso.setChecked(false);
 
-        binding.pesos.setText("Pesos: $ "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_PESOS));
-        binding.dolares.setText("Dólares: U$D "  + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_DOLARES));
-        binding.euros.setText("Euros: € " + Preferences.getPreferenceString(requireContext(), Preferences.PREFERENCE_EUROS));
+
+        Cursor data = dataBaseFinanzas.getDataUser();
+        int pesos = 0;
+        int dolares=0;
+        int euros = 0;
+        while (data.moveToNext()) {
+            pesos = data.getInt(1);
+            dolares = data.getInt(2);
+            euros = data.getInt(3);
+        }
+
+        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
+        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Integer.toString(dolares)));
+        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Integer.toString(euros)));
+
 
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 

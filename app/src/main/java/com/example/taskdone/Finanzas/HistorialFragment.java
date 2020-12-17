@@ -47,7 +47,7 @@ public class HistorialFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void populateRecycler(){
-        Cursor data = dataBaseFinanzas.getData();
+        Cursor data = dataBaseFinanzas.getDataGastos();
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();
