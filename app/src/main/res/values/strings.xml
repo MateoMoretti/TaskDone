@@ -15,7 +15,6 @@
     <!-- FINANZAS -->
 
     <string name="registrar_gasto">Registrar gasto</string>
-    <string name="f_checkbox_escencial">Escencial</string>
     <string name="f_checkbox_ingreso">Es ingreso</string>
     <string name="guardado_exito">Guardado con éxito !</string>
 

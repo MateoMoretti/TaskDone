@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskdone.DataBase;
 import com.example.taskdone.R;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
@@ -28,7 +29,7 @@ public class HistorialFragment extends Fragment {
     private String titulo;
     NavController navController;
 
-    DataBaseFinanzas dataBaseFinanzas;
+    DataBase dataBaseFinanzas;
 
     @Override
     public View onCreateView(
@@ -38,7 +39,7 @@ public class HistorialFragment extends Fragment {
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        dataBaseFinanzas = new DataBaseFinanzas(requireContext());
+        dataBaseFinanzas = new DataBase(requireContext());
 
         populateRecycler();
 
@@ -47,7 +48,7 @@ public class HistorialFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void populateRecycler(){
-        Cursor data = dataBaseFinanzas.getDataGastos();
+        Cursor data = dataBaseFinanzas.getAllGastos();
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();
@@ -55,11 +56,10 @@ public class HistorialFragment extends Fragment {
 
         while (data.moveToNext()){
             String fecha = data.getString(1);
-            String escencial = data.getString(2);
-            String tipo_moneda = data.getString(3);
-            String cantidad = data.getString(4);
-            String motivo = data.getString(5);
-            String ingreso = data.getString(6);
+            String tipo_moneda = data.getString(2);
+            String cantidad = data.getString(3);
+            String motivo = data.getString(4);
+            String ingreso = data.getString(5);
 
             if(ingreso.equals("0")){
                 ingreso = "-";

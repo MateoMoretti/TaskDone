@@ -21,7 +21,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
-        android:id="@+id/fragment"
+        android:id="@+id/nav_host_fragment"
         layout="@layout/content_agenda" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,7 +34,7 @@
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/fragment"
+        app:layout_constraintStart_toStartOf="@+id/nav_host_fragment"
         app:menu="@menu/menu_agenda">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>

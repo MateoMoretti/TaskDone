@@ -1,29 +1,36 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.taskdone.DataBase;
 import com.example.taskdone.Utils;
 import com.example.taskdone.DatePickerFragment;
-import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -35,8 +42,8 @@ public class PrincipalFragment extends Fragment {
     private String titulo;
     NavController navController;
 
-    private TextView fecha;
-    DataBaseFinanzas dataBaseFinanzas;
+    DataBase dataBase;
+    ArrayList<String> tags;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,9 +54,9 @@ public class PrincipalFragment extends Fragment {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        dataBaseFinanzas = new DataBaseFinanzas(requireContext());
+        dataBase = new DataBase(requireContext());
 
-        Cursor data = dataBaseFinanzas.getDataUser();
+        Cursor data = dataBase.getAllUsers();
         String info_cargada = "0";
         int pesos = 0;
         int dolares=0;
@@ -64,7 +71,6 @@ public class PrincipalFragment extends Fragment {
             navController.navigate(R.id.cargarDatosFinanzas);
         }
 
-        binding.titulo.setText(Utils.getDiaHoy());
 
         binding.editFecha.setText(Utils.getFechaHoy());
         binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
@@ -94,13 +100,36 @@ public class PrincipalFragment extends Fragment {
 
         binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
 
-        dataBaseFinanzas = new DataBaseFinanzas(requireContext());
+        binding.agregarTag.setOnClickListener(v -> this.seleccionarTags());
+
+        dataBase = new DataBase(requireContext());
 
         binding.ok.setOnClickListener(v -> addData());
 
+        tags = new ArrayList<>();
+
+        if(getArguments() != null){
+            if(getArguments().getStringArrayList("tags") != null){
+                tags = getArguments().getStringArrayList("tags");
+            }
+            binding.txtTagSeleccionados.setText(tags.size() + " seleccionados");
+            binding.editFecha.setText(getArguments().getString("fecha"));
+            binding.spinnerTipo.setSelection(Integer.parseInt(getArguments().getString("tipo_moneda")));
+            binding.editCantidad.setText(getArguments().getString("cantidad"));
+            binding.editMotivo.setText(getArguments().getString("motivo"));
+            binding.checkIngreso.setChecked(getArguments().getBoolean("ingreso"));
+
+            scrollToTag();
+
+        }
 
         return binding.getRoot();
     }
+
+    private final void scrollToTag(){
+        binding.scrollview.post(() -> binding.scrollview.fullScroll(ScrollView.FOCUS_DOWN));
+    }
+
 
     private boolean verificarCantidad(){
             if (!binding.editCantidad.getText().toString().equals("") && !binding.editCantidad.getText().toString().equals("0")) {
@@ -137,15 +166,11 @@ public class PrincipalFragment extends Fragment {
         if (binding.editCantidad.getText().toString().equals("") || binding.editCantidad.getText().toString().equals("0")) {
             Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show();
         } else {
-            String escencial = "0";
             String ingreso = "0";
-            if (binding.checkEscencial.isChecked()) {
-                escencial = "1";
-            }
             if (binding.checkIngreso.isChecked()) {
                 ingreso = "1";
             }
-            boolean insertData = dataBaseFinanzas.addDataGastos(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), escencial, ingreso);
+            boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), tags, ingreso);
 
             if (insertData) {
                 Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
@@ -161,11 +186,12 @@ public class PrincipalFragment extends Fragment {
         binding.spinnerTipo.setSelection(0);
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");
-        binding.checkEscencial.setChecked(false);
         binding.checkIngreso.setChecked(false);
+        binding.txtTagSeleccionados.setText("0 seleccionados");
 
+        tags.clear();
 
-        Cursor data = dataBaseFinanzas.getDataUser();
+        Cursor data = dataBase.getAllUsers();
         int pesos = 0;
         int dolares=0;
         int euros = 0;
@@ -183,4 +209,28 @@ public class PrincipalFragment extends Fragment {
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 
     }
+
+
+
+    void seleccionarTags() {
+        Bundle bundle = new Bundle();
+        bundle.putString("fecha", binding.editFecha.getText().toString());
+        bundle.putString("tipo_moneda", Integer.toString(binding.spinnerTipo.getSelectedItemPosition()));
+        bundle.putString("cantidad", binding.editCantidad.getText().toString());
+        bundle.putString("motivo", binding.editMotivo.getText().toString());
+        bundle.putStringArrayList("tags", tags);
+        bundle.putBoolean("ingreso", binding.checkIngreso.isChecked());
+
+        navController.navigate(R.id.action_principalFragment_to_tagsFragment, bundle);
+
+    }
+
+
+
+
+
+
+
+
+
 }

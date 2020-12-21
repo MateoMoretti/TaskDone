@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_principalFragment_to_cargarDatosFinanzas"
             app:destination="@id/cargarDatosFinanzas" />
+        <action
+            android:id="@+id/action_principalFragment_to_tagsFragment"
+            app:destination="@id/tagsFragment" />
     </fragment>
     <fragment
         android:id="@+id/historialFragment"
@@ -59,6 +62,15 @@
         tools:layout="@layout/fragment_cargar_datos_finanzas" >
         <action
             android:id="@+id/action_cargarDatosFinanzas_to_principalFragment"
+            app:destination="@id/principalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tagsFragment"
+        android:name="com.example.taskdone.Finanzas.TagsFragment"
+        android:label="fragment_tags"
+        tools:layout="@layout/fragment_tags" >
+        <action
+            android:id="@+id/action_tagsFragment_to_principalFragment"
             app:destination="@id/principalFragment" />
     </fragment>
 </navigation>

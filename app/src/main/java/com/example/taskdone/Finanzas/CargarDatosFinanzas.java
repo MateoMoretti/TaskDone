@@ -7,10 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,15 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.taskdone.DatePickerFragment;
-import com.example.taskdone.Preferences;
+import com.example.taskdone.DataBase;
 import com.example.taskdone.R;
-import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentCargarDatosFinanzasBinding;
-import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
-
-import java.util.Calendar;
-import java.util.Objects;
 
 
 public class CargarDatosFinanzas extends Fragment {
@@ -34,7 +25,7 @@ public class CargarDatosFinanzas extends Fragment {
     private FragmentCargarDatosFinanzasBinding binding;
 
     NavController navController;
-    DataBaseFinanzas dataBaseFinanzas;
+    DataBase dataBaseFinanzas;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -45,7 +36,7 @@ public class CargarDatosFinanzas extends Fragment {
         binding = FragmentCargarDatosFinanzasBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        dataBaseFinanzas = new DataBaseFinanzas(requireContext());
+        dataBaseFinanzas = new DataBase(requireContext());
 
         binding.editPesos.addTextChangedListener(new TextWatcher() {
             @Override
@@ -130,7 +121,7 @@ public class CargarDatosFinanzas extends Fragment {
             euros = Integer.parseInt(e);
         }
 
-        boolean insertData = dataBaseFinanzas.addDataUser(pesos, dolares, euros);
+        boolean insertData = dataBaseFinanzas.addUser(pesos, dolares, euros);
 
         if (insertData) {
             Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
