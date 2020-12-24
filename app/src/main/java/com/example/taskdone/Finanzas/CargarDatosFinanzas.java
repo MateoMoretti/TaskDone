@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.DataBase;
 import com.example.taskdone.R;
+import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.databinding.FragmentCargarDatosFinanzasBinding;
 
 
@@ -121,7 +122,7 @@ public class CargarDatosFinanzas extends Fragment {
             euros = Integer.parseInt(e);
         }
 
-        boolean insertData = dataBaseFinanzas.addUser(pesos, dolares, euros);
+        boolean insertData = dataBaseFinanzas.updateDineroUser(pesos, dolares, euros, UsuarioSingleton.getInstance().getID());
 
         if (insertData) {
             Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();

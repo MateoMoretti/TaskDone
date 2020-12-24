@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.taskdone.DataBase;
 import com.example.taskdone.R;
+import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.databinding.FragmentAgendaFisicoBinding;
 import com.example.taskdone.databinding.FragmentTagsBinding;
 
@@ -67,7 +68,7 @@ public class TagsFragment extends Fragment {
     }
 
     private void cargarTags(){
-        Cursor tags = database.getAllTags(); //Reemplazar por getTagsByUsuarioId si permito más cuentas en un futuro
+        Cursor tags = database.getTagsByUserId(UsuarioSingleton.getInstance().getID()); //Reemplazar por getTagsByUsuarioId si permito más cuentas en un futuro
         List<ItemTag> tags_nombre = new ArrayList<>();
             while (tags.moveToNext()) {
             ItemTag i = new ItemTag();
@@ -79,6 +80,9 @@ public class TagsFragment extends Fragment {
 
         if(tags_nombre.isEmpty()){
             binding.txtSinTags.setVisibility(View.VISIBLE);
+        }
+        else{
+            binding.txtSinTags.setVisibility(View.INVISIBLE);
         }
         binding.recyclerTags.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerTags.setAdapter(adapter_tags);

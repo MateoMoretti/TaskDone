@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.DataBase;
 import com.example.taskdone.R;
+import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
 
@@ -29,7 +30,7 @@ public class HistorialFragment extends Fragment {
     private String titulo;
     NavController navController;
 
-    DataBase dataBaseFinanzas;
+    DataBase dataBase;
 
     @Override
     public View onCreateView(
@@ -39,7 +40,7 @@ public class HistorialFragment extends Fragment {
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        dataBaseFinanzas = new DataBase(requireContext());
+        dataBase = new DataBase(requireContext());
 
         populateRecycler();
 
@@ -48,7 +49,7 @@ public class HistorialFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void populateRecycler(){
-        Cursor data = dataBaseFinanzas.getAllGastos();
+        Cursor data = dataBase.getGastosByUserId(UsuarioSingleton.getInstance().getID());
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();

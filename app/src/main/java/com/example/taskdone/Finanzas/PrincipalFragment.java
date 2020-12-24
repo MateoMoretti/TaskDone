@@ -25,6 +25,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.DataBase;
+import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.Utils;
 import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
@@ -56,7 +57,7 @@ public class PrincipalFragment extends Fragment {
 
         dataBase = new DataBase(requireContext());
 
-        Cursor data = dataBase.getAllUsers();
+        Cursor data = dataBase.getUserByUsername(UsuarioSingleton.getInstance().getUsername());
         String info_cargada = "0";
         int pesos = 0;
         int dolares=0;
@@ -170,7 +171,7 @@ public class PrincipalFragment extends Fragment {
             if (binding.checkIngreso.isChecked()) {
                 ingreso = "1";
             }
-            boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), tags, ingreso);
+            boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), tags, ingreso, UsuarioSingleton.getInstance().getID());
 
             if (insertData) {
                 Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
@@ -191,7 +192,7 @@ public class PrincipalFragment extends Fragment {
 
         tags.clear();
 
-        Cursor data = dataBase.getAllUsers();
+        Cursor data = dataBase.getUserByUsername(UsuarioSingleton.getInstance().getUsername());
         int pesos = 0;
         int dolares=0;
         int euros = 0;

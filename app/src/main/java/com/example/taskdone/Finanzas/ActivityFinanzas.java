@@ -2,10 +2,8 @@ package com.example.taskdone.Finanzas;
 
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.icu.text.Normalizer2;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,11 +12,10 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.taskdone.MainActivity;
+import com.example.taskdone.MenuPrincipalActivity;
 import com.example.taskdone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -96,7 +93,7 @@ public class ActivityFinanzas extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, MenuPrincipalActivity.class);
         startActivity(i);
         finish();
     }
