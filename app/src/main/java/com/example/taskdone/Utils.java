@@ -107,6 +107,12 @@ public class Utils {
         return dateFormat.format(cal.getTime());
     }
 
+    public static Calendar toCalendar(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
+    }
+
     public static String getFechaHoy(){
 
         final Calendar c = Calendar.getInstance();

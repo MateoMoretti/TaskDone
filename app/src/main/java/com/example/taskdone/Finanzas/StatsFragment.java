@@ -1,18 +1,28 @@
 package com.example.taskdone.Finanzas;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -55,6 +65,9 @@ public class StatsFragment extends Fragment {
     ArrayList<Gasto> ingresos_dolares = new ArrayList<>();
     ArrayList<Gasto> ingresos_euros = new ArrayList<>();
 
+    String selected_date_desde = "Siempre";
+    String selected_date_hasta = "Hoy";
+
     Long cantidad_dias = 0L;
 
 
@@ -69,7 +82,7 @@ public class StatsFragment extends Fragment {
 
         database = new DataBase(requireContext());
         Calendar c= Calendar.getInstance();
-        c.add(Calendar.DATE, -30);
+        c.add(Calendar.DATE, -29);
 
         try {
             cargarStats(c, Calendar.getInstance());
@@ -77,7 +90,7 @@ public class StatsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        binding.calendar.setOnClickListener(v ->  showDatePickerDialog());
+        binding.calendar.setOnClickListener(v ->  abrir_popup_fechas());
 
         return binding.getRoot();
     }
@@ -311,11 +324,102 @@ public class StatsFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void abrir_popup_fechas(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.popup_fecha_between, null);
+
+        ImageView desde_button = view.findViewById(R.id.calendar_desde);
+        ImageView hasta_button = view.findViewById(R.id.calendar_hasta);
+
+        TextView desde_text = view.findViewById(R.id.text_desde);
+        TextView hasta_text = view.findViewById(R.id.text_hasta);
+
+        desde_text.setText(selected_date_desde);
+        hasta_text.setText(selected_date_hasta);
+
+        desde_button.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), desde_text));
+        hasta_button.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), hasta_text));
+        desde_text.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), desde_text));
+        hasta_text.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), hasta_text));
+
+        builder.setTitle("Filtrar");
+        builder.setView(view)
+                .setPositiveButton("Aceptar", (dialog, which) ->
+                        {
+                            try {
+                                filtrar(desde_text.getText().toString(), hasta_text.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                );
+
+        Dialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setGravity(Gravity.CENTER | Gravity.CENTER);
+        }
+
+        dialog.show();
+        dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void filtrar(String desde, String hasta) throws ParseException {
+
+        String text_desde = "Siempre";
+        String text_hasta = "Hoy";
+        String mensaje_filtro;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        Date desde_date = sdf.parse("1900/01/01");
+        Date hasta_date = Calendar.getInstance().getTime();
+
+        if (!desde.equals(text_desde)) {
+            desde_date = sdf.parse(desde);
+            text_desde = desde;
+        }
+        if (!hasta.equals(text_hasta)) {
+            hasta_date = sdf.parse(hasta);
+            text_hasta = hasta;
+        }
+
+        if(!desde.isEmpty() && !hasta.isEmpty()) {
+            mensaje_filtro = text_desde + " - " + text_hasta;
+        }
+
+        else{
+            if (!desde.isEmpty()) {
+                mensaje_filtro = "Desde " + text_desde;
+            }
+            else if (!hasta.isEmpty()) {
+                mensaje_filtro = "Hasta " + text_hasta;
+            }
+            else{
+                mensaje_filtro = "Todo";
+            }
+        }
+
+        binding.fechaFiltro.setText(mensaje_filtro);
+
+        cargarStats(Utils.toCalendar(desde_date), Utils.toCalendar(hasta_date));
+    }
+
     private void cleanLayouts(){
         cantidad_dias = 0L;
         gastos_pesos.clear();
         gastos_dolares.clear();
         gastos_euros.clear();
+
+        ingresos_pesos.clear();
+        ingresos_dolares.clear();
+        ingresos_euros.clear();
 
 
         for(int x = 1; 1!= binding.layoutGastos.getChildCount(); x++) {
@@ -330,27 +434,26 @@ public class StatsFragment extends Fragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showDatePickerDialog() {
+
+    private void showDatePickerDialog(Boolean es_desde, FragmentActivity activity, TextView fecha_a_actualizar) {
         DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
+            final String selectedDate = year + "/" + twoDigits(month + 1) + "/" + twoDigits(day);
 
-                    String selectedDate = year + "-" + Utils.twoDigits(month + 1) + "-" + Utils.twoDigits(day);
-                    if(selectedDate != null){
-                        final Calendar h = Calendar.getInstance();
-                        h.set(year,month,day);
-                        try {
-                            cargarStats(h, Calendar.getInstance());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        selectedDate = year + "-" + Utils.twoDigits(month + 1) + "-" + Utils.twoDigits(day);
-                    }
-                    binding.fechaFiltro.setText(selectedDate);
-                }
+            if(es_desde){
+                fecha_a_actualizar.setText(selectedDate);
+                selected_date_desde = selectedDate;
+            }else{
+                fecha_a_actualizar.setText(selectedDate);
+                selected_date_hasta = selectedDate;
+            }
 
-        );
-        newFragment.show(Objects.requireNonNull(requireActivity()).getSupportFragmentManager(), "datePicker");
+        });
+        newFragment.show(Objects.requireNonNull(activity).getSupportFragmentManager(), "datePicker");
+    }
+
+
+    private String twoDigits(int n) {
+        return (n <= 9) ? ("0" + n) : String.valueOf(n);
     }
 
 
