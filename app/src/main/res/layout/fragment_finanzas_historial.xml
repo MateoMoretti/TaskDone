@@ -35,6 +35,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fondo" />
 
+    <ImageView
+        android:id="@+id/calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/calendar"
+        app:layout_constraintBottom_toBottomOf="@+id/fecha_filtro2"
+        app:layout_constraintEnd_toEndOf="@+id/titulo"
+        app:layout_constraintStart_toEndOf="@+id/fecha_filtro2"
+        app:layout_constraintTop_toTopOf="@+id/fecha_filtro2"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/fecha_filtro2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Ultimos 30 días"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/calendar"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="@+id/titulo"
+        app:layout_constraintTop_toBottomOf="@+id/titulo" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -46,7 +70,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo">
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
 
         <LinearLayout
             android:id="@+id/layout_historial"

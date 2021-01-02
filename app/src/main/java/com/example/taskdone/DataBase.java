@@ -99,7 +99,7 @@ public class DataBase extends SQLiteOpenHelper {
         }
         else{
             ContentValues dineroModificado = new ContentValues();
-            Cursor data = getAllUsers();
+            Cursor data = getUserById(idUsuario);
             int id = 0;
             int pesos = 0;
             int dolares=0;
@@ -133,8 +133,8 @@ public class DataBase extends SQLiteOpenHelper {
             for(String t:tags){
                 Cursor tag = getTagByNombre(t);
                 int id_tag = 0;
-                while (data.moveToNext()) {
-                    id_tag = data.getInt(0);
+                while (tag.moveToNext()) {
+                    id_tag = tag.getInt(0);
                 }
                 addTagGasto(id_tag, (int)result);
             }
@@ -149,6 +149,7 @@ public class DataBase extends SQLiteOpenHelper {
         Cursor data = db.rawQuery(query, null);
         return data;
     }
+
     public Cursor getGastosByUserId(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_GASTO+ " WHERE " + COL_ID_USUARIO +"='"+id+"'" + " ORDER BY " + COL_FECHA + " DESC";
@@ -193,6 +194,13 @@ public class DataBase extends SQLiteOpenHelper {
     public Cursor getAllUsers(){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_USUARIO;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+    public Cursor getUserById(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE ID='" + id +"'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -242,6 +250,15 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + TABLE_TAG + ".* FROM " + TABLE_TAG + ", " + TABLE_TAG_USUARIO + " WHERE " + TABLE_TAG_USUARIO + "." +COL_ID_USUARIO +"='" + id + "' AND "
                 + TABLE_TAG +".ID=" + TABLE_TAG_USUARIO + "." + COL_ID_TAG;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+
+    public Cursor getTagsByGastoId(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + TABLE_TAG + ".* FROM " + TABLE_TAG + " INNER JOIN " + TABLE_TAG_GASTO + " ON "+ TABLE_TAG +".ID=" + TABLE_TAG_GASTO + "." + COL_ID_TAG +
+                " WHERE " + TABLE_TAG_GASTO + "." +COL_ID_GASTO +"='" + id +"'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }

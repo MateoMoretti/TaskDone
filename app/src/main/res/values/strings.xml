@@ -17,6 +17,8 @@
     <string name="registrar_gasto">Registrar gasto</string>
     <string name="f_checkbox_ingreso">Es ingreso</string>
     <string name="guardado_exito">Guardado con éxito !</string>
+    <string name="sin_gastos">No has gastado nada</string>
+    <string name="sin_ingresos">No has tenido un ingreso</string>
 
 
 

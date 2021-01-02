@@ -4,8 +4,10 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -122,41 +124,24 @@ public class Utils {
     }
 
     public static String formatoCantidad(String c){
-        String sin_barra;
-        if(c.contains("-")){
-            sin_barra = c.replaceAll("-", "");
-            switch (sin_barra.length()){
-                case 4:
-                    c = "-" + sin_barra.substring(0,1) + "." + sin_barra.substring(1,4);
-                    break;
-                case 5:
-                    c = "-" + sin_barra.substring(0,2) + "." + sin_barra.substring(2,5);
-                    break;
-                case 6:
-                    c = "-" + sin_barra.substring(0,3) + "." + sin_barra.substring(3,6);
-                    break;
-                case 7:
-                    c = "-" + sin_barra.substring(0,1) + "." + sin_barra.substring(1,4) + "." + sin_barra.substring(4,7);
-                    break;
-            }
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        if(c.contains("-")) {
+            c = c.replaceAll("-", "");
         }
-        else{
-            switch (c.length()){
-                case 4:
-                    c = c.substring(0,1) + "." + c.substring(1,4);
-                    break;
-                case 5:
-                    c = c.substring(0,2) + "." + c.substring(2,5);
-                    break;
-                case 6:
-                    c = c.substring(0,3) + "." + c.substring(3,6);
-                    break;
-                case 7:
-                    c = c.substring(0,1) + "." + c.substring(1,4) + "." + c.substring(4,7);
-                    break;
-            }
-        }
-        return c;
+        return df.format(Float.parseFloat(c));
+    }
+
+    public static String formatoCantidad(float f){
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        return df.format(f);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static long diferenciaDeDias(Calendar desde, Calendar hasta){
+        return ChronoUnit.DAYS.between(desde.getTime().toInstant(), hasta.getTime().toInstant()) +1;
     }
 
 
