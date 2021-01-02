@@ -110,7 +110,7 @@ public class StatsFragment extends Fragment {
 
             Date fecha_gasto = sdf.parse(fecha);
 
-            if ((desde_date.before(fecha_gasto)||desde_date.equals(fecha_gasto))  && (hasta_date.after(fecha_gasto) || hasta_date.equals(fecha_gasto))) {
+            if ((desde_date.before(fecha_gasto)||desde_date.getDay()==fecha_gasto.getDay())  && (hasta_date.after(fecha_gasto) || hasta_date.getDay()==fecha_gasto.getDay())) {
 
                 Cursor t_gasto = database.getTagsByGastoId(id);
                 ArrayList<String> tags_asociados = new ArrayList();
@@ -338,10 +338,6 @@ public class StatsFragment extends Fragment {
                     if(selectedDate != null){
                         final Calendar h = Calendar.getInstance();
                         h.set(year,month,day);
-                        h.add(Calendar.DAY_OF_YEAR,1);
-                        int years = h.get(Calendar.YEAR);
-                        int months = h.get(Calendar.MONTH);
-                        int days = h.get(Calendar.DAY_OF_MONTH);
                         try {
                             cargarStats(h, Calendar.getInstance());
                         } catch (ParseException e) {
