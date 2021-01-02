@@ -19,6 +19,7 @@
     <string name="guardado_exito">Guardado con éxito !</string>
     <string name="sin_gastos">No has gastado nada</string>
     <string name="sin_ingresos">No has tenido un ingreso</string>
+    <string name="sin_info_sobre_tags">No tienes información sobre Tags en estos días</string>
 
 
 

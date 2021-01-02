@@ -91,6 +91,7 @@ public class StatsFragment extends Fragment {
         }
 
         binding.calendar.setOnClickListener(v ->  abrir_popup_fechas());
+        binding.fechaFiltro.setOnClickListener(v ->  abrir_popup_fechas());
 
         return binding.getRoot();
     }
@@ -201,6 +202,7 @@ public class StatsFragment extends Fragment {
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
             ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_gastos));
+            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutGastos.addView(view);
         }
 
@@ -221,6 +223,7 @@ public class StatsFragment extends Fragment {
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
             ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_ingresos));
+            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutIngresos.addView(view);
         }
 
@@ -285,7 +288,7 @@ public class StatsFragment extends Fragment {
             //No hay informacion de los tags
             View view = inflater.inflate(R.layout.item_stats, null);
             ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView) view.findViewById(R.id.total)).setText("No tienes información sobre Tags en estos días");
+            ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_info_sobre_tags));
             ((TextView) view.findViewById(R.id.promedio)).setText("");
             view.setPadding(0,0,0,10);
             binding.layoutAvanzado.addView(view);

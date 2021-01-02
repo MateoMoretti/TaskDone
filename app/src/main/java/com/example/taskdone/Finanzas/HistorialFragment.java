@@ -1,27 +1,42 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.DataBase;
+import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
 import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 
 public class HistorialFragment extends Fragment {
 
@@ -30,8 +45,12 @@ public class HistorialFragment extends Fragment {
     private String titulo;
     NavController navController;
 
+    String selected_date_desde = "Siempre";
+    String selected_date_hasta = "Hoy";
+
     DataBase dataBase;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -42,78 +61,214 @@ public class HistorialFragment extends Fragment {
 
         dataBase = new DataBase(requireContext());
 
-        populateRecycler();
+        Calendar c= Calendar.getInstance();
+        c.add(Calendar.DATE, -29);
+        try {
+            cargarHistorial(c.getTime(), Calendar.getInstance().getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        binding.calendar.setOnClickListener(v ->  abrir_popup_fechas());
+        binding.fechaFiltro.setOnClickListener(v ->  abrir_popup_fechas());
 
         return binding.getRoot();
     }
 
     @SuppressLint("SetTextI18n")
-    private void populateRecycler(){
+    private void cargarHistorial(Date desde_date, Date hasta_date) throws ParseException {
+        cleanHistorial();
         Cursor data = dataBase.getGastosByUserId(UsuarioSingleton.getInstance().getID());
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();
 
 
-        while (data.moveToNext()){
+        while (data.moveToNext()) {
             String fecha = data.getString(1);
             String tipo_moneda = data.getString(2);
             String cantidad = data.getString(3);
             String motivo = data.getString(4);
             String ingreso = data.getString(5);
 
-            if(ingreso.equals("0")){
-                ingreso = "-";
-            }
-            else{
-                ingreso = "+";
-            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date fecha_gasto = sdf.parse(fecha);
 
-            if(tipo_moneda.equals("Pesos")){
-                tipo_moneda = "$";
-            }
-            else if(tipo_moneda.equals("Dólares")){
-                tipo_moneda = "U$D";
-            }
+            if ((desde_date.before(fecha_gasto) || desde_date.getDay() == fecha_gasto.getDay()) && (hasta_date.after(fecha_gasto) || hasta_date.getDay() == fecha_gasto.getDay())) {
 
-            else if(tipo_moneda.equals("Euros")){
-                tipo_moneda = "€";
+                if (ingreso.equals("0")) {
+                    ingreso = "-";
+                } else {
+                    ingreso = "+";
+                }
+
+                if (tipo_moneda.equals("Pesos")) {
+                    tipo_moneda = "$";
+                } else if (tipo_moneda.equals("Dólares")) {
+                    tipo_moneda = "U$D";
+                } else if (tipo_moneda.equals("Euros")) {
+                    tipo_moneda = "€";
+                }
+
+                if (!fechas.contains(fecha)) {
+                    fechas.add(fecha);
+                }
+
+                ItemHistorial i = new ItemHistorial();
+                i.fecha = fecha;
+                i.signo = ingreso;
+                i.tipo = tipo_moneda;
+                i.cantidad = Utils.formatoCantidad(cantidad);
+                i.motivo = motivo;
+
+                data_items.add(i);
             }
-
-            if(!fechas.contains(fecha)){
-                fechas.add(fecha);
-            }
-
-            ItemHistorial i = new ItemHistorial();
-            i.fecha = fecha;
-            i.signo = ingreso;
-            i.tipo = tipo_moneda;
-            i.cantidad = Utils.formatoCantidad(cantidad);
-            i.motivo = motivo;
-
-            data_items.add(i);
         }
 
         //LLENO LOS TITULOS DE FECHAS
 
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        for(int x=0;x!=fechas.size();x++){
-            ArrayList<ItemHistorial> data_items_fecha = new ArrayList<>();
-            for(ItemHistorial i:data_items){
-                if(i.fecha.equals(fechas.get(x))){
-                    data_items_fecha.add(i);
+        if(fechas.size()==0){
+            binding.sinDatos.setVisibility(View.VISIBLE);
+        }
+        else {
+            binding.sinDatos.setVisibility(View.INVISIBLE);
+            LayoutInflater inflater = requireActivity().getLayoutInflater();
+            for (int x = 0; x != fechas.size(); x++) {
+                ArrayList<ItemHistorial> data_items_fecha = new ArrayList<>();
+                for (ItemHistorial i : data_items) {
+                    if (i.fecha.equals(fechas.get(x))) {
+                        data_items_fecha.add(i);
+                    }
                 }
+                HistorialAdapter adapter = new HistorialAdapter(data_items_fecha, requireContext());
+                View view = inflater.inflate(R.layout.elementos_historial, null);
+                binding.layoutHistorial.addView(view);
+                TextView fecha = view.findViewById(R.id.fecha);
+                RecyclerView rec = view.findViewById(R.id.recycler);
+                rec.setLayoutManager(new LinearLayoutManager(getContext()));
+                fecha.setText(Utils.getDiaFormateado(fechas.get(x)));
+                rec.setAdapter(adapter);
             }
-            HistorialAdapter adapter = new HistorialAdapter(data_items_fecha, requireContext());
-            View view = inflater.inflate(R.layout.elementos_historial, null);
-            binding.layoutHistorial.addView(view);
-            TextView fecha = view.findViewById(R.id.fecha);
-            RecyclerView rec = view.findViewById(R.id.recycler);
-            rec.setLayoutManager(new LinearLayoutManager(getContext()));
-            fecha.setText(Utils.getDiaFormateado(fechas.get(x)));
-            rec.setAdapter(adapter);
         }
 
+    }
+
+    private void cleanHistorial(){
+        for(int x=0;0!=binding.layoutHistorial.getChildCount(); x++)
+        binding.layoutHistorial.removeViewAt(0);
+    }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void abrir_popup_fechas(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.popup_fecha_between, null);
+
+        ImageView desde_button = view.findViewById(R.id.calendar_desde);
+        ImageView hasta_button = view.findViewById(R.id.calendar_hasta);
+
+        TextView desde_text = view.findViewById(R.id.text_desde);
+        TextView hasta_text = view.findViewById(R.id.text_hasta);
+
+        desde_text.setText(selected_date_desde);
+        hasta_text.setText(selected_date_hasta);
+
+        desde_button.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), desde_text));
+        hasta_button.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), hasta_text));
+        desde_text.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), desde_text));
+        hasta_text.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), hasta_text));
+
+        builder.setTitle("Filtrar");
+        builder.setView(view)
+                .setPositiveButton("Aceptar", (dialog, which) ->
+                        {
+                            try {
+                                filtrar(desde_text.getText().toString(), hasta_text.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                );
+
+        Dialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setGravity(Gravity.CENTER | Gravity.CENTER);
+        }
+
+        dialog.show();
+        dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void filtrar(String desde, String hasta) throws ParseException {
+
+        String text_desde = "Siempre";
+        String text_hasta = "Hoy";
+        String mensaje_filtro;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        Date desde_date = sdf.parse("1900/01/01");
+        Date hasta_date = Calendar.getInstance().getTime();
+
+        if (!desde.equals(text_desde)) {
+            desde_date = sdf.parse(desde);
+            text_desde = desde;
+        }
+        if (!hasta.equals(text_hasta)) {
+            hasta_date = sdf.parse(hasta);
+            text_hasta = hasta;
+        }
+
+        if(!desde.isEmpty() && !hasta.isEmpty()) {
+            mensaje_filtro = text_desde + " - " + text_hasta;
+        }
+
+        else{
+            if (!desde.isEmpty()) {
+                mensaje_filtro = "Desde " + text_desde;
+            }
+            else if (!hasta.isEmpty()) {
+                mensaje_filtro = "Hasta " + text_hasta;
+            }
+            else{
+                mensaje_filtro = "Todo";
+            }
+        }
+
+        binding.fechaFiltro.setText(mensaje_filtro);
+
+        cargarHistorial(desde_date, hasta_date);
+    }
+
+
+    private void showDatePickerDialog(Boolean es_desde, FragmentActivity activity, TextView fecha_a_actualizar) {
+        DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
+            final String selectedDate = year + "/" + twoDigits(month + 1) + "/" + twoDigits(day);
+
+            if(es_desde){
+                fecha_a_actualizar.setText(selectedDate);
+                selected_date_desde = selectedDate;
+            }else{
+                fecha_a_actualizar.setText(selectedDate);
+                selected_date_hasta = selectedDate;
+            }
+
+        });
+        newFragment.show(Objects.requireNonNull(activity).getSupportFragmentManager(), "datePicker");
+    }
+
+
+    private String twoDigits(int n) {
+        return (n <= 9) ? ("0" + n) : String.valueOf(n);
+    }
+
+
+
 }

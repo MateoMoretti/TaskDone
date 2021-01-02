@@ -30,36 +30,38 @@
         android:layout_marginTop="20dp"
         android:text="Historial"
         android:textColor="#FFFFFF"
-        android:textSize="42sp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fondo" />
 
     <ImageView
         android:id="@+id/calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/calendar"
-        app:layout_constraintBottom_toBottomOf="@+id/fecha_filtro2"
-        app:layout_constraintEnd_toEndOf="@+id/titulo"
-        app:layout_constraintStart_toEndOf="@+id/fecha_filtro2"
-        app:layout_constraintTop_toTopOf="@+id/fecha_filtro2"
+        app:layout_constraintBottom_toBottomOf="@+id/fecha_filtro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fecha_filtro"
         app:tint="@color/white" />
 
     <TextView
-        android:id="@+id/fecha_filtro2"
+        android:id="@+id/fecha_filtro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Ultimos 30 días"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/calendar"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toStartOf="@+id/titulo"
+        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
@@ -78,5 +80,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+    <TextView
+        android:id="@+id/sin_datos"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="No has registrado nada entre éstas fechas"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/fecha_filtro" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
