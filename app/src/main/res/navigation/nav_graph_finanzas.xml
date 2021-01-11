@@ -19,11 +19,11 @@
             android:id="@+id/action_principalFragment_self"
             app:destination="@id/principalFragment" />
         <action
-            android:id="@+id/action_principalFragment_to_cargarDatosFinanzas"
-            app:destination="@id/cargarDatosFinanzas" />
-        <action
             android:id="@+id/action_principalFragment_to_tagsFragment"
             app:destination="@id/tagsFragment" />
+        <action
+            android:id="@+id/action_principalFragment_to_crearMonedaFragment"
+            app:destination="@id/crearMonedaFragment" />
     </fragment>
     <fragment
         android:id="@+id/historialFragment"
@@ -56,21 +56,21 @@
             app:destination="@id/statsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/cargarDatosFinanzas"
-        android:name="com.example.taskdone.Finanzas.CargarDatosFinanzas"
-        android:label="fragment_cargar_datos_finanzas"
-        tools:layout="@layout/fragment_cargar_datos_finanzas" >
-        <action
-            android:id="@+id/action_cargarDatosFinanzas_to_principalFragment"
-            app:destination="@id/principalFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/tagsFragment"
         android:name="com.example.taskdone.Finanzas.TagsFragment"
         android:label="fragment_tags"
         tools:layout="@layout/fragment_tags" >
         <action
             android:id="@+id/action_tagsFragment_to_principalFragment"
+            app:destination="@id/principalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/crearMonedaFragment"
+        android:name="com.example.taskdone.Finanzas.CrearMonedaFragment"
+        android:label="fragment_crear_moneda"
+        tools:layout="@layout/fragment_crear_moneda" >
+        <action
+            android:id="@+id/action_crearMonedaFragment_to_principalFragment"
             app:destination="@id/principalFragment" />
     </fragment>
 </navigation>

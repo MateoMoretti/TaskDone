@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,9 @@ public class PrincipalFragment extends Fragment {
     DataBase dataBase;
     ArrayList<String> tags;
 
+    ArrayList<String> monedas = new ArrayList<>();
+    ArrayList<Float> cantidades = new ArrayList<>();
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(
@@ -51,26 +55,24 @@ public class PrincipalFragment extends Fragment {
 
         dataBase = new DataBase(requireContext());
 
-        Cursor data = dataBase.getUserByUsername(UsuarioSingleton.getInstance().getUsername());
-        String info_cargada = "0";
-        int pesos = 0;
-        int dolares=0;
-        int euros = 0;
+        Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
+
+
         while (data.moveToNext()) {
-            pesos = data.getInt(1);
-            dolares = data.getInt(2);
-            euros = data.getInt(3);
-            info_cargada = data.getString(4);
+            monedas.add(data.getString(1));
+            cantidades.add(data.getFloat(2));
         }
-        if(info_cargada.equals("0")){
-            navController.navigate(R.id.cargarDatosFinanzas);
+        if(monedas.isEmpty()){
+            navController.navigate(R.id.crearMonedaFragment);
+        }
+        else{
+            llenarLayoutMonedas();
         }
 
 
         binding.editFecha.setText(Utils.getFechaHoy());
-        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
-        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Integer.toString(dolares)));
-        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Integer.toString(euros)));
+
+        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment));
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,6 +121,20 @@ public class PrincipalFragment extends Fragment {
         }
 
         return binding.getRoot();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void llenarLayoutMonedas(){
+        binding.layoutMonedas.removeViewAt(0);
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        for(int x=0;x!=monedas.size();x++){
+            View view = inflater.inflate(R.layout.elementos_historial, null);
+            @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
+            @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.moneda);
+            moneda.setText(monedas.get(x));
+            cantidad.setText(""+cantidades.get(x));
+            binding.layoutMonedas.addView(view);
+        }
     }
 
     private final void scrollToTag(){
@@ -185,21 +201,14 @@ public class PrincipalFragment extends Fragment {
         binding.txtTagSeleccionados.setText("0 seleccionados");
 
         tags.clear();
+        monedas.clear();
+        cantidades.clear();
 
-        Cursor data = dataBase.getUserByUsername(UsuarioSingleton.getInstance().getUsername());
-        int pesos = 0;
-        int dolares=0;
-        int euros = 0;
+        Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
         while (data.moveToNext()) {
-            pesos = data.getInt(1);
-            dolares = data.getInt(2);
-            euros = data.getInt(3);
+            monedas.add(data.getString(1));
+            cantidades.add(data.getFloat(2));
         }
-
-        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
-        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Integer.toString(dolares)));
-        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Integer.toString(euros)));
-
 
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 
