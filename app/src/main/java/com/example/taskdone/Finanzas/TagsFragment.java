@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.taskdone.DataBase;
 import com.example.taskdone.R;
 import com.example.taskdone.UsuarioSingleton;
-import com.example.taskdone.databinding.FragmentAgendaFisicoBinding;
 import com.example.taskdone.databinding.FragmentTagsBinding;
 
 import java.util.ArrayList;

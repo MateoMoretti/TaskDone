@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Desde"
-                android:textColor="@color/fondoDiasAgenda"
+                android:textColor="@color/very_light_green"
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
 
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Hasta"
-                android:textColor="@color/fondoDiasAgenda"
+                android:textColor="@color/very_light_green"
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
 
@@ -242,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Avanzado"
-                    android:textColor="@color/fondoDiasAgenda"
+                    android:textColor="@color/very_light_green"
                     android:textSize="28sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"

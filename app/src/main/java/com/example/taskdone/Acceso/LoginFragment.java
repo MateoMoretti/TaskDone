@@ -16,10 +16,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.DataBase;
-import com.example.taskdone.MenuPrincipalActivity;
+import com.example.taskdone.Finanzas.ActivityFinanzas;
 import com.example.taskdone.R;
 import com.example.taskdone.UsuarioSingleton;
-import com.example.taskdone.databinding.FragmentAgendaFisicoBinding;
 import com.example.taskdone.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
@@ -59,7 +58,7 @@ public class LoginFragment extends Fragment {
         }
 
         if(permitido) {
-            Intent i = new Intent(requireContext(), MenuPrincipalActivity.class);
+            Intent i = new Intent(requireContext(), ActivityFinanzas.class);
             startActivity(i);
         }
         else{

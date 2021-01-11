@@ -12,10 +12,10 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.taskdone.MenuPrincipalActivity;
 import com.example.taskdone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -89,10 +89,5 @@ public class ActivityFinanzas extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        getSupportFragmentManager().popBackStack();
     }
 }

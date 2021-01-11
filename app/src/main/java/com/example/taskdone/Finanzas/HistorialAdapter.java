@@ -14,8 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.taskdone.Agenda.ActivityAgenda;
-import com.example.taskdone.Agenda.DiaItem;
 import com.example.taskdone.R;
 
 import java.text.SimpleDateFormat;
@@ -75,14 +73,6 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
         return items.size();
     }
 
-    public void avanzar(){
-
-        Intent intent = new Intent(context, ActivityAgenda.class);
-        context.startActivity(intent);
-
-        //Ojo que nunca cierro el activity main
-    }
-
 
     public class ViewHolderHistorial extends RecyclerView.ViewHolder {
         TextView signo;
@@ -97,12 +87,6 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
             tipo = itemView.findViewById(R.id.txt_tipo);
             cantidad = itemView.findViewById(R.id.txt_cantidad);
             motivo = itemView.findViewById(R.id.txt_motivo);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    avanzar();
-                }
-            });
         }
 
 

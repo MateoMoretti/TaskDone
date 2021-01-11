@@ -20,17 +20,6 @@
             </intent-filter>
         </activity>
         <activity
-        android:name=".MenuPrincipalActivity"
-        android:label="Menu"
-        android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".Agenda.ActivityAgenda"
-            android:label="Agenda"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
-        <activity
             android:name=".Finanzas.ActivityFinanzas"
             android:label="Finanzas"
             android:theme="@style/AppTheme.Finanzas"

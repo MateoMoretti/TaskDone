@@ -31,7 +31,6 @@ import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.Model.Gasto;
 import com.example.taskdone.R;
 import com.example.taskdone.Utils;
-import com.example.taskdone.databinding.FragmentAgendaFisicoBinding;
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding;
 
 import java.text.DecimalFormat;
@@ -113,7 +112,7 @@ public class StatsFragment extends Fragment {
 
 
         Cursor data = database.getAllGastos();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         while(data.moveToNext()) {
             int id = data.getInt(0);
@@ -128,10 +127,11 @@ public class StatsFragment extends Fragment {
 
             Date fecha_gasto = sdf.parse(fecha);
 
+            assert fecha_gasto != null;
             if ((desde_date.before(fecha_gasto)||desde_date.getDay()==fecha_gasto.getDay())  && (hasta_date.after(fecha_gasto) || hasta_date.getDay()==fecha_gasto.getDay())) {
 
                 Cursor t_gasto = database.getTagsByGastoId(id);
-                ArrayList<String> tags_asociados = new ArrayList();
+                ArrayList<String> tags_asociados = new ArrayList<String>();
                 while (t_gasto.moveToNext()) {
                     tags_asociados.add(t_gasto.getString(1));
                 }

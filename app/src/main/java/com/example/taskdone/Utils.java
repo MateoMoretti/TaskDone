@@ -90,9 +90,11 @@ public class Utils {
 
     public static String getDia(String fecha){
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        Date d;
-        d = new Date(Integer.parseInt(fecha.substring(0,4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(8,10)));
-        return sdf.format(d);
+        Calendar c = Calendar.getInstance();
+        c.set(Integer.parseInt(fecha.substring(0,4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(8,10)));
+        Date d= c.getTime();
+        String oa = sdf.format(c.getTime());
+        return sdf.format(c.getTime());
     }
 
     public static String getDiaFormateado(String fecha){
