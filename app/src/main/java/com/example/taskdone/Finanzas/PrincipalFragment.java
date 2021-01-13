@@ -43,6 +43,7 @@ public class PrincipalFragment extends Fragment {
 
     ArrayList<String> monedas = new ArrayList<>();
     ArrayList<Float> cantidades = new ArrayList<>();
+    ArrayList<String> simbolos = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,12 +56,15 @@ public class PrincipalFragment extends Fragment {
 
         dataBase = new DataBase(requireContext());
 
+        //Obtengo las monedas del usuario con sus cantidades y simbolos
+        //Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
+        Integer ad= UsuarioSingleton.getInstance().getID();
         Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
-
-
         while (data.moveToNext()) {
+            int id = data.getInt(0);
             monedas.add(data.getString(1));
             cantidades.add(data.getFloat(2));
+            simbolos.add(data.getString(3));
         }
         if(monedas.isEmpty()){
             navController.navigate(R.id.crearMonedaFragment);
@@ -72,7 +76,7 @@ public class PrincipalFragment extends Fragment {
 
         binding.editFecha.setText(Utils.getFechaHoy());
 
-        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment));
+        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.crearMonedaFragment));
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -128,11 +132,11 @@ public class PrincipalFragment extends Fragment {
         binding.layoutMonedas.removeViewAt(0);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         for(int x=0;x!=monedas.size();x++){
-            View view = inflater.inflate(R.layout.elementos_historial, null);
+            View view = inflater.inflate(R.layout.item_moneda_cantidad, null);
             @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
-            @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.moneda);
-            moneda.setText(monedas.get(x));
-            cantidad.setText(""+cantidades.get(x));
+            @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.cantidad);
+            moneda.setText(monedas.get(x) );
+            cantidad.setText(simbolos.get(x)+cantidades.get(x));
             binding.layoutMonedas.addView(view);
         }
     }

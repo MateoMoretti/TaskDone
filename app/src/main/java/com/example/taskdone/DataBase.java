@@ -81,8 +81,8 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL(createTableTagGasto);
 
 
-        String createTableMonedaCantidad = "CREATE TABLE " + TABLE_MONEDA_CANTIDAD + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_ID_MONEDA_CANTIDAD + " INTEGER, " +
-                COL_MONEDA + " TEXT, "  + COL_CANTIDAD + " REAL, " + COL_SIMBOLO + " TEXT, " +" FOREIGN KEY ("+COL_ID_USUARIO+") REFERENCES "+TABLE_USUARIO+"("+COL_ID+"));";
+        String createTableMonedaCantidad = "CREATE TABLE " + TABLE_MONEDA_CANTIDAD + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_MONEDA + " TEXT, "  + COL_CANTIDAD + " REAL, " + COL_SIMBOLO + " TEXT, " + COL_ID_USUARIO + " INTEGER, " +"FOREIGN KEY ("+COL_ID_USUARIO+") REFERENCES "+TABLE_USUARIO+"("+COL_ID+"));";
         db.execSQL(createTableMonedaCantidad);
     }
 
@@ -301,12 +301,13 @@ public class DataBase extends SQLiteOpenHelper {
     }
 
 
-    public boolean addMonedaCantidad(String moneda, int cantidad, String simbolo){
+    public boolean addMonedaCantidad(String moneda, float cantidad, String simbolo){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_MONEDA, moneda);
         contentValues.put(COL_CANTIDAD, cantidad);
         contentValues.put(COL_SIMBOLO, simbolo);
+        Integer test = UsuarioSingleton.getInstance().getID();
         contentValues.put(COL_ID_USUARIO, UsuarioSingleton.getInstance().getID());
 
         long result = db.insert(TABLE_MONEDA_CANTIDAD, null, contentValues);
@@ -317,15 +318,19 @@ public class DataBase extends SQLiteOpenHelper {
         return true;
     }
 
-    public Cursor getMonedasByUserId(int id_usuario){
+
+    public Cursor getAllMonedas(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_MONEDA_CANTIDAD + " WHERE " + COL_ID_USUARIO + " = '" + id_usuario + "'";
+        String query = "SELECT * FROM " + TABLE_MONEDA_CANTIDAD;
         Cursor data = db.rawQuery(query, null);
         return data;
 
     }
 
-
-
-
+    public Cursor getMonedasByUserId(int id_usuario){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MONEDA_CANTIDAD + " WHERE " + TABLE_MONEDA_CANTIDAD+"."+COL_ID_USUARIO + " = " + id_usuario;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
 }

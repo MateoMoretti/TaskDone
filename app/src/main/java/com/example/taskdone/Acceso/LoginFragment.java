@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment {
         boolean permitido = false;
         while (data.moveToNext()) {
             UsuarioSingleton.getInstance().setID(data.getInt(0));
-            UsuarioSingleton.getInstance().setUsername(data.getString(5));
+            UsuarioSingleton.getInstance().setUsername(data.getString(1));
             permitido = true;
         }
 

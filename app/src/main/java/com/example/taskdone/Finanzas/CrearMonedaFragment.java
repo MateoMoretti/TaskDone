@@ -60,7 +60,6 @@ public class CrearMonedaFragment extends Fragment {
 
         binding.buttonCrear.setOnClickListener(v -> crearMoneda());
 
-
         return binding.getRoot();
     }
 
@@ -76,12 +75,12 @@ public class CrearMonedaFragment extends Fragment {
 
     public void crearMoneda() {
         String nombre_moneda_persistir = binding.editMoneda.getText().toString();
-        String cantidad_elegida = binding.editMoneda.getText().toString();
+        String cantidad_elegida = binding.editCantidad.getText().toString();
         String simbolo_persistir = binding.editSimbolo.getText().toString();
 
         int cantidad_persistir =0;
         if(!cantidad_elegida.equals("")){
-            cantidad_persistir = Integer.parseInt(nombre_moneda_persistir);
+            cantidad_persistir = Integer.parseInt(cantidad_elegida);
         }
         boolean insertData = dataBaseFinanzas.addMonedaCantidad(nombre_moneda_persistir, cantidad_persistir, simbolo_persistir);
 
