@@ -2,10 +2,15 @@ package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.MaskFilter;
+import android.graphics.Typeface;
+import android.graphics.fonts.Font;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.res.FontResourcesParserCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.TypefaceCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -26,11 +35,13 @@ import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class PrincipalFragment extends Fragment {
 
     private FragmentFinanzasPrincipalBinding binding;
@@ -45,7 +56,7 @@ public class PrincipalFragment extends Fragment {
     ArrayList<Float> cantidades = new ArrayList<>();
     ArrayList<String> simbolos = new ArrayList<>();
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi"})
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -57,7 +68,7 @@ public class PrincipalFragment extends Fragment {
         dataBase = new DataBase(requireContext());
 
         //Obtengo las monedas del usuario con sus cantidades y simbolos
-        //Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
+
         Integer ad= UsuarioSingleton.getInstance().getID();
         Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
         while (data.moveToNext()) {
@@ -73,34 +84,22 @@ public class PrincipalFragment extends Fragment {
             llenarLayoutMonedas();
         }
 
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, monedas){
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
 
-        binding.editFecha.setText(Utils.getFechaHoy());
+                ((TextView) v).setTextSize(20);
+                ((TextView) v).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.crearMonedaFragment));
-
-        binding.editCantidad.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                return v;
             }
+        };
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                verificarCantidad();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        ArrayAdapter<CharSequence> adapter_tipo = ArrayAdapter.createFromResource(requireContext(),
-                R.array.tipos_monedas, R.layout.spinner);
-        adapter_tipo.setDropDownViewResource(R.layout.spinner_dropdown);
-        binding.spinnerTipo.setAdapter(adapter_tipo);
-
-        binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
-
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        binding.spinnerTipo.setAdapter(spinnerArrayAdapter);
+        binding.spinnerTipo.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
+        binding.spinnerTipo.setGravity(Gravity.CENTER);
         binding.agregarTag.setOnClickListener(v -> this.seleccionarTags());
 
         dataBase = new DataBase(requireContext());
@@ -123,6 +122,28 @@ public class PrincipalFragment extends Fragment {
             scrollToTag();
 
         }
+
+        binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
+        binding.editFecha.setText(Utils.getFechaHoy());
+
+        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.crearMonedaFragment));
+
+        binding.editCantidad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                verificarCantidad();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
 
         return binding.getRoot();
     }
