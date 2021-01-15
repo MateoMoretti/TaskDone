@@ -2,18 +2,28 @@ package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.MaskFilter;
+import android.graphics.Typeface;
+import android.graphics.fonts.Font;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.res.FontResourcesParserCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.TypefaceCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -25,11 +35,13 @@ import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class PrincipalFragment extends Fragment {
 
     private FragmentFinanzasPrincipalBinding binding;
@@ -40,7 +52,11 @@ public class PrincipalFragment extends Fragment {
     DataBase dataBase;
     ArrayList<String> tags;
 
-    @SuppressLint("SetTextI18n")
+    ArrayList<String> monedas = new ArrayList<>();
+    ArrayList<Float> cantidades = new ArrayList<>();
+    ArrayList<String> simbolos = new ArrayList<>();
+
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi"})
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,50 +67,39 @@ public class PrincipalFragment extends Fragment {
 
         dataBase = new DataBase(requireContext());
 
-        Cursor data = dataBase.getUserByUsername(UsuarioSingleton.getInstance().getUsername());
-        String info_cargada = "0";
-        int pesos = 0;
-        int dolares=0;
-        int euros = 0;
+        //Obtengo las monedas del usuario con sus cantidades y simbolos
+
+        Integer ad= UsuarioSingleton.getInstance().getID();
+        Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
         while (data.moveToNext()) {
-            pesos = data.getInt(1);
-            dolares = data.getInt(2);
-            euros = data.getInt(3);
-            info_cargada = data.getString(4);
+            int id = data.getInt(0);
+            monedas.add(data.getString(1));
+            cantidades.add(data.getFloat(2));
+            simbolos.add(data.getString(3));
         }
-        if(info_cargada.equals("0")){
-            navController.navigate(R.id.cargarDatosFinanzas);
+        if(monedas.isEmpty()){
+            navController.navigate(R.id.crearMonedaFragment);
+        }
+        else{
+            llenarLayoutMonedas();
         }
 
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, monedas){
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
 
-        binding.editFecha.setText(Utils.getFechaHoy());
-        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
-        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Integer.toString(dolares)));
-        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Integer.toString(euros)));
+                ((TextView) v).setTextSize(20);
+                ((TextView) v).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-        binding.editCantidad.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                return v;
             }
+        };
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                verificarCantidad();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        ArrayAdapter<CharSequence> adapter_tipo = ArrayAdapter.createFromResource(requireContext(),
-                R.array.tipos_monedas, R.layout.spinner);
-        adapter_tipo.setDropDownViewResource(R.layout.spinner_dropdown);
-        binding.spinnerTipo.setAdapter(adapter_tipo);
-
-        binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
-
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        binding.spinnerTipo.setAdapter(spinnerArrayAdapter);
+        binding.spinnerTipo.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
+        binding.spinnerTipo.setGravity(Gravity.CENTER);
         binding.agregarTag.setOnClickListener(v -> this.seleccionarTags());
 
         dataBase = new DataBase(requireContext());
@@ -118,7 +123,43 @@ public class PrincipalFragment extends Fragment {
 
         }
 
+        binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
+        binding.editFecha.setText(Utils.getFechaHoy());
+
+        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.crearMonedaFragment));
+
+        binding.editCantidad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                verificarCantidad();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+
         return binding.getRoot();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void llenarLayoutMonedas(){
+        binding.layoutMonedas.removeViewAt(0);
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        for(int x=0;x!=monedas.size();x++){
+            View view = inflater.inflate(R.layout.item_moneda_cantidad, null);
+            @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
+            @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.cantidad);
+            moneda.setText(monedas.get(x) );
+            cantidad.setText(simbolos.get(x)+cantidades.get(x));
+            binding.layoutMonedas.addView(view);
+        }
     }
 
     private final void scrollToTag(){
@@ -185,21 +226,14 @@ public class PrincipalFragment extends Fragment {
         binding.txtTagSeleccionados.setText("0 seleccionados");
 
         tags.clear();
+        monedas.clear();
+        cantidades.clear();
 
-        Cursor data = dataBase.getUserByUsername(UsuarioSingleton.getInstance().getUsername());
-        int pesos = 0;
-        int dolares=0;
-        int euros = 0;
+        Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
         while (data.moveToNext()) {
-            pesos = data.getInt(1);
-            dolares = data.getInt(2);
-            euros = data.getInt(3);
+            monedas.add(data.getString(1));
+            cantidades.add(data.getFloat(2));
         }
-
-        binding.pesos.setText("Pesos: $ "  + Utils.formatoCantidad(Integer.toString(pesos)));
-        binding.dolares.setText("Dólares: U$D "  + Utils.formatoCantidad(Integer.toString(dolares)));
-        binding.euros.setText("Euros: € " + Utils.formatoCantidad(Integer.toString(euros)));
-
 
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 

@@ -15,8 +15,21 @@
     <!-- MONEDAS -->
 
     <string name="Pesos">Pesos</string>
-    <string name="Dolares">Dolares</string>
+    <string name="Dolares">Dólares</string>
     <string name="Euros">Euros</string>
+
+
+    <string name="tus_monedas">Tus monedas</string>
+    <string name="no_has_creado_monedas">No has creado monedas</string>
+    <string name="crea_una_moneda">Crea una moneda</string>
+
+
+    <!-- COMUNES -->
+
+    <string name="crear">Crear</string>
+    <string name="moneda">Moneda</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="simbolo">Simbolo</string>
 
 
 
@@ -37,11 +50,6 @@
         <item>2024</item>        <item>2025</item>        <item>2026</item>        <item>2027</item>
         <item>2028</item>        <item>2029</item>        <item>2030</item>        <item>2031</item>
         <item>2032</item>        <item>2033</item>        <item>2034</item>        <item>2035</item>
-    </string-array>
-
-
-    <string-array name="tipos_monedas">
-        <item>Pesos</item>        <item>Dólares</item>        <item>Euros</item>
     </string-array>
 
 </resources>
