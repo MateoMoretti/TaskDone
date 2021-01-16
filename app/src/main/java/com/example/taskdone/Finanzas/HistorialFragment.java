@@ -1,22 +1,16 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -42,7 +36,6 @@ public class HistorialFragment extends Fragment {
 
     private FragmentFinanzasHistorialBinding binding;
 
-    private String titulo;
     NavController navController;
 
     String selected_date_desde = "Siempre";
@@ -82,7 +75,7 @@ public class HistorialFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void cargarHistorial(Date desde_date, Date hasta_date) throws ParseException {
         cleanHistorial();
-        Cursor data = dataBase.getGastosByUserId(UsuarioSingleton.getInstance().getID());
+        Cursor data = dataBase.getGastosBySessionUser();
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();
@@ -90,14 +83,16 @@ public class HistorialFragment extends Fragment {
 
         while (data.moveToNext()) {
             String fecha = data.getString(1);
-            String tipo_moneda = data.getString(2);
-            String cantidad = data.getString(3);
-            String motivo = data.getString(4);
-            String ingreso = data.getString(5);
+            Float total_gasto = data.getFloat(2);
+            String motivo = data.getString(3);
+            String ingreso = data.getString(4);
+            String nombre_moneda = data.getString(5);
+            String simbolo_moneda = data.getString(6);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date fecha_gasto = sdf.parse(fecha);
 
+            assert fecha_gasto != null;
             if ((desde_date.before(fecha_gasto) || desde_date.getDay() == fecha_gasto.getDay()) && (hasta_date.after(fecha_gasto) || hasta_date.getDay() == fecha_gasto.getDay())) {
 
                 if (ingreso.equals("0")) {
@@ -105,15 +100,6 @@ public class HistorialFragment extends Fragment {
                 } else {
                     ingreso = "+";
                 }
-
-                if (tipo_moneda.equals("Pesos")) {
-                    tipo_moneda = "$";
-                } else if (tipo_moneda.equals("Dólares")) {
-                    tipo_moneda = "U$D";
-                } else if (tipo_moneda.equals("Euros")) {
-                    tipo_moneda = "€";
-                }
-
                 if (!fechas.contains(fecha)) {
                     fechas.add(fecha);
                 }
@@ -121,8 +107,8 @@ public class HistorialFragment extends Fragment {
                 ItemHistorial i = new ItemHistorial();
                 i.fecha = fecha;
                 i.signo = ingreso;
-                i.tipo = tipo_moneda;
-                i.cantidad = Utils.formatoCantidad(cantidad);
+                i.simbolo = simbolo_moneda;
+                i.cantidad = Utils.formatoCantidad(total_gasto);
                 i.motivo = motivo;
 
                 data_items.add(i);
@@ -154,7 +140,6 @@ public class HistorialFragment extends Fragment {
                 rec.setAdapter(adapter);
             }
         }
-
     }
 
     private void cleanHistorial(){

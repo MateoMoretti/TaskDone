@@ -1,26 +1,18 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -36,12 +28,7 @@ import com.example.taskdone.databinding.FragmentFinanzasStatsBinding;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,12 +44,12 @@ public class StatsFragment extends Fragment {
 
     ArrayList<Gasto> all_gastos = new ArrayList<>();
 
-    ArrayList<Gasto> gastos_pesos = new ArrayList<>();
-    ArrayList<Gasto> gastos_dolares = new ArrayList<>();
-    ArrayList<Gasto> gastos_euros = new ArrayList<>();
-    ArrayList<Gasto> ingresos_pesos = new ArrayList<>();
-    ArrayList<Gasto> ingresos_dolares = new ArrayList<>();
-    ArrayList<Gasto> ingresos_euros = new ArrayList<>();
+
+    ArrayList<String> monedas = new ArrayList<>();
+    ArrayList<String> simbolos = new ArrayList<>();
+
+    ArrayList<ArrayList<Gasto>> gastos = new ArrayList<>();
+    ArrayList<ArrayList<Gasto>> ingresos = new ArrayList<>();
 
     String selected_date_desde = "Siempre";
     String selected_date_hasta = "Hoy";
@@ -102,8 +89,8 @@ public class StatsFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void cargarStats(Calendar desde, Calendar hasta) throws ParseException {
         cleanLayouts();
-        HashMap<String, Integer> total_tag_ingresos = new HashMap<>();
-        HashMap<String, Integer> total_tag_gastos = new HashMap<>();
+        HashMap<String, Float> total_tag_ingresos = new HashMap<>();
+        HashMap<String, Float> total_tag_gastos = new HashMap<>();
 
         Date desde_date = desde.getTime();
         Date hasta_date = hasta.getTime();
@@ -111,19 +98,24 @@ public class StatsFragment extends Fragment {
         cantidad_dias = Utils.diferenciaDeDias(desde, hasta);
 
 
-        Cursor data = database.getAllGastos();
+        Cursor data = database.getGastosBySessionUser();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        while(data.moveToNext()) {
+        while (data.moveToNext()) {
             int id = data.getInt(0);
             String fecha = data.getString(1);
-            String tipo_moneda = data.getString(2);
-            String cantidad = data.getString(3);
-            String motivo = data.getString(4);
-            String ingreso = data.getString(5);
+            Float total_gasto = data.getFloat(2);
+            String motivo = data.getString(3);
+            String ingreso = data.getString(4);
+            String nombre_moneda = data.getString(5);
+            String simbolo_moneda = data.getString(6);
 
-            Gasto g = new Gasto(fecha, tipo_moneda, cantidad, motivo, ingreso);
+            Gasto g = new Gasto(fecha, nombre_moneda, total_gasto, motivo, ingreso);
             all_gastos.add(g);
+            if(!monedas.contains(g.getNombre_moneda())) {
+                monedas.add(nombre_moneda);
+                simbolos.add(simbolo_moneda);
+            }
 
             Date fecha_gasto = sdf.parse(fecha);
 
@@ -137,71 +129,53 @@ public class StatsFragment extends Fragment {
                 }
 
                 if (ingreso.equals("0")) {
-                    //GUARDO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
+                    //OBTENGO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
                     for(String t:tags_asociados) {
                         if (!t.equals("")) {
                             if (!total_tag_gastos.containsKey(ingreso + t)) {
-                                total_tag_gastos.put(ingreso + t, Integer.parseInt(cantidad));
+                                total_tag_gastos.put(ingreso + t, total_gasto);
                             } else {
-                                Integer a = total_tag_gastos.get(ingreso + t);
-                                total_tag_gastos.replace(ingreso + t, total_tag_gastos.get(ingreso + t) + Integer.parseInt(cantidad));
+                                Float a = total_tag_gastos.get(ingreso + t);
+                                total_tag_gastos.replace(ingreso + t, total_tag_gastos.get(ingreso + t) + total_gasto);
                             }
                         }
-                    }
-
-                    switch (tipo_moneda) {
-                        case "Pesos":
-                            gastos_pesos.add(g);
-                            break;
-                        case "Dólares":
-                            gastos_dolares.add(g);
-                            break;
-                        case "Euros":
-                            gastos_euros.add(g);
-                            break;
                     }
                 } else {
                     //GUARDO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
                     for(String t:tags_asociados) {
                         if(!t.equals("")){
                             if(!total_tag_ingresos.containsKey(ingreso+t)){
-                                total_tag_ingresos.put(ingreso+t, Integer.parseInt(cantidad));
+                                total_tag_ingresos.put(ingreso+t, total_gasto);
                             }
                             else {
-                                total_tag_ingresos.replace(ingreso + t, total_tag_ingresos.get(ingreso + t) + Integer.parseInt(cantidad));
+                                total_tag_ingresos.replace(ingreso + t, total_tag_ingresos.get(ingreso + t) + total_gasto);
                             }
                         }
-                    }
-
-                    switch (tipo_moneda) {
-                        case "Pesos":
-                            ingresos_pesos.add(g);
-                            break;
-                        case "Dólares":
-                            ingresos_dolares.add(g);
-                            break;
-                        case "Euros":
-                            ingresos_euros.add(g);
-                            break;
                     }
                 }
             }
         }
 
-            //AGREGO LINEAS DE GASTOS EJ:    PESOS  280 (TOTAL)   53,333 (PROMEDIO)
+        //AGREGO LINEAS DE GASTOS EJ:    PESOS  280 (TOTAL)   53,333 (PROMEDIO)
 
+        Cursor total_gastos = database.getTotalGastosGroupByMonedas("0");
+        Cursor total_ingresos = database.getTotalGastosGroupByMonedas("1");
+
+        boolean hay_gastos = false;
+        boolean hay_ingresos = false;
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        if(gastos_pesos.size()>0 || gastos_dolares.size()>0 || gastos_euros.size()>0){
+
+        while (total_gastos.moveToNext()){
+            hay_gastos = true;
             View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView)view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView)view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
+            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+            ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutGastos.addView(view);
 
-            agregarGastoIngreso("Pesos", binding.layoutGastos, gastos_pesos);
-            agregarGastoIngreso("Dólares", binding.layoutGastos, gastos_dolares);
-            agregarGastoIngreso("Euros", binding.layoutGastos, gastos_euros);
+            agregarGastoIngreso(total_gastos.getString(2), total_gastos.getFloat(1), total_gastos.getString(3), binding.layoutGastos);
         }
-        else{
+
+        if(!hay_gastos){
             View view = inflater.inflate(R.layout.item_stats, null);
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
@@ -212,21 +186,21 @@ public class StatsFragment extends Fragment {
 
         //LINEAS DE INGRESOS
 
-        if(ingresos_pesos.size()>0 || ingresos_dolares.size()>0 || ingresos_euros.size()>0){
+        while (total_ingresos.moveToNext()){
+            hay_ingresos = true;
             View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView)view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView)view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
+            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+            ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutIngresos.addView(view);
 
-            agregarGastoIngreso("Pesos", binding.layoutIngresos, ingresos_pesos);
-            agregarGastoIngreso("Dólares", binding.layoutIngresos, ingresos_dolares);
-            agregarGastoIngreso("Euros", binding.layoutIngresos, ingresos_euros);
+            agregarGastoIngreso(total_ingresos.getString(2), total_ingresos.getFloat(1), total_ingresos.getString(3), binding.layoutIngresos);
         }
-        else{
+
+        if(!hay_ingresos){
             View view = inflater.inflate(R.layout.item_stats, null);
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
-            ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_ingresos));
+            ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_gastos));
             ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutIngresos.addView(view);
         }
@@ -300,35 +274,16 @@ public class StatsFragment extends Fragment {
     }
 
 
-    private void agregarGastoIngreso(String tipo, LinearLayout layout, ArrayList<Gasto> gasto_ingreso){
+    @SuppressLint("SetTextI18n")
+    private void agregarGastoIngreso(String tipo, Float total, String simbolo, LinearLayout layout){
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-
-        if(gasto_ingreso.size()>0){
-            int total = 0;
-            for(Gasto g: gasto_ingreso){
-                total += Integer.parseInt(g.getCantidad());
-            }
-
-            View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView)view.findViewById(R.id.tipo)).setText(tipo + ": ");
-            switch (tipo){
-                case "Pesos":
-                    ((TextView)view.findViewById(R.id.promedio)).setText("$ "+df.format((float)total/(float)cantidad_dias));
-                    ((TextView)view.findViewById(R.id.total)).setText("$ "+df.format(total));
-                    break;
-                case "Dólares":
-                    ((TextView)view.findViewById(R.id.promedio)).setText("U$D "+df.format((float)total/(float)cantidad_dias));
-                    ((TextView)view.findViewById(R.id.total)).setText("U$D "+df.format(total));
-                    break;
-                case "Euros":
-                    ((TextView)view.findViewById(R.id.promedio)).setText("€ "+df.format((float)total/(float)cantidad_dias));
-                    ((TextView)view.findViewById(R.id.total)).setText("€ "+df.format(total));
-                    break;
-            }
-            layout.addView(view);
-        }
+        View view = inflater.inflate(R.layout.item_stats, null);
+        ((TextView)view.findViewById(R.id.tipo)).setText(tipo + ": ");
+        ((TextView)view.findViewById(R.id.total)).setText(simbolo + " "+ Utils.formatoCantidad(total));
+        ((TextView)view.findViewById(R.id.promedio)).setText(simbolo + " "+ Utils.formatoCantidad(total/cantidad_dias));
+        layout.addView(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -337,7 +292,7 @@ public class StatsFragment extends Fragment {
         String text_desde = "Siempre";
         String text_hasta = "Hoy";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
         Date desde_date = sdf.parse("1900/01/01");
         Date hasta_date = Calendar.getInstance().getTime();
 
@@ -357,19 +312,14 @@ public class StatsFragment extends Fragment {
 
     private void cleanLayouts(){
         cantidad_dias = 0L;
-        gastos_pesos.clear();
-        gastos_dolares.clear();
-        gastos_euros.clear();
-
-        ingresos_pesos.clear();
-        ingresos_dolares.clear();
-        ingresos_euros.clear();
+        gastos.clear();
+        ingresos.clear();
 
         binding.textDesde.setText("Siempre");
         binding.textHasta.setText("Hoy");
 
 
-        for(int x = 1; 1!= binding.layoutGastos.getChildCount(); x++) {
+        while(binding.layoutGastos.getChildCount() != 1){
             binding.layoutGastos.removeViewAt(1);
         }
         for(int x = 1; 1!= binding.layoutIngresos.getChildCount(); x++) {

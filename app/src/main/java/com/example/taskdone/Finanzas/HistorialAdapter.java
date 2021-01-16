@@ -3,11 +3,9 @@ package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -51,7 +47,7 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.View
     public void onBindViewHolder(@NonNull ViewHolderHistorial holder, int position) {
 
         holder.signo.setText(items.get(position).signo);
-        holder.tipo.setText(items.get(position).tipo);
+        holder.tipo.setText(items.get(position).simbolo);
         holder.cantidad.setText(items.get(position).cantidad);
         holder.motivo.setText(items.get(position).motivo);
 

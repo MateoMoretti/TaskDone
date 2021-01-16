@@ -1,5 +1,6 @@
 package com.example.taskdone;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -89,11 +90,9 @@ public class Utils {
     }
 
     public static String getDia(String fecha){
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Calendar c = Calendar.getInstance();
-        c.set(Integer.parseInt(fecha.substring(0,4)), Integer.parseInt(fecha.substring(5,7)), Integer.parseInt(fecha.substring(8,10)));
-        Date d= c.getTime();
-        String oa = sdf.format(c.getTime());
+        c.set(Integer.parseInt(fecha.substring(0,4)), Integer.parseInt(fecha.substring(5,7))-1, Integer.parseInt(fecha.substring(8,10)));
         return sdf.format(c.getTime());
     }
 
@@ -140,6 +139,7 @@ public class Utils {
         return df.format(Float.parseFloat(c));
     }
 
+    //Agrega los puntos y lo hace bonito
     public static String formatoCantidad(float f){
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);

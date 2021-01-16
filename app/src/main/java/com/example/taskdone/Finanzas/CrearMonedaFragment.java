@@ -90,10 +90,7 @@ public class CrearMonedaFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
         }
 
-        actualizar();
+        navController.navigate(R.id.principalFragment);
     }
 
-    private void actualizar(){
-
-    }
 }

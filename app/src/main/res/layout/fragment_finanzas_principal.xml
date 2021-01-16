@@ -130,22 +130,22 @@
                     android:text="Moneda: "
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_tipo"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_moneda"
                     app:layout_constraintEnd_toEndOf="@+id/txt_fecha"
                     app:layout_constraintStart_toStartOf="@+id/txt_fecha"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_tipo" />
+                    app:layout_constraintTop_toTopOf="@+id/spinner_moneda" />
 
                 <Button
                     android:id="@+id/agregar_moneda"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@android:drawable/ic_input_add"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_tipo"
-                    app:layout_constraintStart_toEndOf="@+id/spinner_tipo"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_tipo" />
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_moneda"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_moneda"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_moneda" />
 
                 <Spinner
-                    android:id="@+id/spinner_tipo"
+                    android:id="@+id/spinner_moneda"
                     android:layout_width="125dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
@@ -176,8 +176,8 @@
                     android:textColor="@color/almost_black"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/spinner_tipo"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_tipo" />
+                    app:layout_constraintStart_toStartOf="@+id/spinner_moneda"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_moneda" />
 
                 <TextView
                     android:id="@+id/txt_motivo"
@@ -199,7 +199,6 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/fondo_blanco_redondeado"
                     android:ems="10"
-                    android:text="-"
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="18sp"

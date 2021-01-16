@@ -3,15 +3,15 @@ package com.example.taskdone.Model;
 public class Gasto {
 
     String fecha;
-    String tipo_moneda;
-    String cantidad;
+    String nombre_moneda;
+    Float total_gasto;
     String motivo;
     String ingreso;
 
-    public Gasto( String fecha, String tipo_moneda, String cantidad, String motivo, String ingreso){
+    public Gasto( String fecha, String nombre_moneda, Float total_gasto, String motivo, String ingreso){
         this.fecha = fecha;
-        this.tipo_moneda = tipo_moneda;
-        this.cantidad =cantidad;
+        this.nombre_moneda = nombre_moneda;
+        this.total_gasto =total_gasto;
         this.motivo = motivo;
         this.ingreso = ingreso;
     }
@@ -24,20 +24,20 @@ public class Gasto {
         this.fecha = fecha;
     }
 
-    public String getTipo_moneda() {
-        return tipo_moneda;
+    public String getNombre_moneda() {
+        return nombre_moneda;
     }
 
-    public void setTipo_moneda(String tipo_moneda) {
-        this.tipo_moneda = tipo_moneda;
+    public void setNombre_moneda(String nombre_moneda) {
+        this.nombre_moneda = nombre_moneda;
     }
 
-    public String getCantidad() {
-        return cantidad;
+    public Float getTotal_gasto() {
+        return total_gasto;
     }
 
-    public void setCantidad(String cantidad) {
-        this.cantidad = cantidad;
+    public void setTotal_gasto(Float total_gasto) {
+        this.total_gasto = total_gasto;
     }
 
     public String getMotivo() {

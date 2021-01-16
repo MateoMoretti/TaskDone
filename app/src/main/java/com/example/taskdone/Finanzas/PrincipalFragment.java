@@ -2,10 +2,6 @@ package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.MaskFilter;
-import android.graphics.Typeface;
-import android.graphics.fonts.Font;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,9 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.res.FontResourcesParserCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.TypefaceCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -35,7 +28,6 @@ import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -69,10 +61,8 @@ public class PrincipalFragment extends Fragment {
 
         //Obtengo las monedas del usuario con sus cantidades y simbolos
 
-        Integer ad= UsuarioSingleton.getInstance().getID();
         Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
         while (data.moveToNext()) {
-            int id = data.getInt(0);
             monedas.add(data.getString(1));
             cantidades.add(data.getFloat(2));
             simbolos.add(data.getString(3));
@@ -97,9 +87,9 @@ public class PrincipalFragment extends Fragment {
         };
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        binding.spinnerTipo.setAdapter(spinnerArrayAdapter);
-        binding.spinnerTipo.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
-        binding.spinnerTipo.setGravity(Gravity.CENTER);
+        binding.spinnerMoneda.setAdapter(spinnerArrayAdapter);
+        binding.spinnerMoneda.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
+        binding.spinnerMoneda.setGravity(Gravity.CENTER);
         binding.agregarTag.setOnClickListener(v -> this.seleccionarTags());
 
         dataBase = new DataBase(requireContext());
@@ -114,7 +104,7 @@ public class PrincipalFragment extends Fragment {
             }
             binding.txtTagSeleccionados.setText(tags.size() + " seleccionados");
             binding.editFecha.setText(getArguments().getString("fecha"));
-            binding.spinnerTipo.setSelection(Integer.parseInt(getArguments().getString("tipo_moneda")));
+            binding.spinnerMoneda.setSelection(Integer.parseInt(getArguments().getString("tipo_moneda")));
             binding.editCantidad.setText(getArguments().getString("cantidad"));
             binding.editMotivo.setText(getArguments().getString("motivo"));
             binding.checkIngreso.setChecked(getArguments().getBoolean("ingreso"));
@@ -150,14 +140,16 @@ public class PrincipalFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void llenarLayoutMonedas(){
-        binding.layoutMonedas.removeViewAt(0);
+        while(binding.layoutMonedas.getChildCount()!=0) {
+            binding.layoutMonedas.removeViewAt(0);
+        }
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         for(int x=0;x!=monedas.size();x++){
             View view = inflater.inflate(R.layout.item_moneda_cantidad, null);
             @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
             @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.cantidad);
-            moneda.setText(monedas.get(x) );
-            cantidad.setText(simbolos.get(x)+cantidades.get(x));
+            moneda.setText(monedas.get(x) +": ");
+            cantidad.setText(simbolos.get(x)+" "+Utils.formatoCantidad(cantidades.get(x)));
             binding.layoutMonedas.addView(view);
         }
     }
@@ -206,7 +198,7 @@ public class PrincipalFragment extends Fragment {
             if (binding.checkIngreso.isChecked()) {
                 ingreso = "1";
             }
-            boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerTipo.getSelectedItem().toString(), binding.editCantidad.getText().toString(), binding.editMotivo.getText().toString(), tags, ingreso, UsuarioSingleton.getInstance().getID());
+            boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerMoneda.getSelectedItem().toString(), Float.parseFloat(binding.editCantidad.getText().toString()), binding.editMotivo.getText().toString(), tags, ingreso);
 
             if (insertData) {
                 Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
@@ -219,7 +211,7 @@ public class PrincipalFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void cleanAndUpdate(){
-        binding.spinnerTipo.setSelection(0);
+        binding.spinnerMoneda.setSelection(0);
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");
         binding.checkIngreso.setChecked(false);
@@ -233,7 +225,9 @@ public class PrincipalFragment extends Fragment {
         while (data.moveToNext()) {
             monedas.add(data.getString(1));
             cantidades.add(data.getFloat(2));
+            simbolos.add(data.getString(3));
         }
+        llenarLayoutMonedas();
 
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 
@@ -244,7 +238,7 @@ public class PrincipalFragment extends Fragment {
     void seleccionarTags() {
         Bundle bundle = new Bundle();
         bundle.putString("fecha", binding.editFecha.getText().toString());
-        bundle.putString("tipo_moneda", Integer.toString(binding.spinnerTipo.getSelectedItemPosition()));
+        bundle.putString("tipo_moneda", Integer.toString(binding.spinnerMoneda.getSelectedItemPosition()));
         bundle.putString("cantidad", binding.editCantidad.getText().toString());
         bundle.putString("motivo", binding.editMotivo.getText().toString());
         bundle.putStringArrayList("tags", tags);
@@ -253,13 +247,5 @@ public class PrincipalFragment extends Fragment {
         navController.navigate(R.id.action_principalFragment_to_tagsFragment, bundle);
 
     }
-
-
-
-
-
-
-
-
 
 }
