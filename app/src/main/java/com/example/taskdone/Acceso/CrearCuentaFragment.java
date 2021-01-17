@@ -53,13 +53,19 @@ public class CrearCuentaFragment extends Fragment {
         if (existe) {
             Toast.makeText(requireContext(), getResources().getString(R.string.error_usuario_existente), Toast.LENGTH_SHORT).show();
         } else {
-            boolean result = database.addUser(binding.usuario.getText().toString(), binding.contrasena.getText().toString());
-            if (result) {
-                Toast.makeText(requireContext(), getResources().getString(R.string.usuario_creado), Toast.LENGTH_SHORT).show();
-                navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment);
-            } else {
-                Toast.makeText(requireContext(),  getResources().getString(R.string.error_crear_usuario), Toast.LENGTH_SHORT).show();
+            if(binding.usuario.getText().toString().equals("")) {
+                Toast.makeText(requireContext(), getResources().getString(R.string.error_usuario_vacio), Toast.LENGTH_SHORT).show();
             }
+            else {
+                boolean result = database.addUser(binding.usuario.getText().toString(), binding.contrasena.getText().toString());
+                if (result) {
+                    Toast.makeText(requireContext(), getResources().getString(R.string.usuario_creado), Toast.LENGTH_SHORT).show();
+                    navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment);
+                } else {
+                    Toast.makeText(requireContext(), getResources().getString(R.string.error_crear_usuario), Toast.LENGTH_SHORT).show();
+                }
+            }
+
         }
     }
 

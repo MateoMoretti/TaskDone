@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.DataBase;
 import com.example.taskdone.Finanzas.ActivityFinanzas;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.databinding.FragmentLoginBinding;
@@ -39,7 +40,7 @@ public class LoginFragment extends Fragment {
 
         binding.iniciaSesion.setOnClickListener(v -> iniciarSesion());
 
-        binding.crearCuenta.setOnClickListener(v -> navController.navigate(R.id.action_loginFragment_to_crearCuentaFragment));
+        binding.crearCuenta.setOnClickListener(v -> crearCuenta());
 
         binding.contrasena.setInputType(129);
         binding.verPassword.setOnClickListener(v -> alternarVisibilidadPassword());
@@ -47,9 +48,15 @@ public class LoginFragment extends Fragment {
         return binding.getRoot();
     }
 
+    void crearCuenta(){
+        Preferences.savePreferenceString(requireContext(), ""+R.id.loginFragment, "id_fragment_anterior");
+        navController.navigate(R.id.action_loginFragment_to_crearCuentaFragment);
+    }
+
     void iniciarSesion(){
         Cursor data = database.getUserByUsernameAndPassword(binding.usuario.getText().toString(), binding.contrasena.getText().toString());
         boolean permitido = false;
+        String password ="";
         while (data.moveToNext()) {
             UsuarioSingleton.getInstance().setID(data.getInt(0));
             UsuarioSingleton.getInstance().setUsername(data.getString(1));
@@ -57,11 +64,15 @@ public class LoginFragment extends Fragment {
         }
 
         if(permitido) {
+            if(binding.mantenerSesion.isChecked()){
+                Preferences.savePreferenceString(requireContext(),UsuarioSingleton.getInstance().getUsername(),"usuario");
+                Preferences.savePreferenceString(requireContext(),password,"password");
+            }
             Intent i = new Intent(requireContext(), ActivityFinanzas.class);
             startActivity(i);
         }
         else{
-            Toast.makeText(requireContext(), "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.credenciales_incorrectas), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -15,10 +15,10 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/fondo"
         tools:srcCompat="@drawable/fondo"
         tools:visibility="visible" />
@@ -29,25 +29,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="@string/acceso"
+        android:text="@string/app_name"
         android:textColor="#FFFFFF"
-        android:textSize="42dp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inicia_sesion"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titulo"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:text="@string/nombre_de_usuario"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/usuario"
+        app:layout_constraintBottom_toBottomOf="@+id/fondo"
         app:layout_constraintEnd_toEndOf="@+id/titulo"
-        app:layout_constraintStart_toStartOf="@+id/titulo" />
+        app:layout_constraintStart_toStartOf="@+id/titulo"
+        app:layout_constraintTop_toBottomOf="@+id/titulo"
+        app:layout_constraintVertical_bias="0.2" />
 
     <EditText
         android:id="@+id/usuario"
@@ -58,11 +73,9 @@
         android:hint="@string/usuario"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/titulo"
         app:layout_constraintStart_toStartOf="@+id/titulo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textView8"
@@ -99,25 +112,43 @@
         app:layout_constraintStart_toEndOf="@+id/contrasena"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <Button
-        android:id="@+id/inicia_sesion"
-        android:layout_width="130dp"
+    <CheckBox
+        android:id="@+id/mantener_sesion"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/gray_with_border"
-        android:text="@string/inicia_sesion"
-        app:layout_constraintEnd_toEndOf="@+id/contrasena"
+        android:background="@drawable/fondo_blanco_redondeado"
+        android:text="@string/mantener_sesion"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/ver_password"
         app:layout_constraintStart_toStartOf="@+id/contrasena"
         app:layout_constraintTop_toBottomOf="@+id/contrasena" />
 
     <Button
-        android:id="@+id/crear_cuenta"
-        android:layout_width="130dp"
+        android:id="@+id/inicia_sesion"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/gray_with_border"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="@string/ingresar"
+        app:layout_constraintEnd_toEndOf="@+id/contrasena"
+        app:layout_constraintStart_toStartOf="@+id/contrasena"
+        app:layout_constraintTop_toBottomOf="@+id/mantener_sesion" />
+
+    <Button
+        android:id="@+id/crear_cuenta"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@color/naranja"
         android:text="@string/crear_cuenta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/contrasena"
         app:layout_constraintStart_toStartOf="@+id/contrasena"
-        app:layout_constraintTop_toBottomOf="@+id/inicia_sesion" />
+        app:layout_constraintTop_toBottomOf="@+id/inicia_sesion"
+        app:layout_constraintVertical_bias="0.3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
