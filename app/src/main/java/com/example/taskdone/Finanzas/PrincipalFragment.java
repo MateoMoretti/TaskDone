@@ -22,6 +22,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.DataBase;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.Utils;
 import com.example.taskdone.DatePickerFragment;
@@ -133,7 +134,7 @@ public class PrincipalFragment extends Fragment {
         binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
         binding.editFecha.setText(Utils.calendarToString(Calendar.getInstance()));
 
-        binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.crearMonedaFragment));
+        binding.agregarMoneda.setOnClickListener(v -> irACrearMoneda());
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -153,6 +154,11 @@ public class PrincipalFragment extends Fragment {
 
 
         return binding.getRoot();
+    }
+
+    private void irACrearMoneda(){
+        Preferences.savePreferenceString(requireContext(), ""+R.id.principalFragment, "id_fragment_anterior");
+        navController.navigate(R.id.crearMonedaFragment);
     }
 
     @SuppressLint("SetTextI18n")

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.DataBase;
 import com.example.taskdone.DatePickerFragment;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
@@ -50,15 +51,23 @@ public class HistorialFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
+        String selected_date_desde = Preferences.getPreferenceString(requireContext(), "historial_desde");
+        String selected_date_hasta = Preferences.getPreferenceString(requireContext(), "historial_hasta");
 
-        selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
-        selected_date_hasta = getResources().getString(R.string.hoy);
+        if(selected_date_desde.equals("")) {
+            selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
+        }
+        if(selected_date_hasta.equals("")) {
+            selected_date_hasta = getResources().getString(R.string.hoy);
+        }
 
         dataBase = new DataBase(requireContext());
 
-        Calendar c= Calendar.getInstance();
-        c.add(Calendar.DATE, -29);
-        cargarHistorial(c.getTime(), Calendar.getInstance().getTime());
+        try {
+            filtrar(selected_date_desde, selected_date_hasta);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         binding.tituloDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
         binding.tituloHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
@@ -178,9 +187,11 @@ public class HistorialFragment extends Fragment {
             if(es_desde){
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_desde = selectedDate;
+                Preferences.savePreferenceString(requireContext(), selectedDate,"historial_desde");
             }else{
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_hasta = selectedDate;
+                Preferences.savePreferenceString(requireContext(), selectedDate,"historial_hasta");
             }
             try {
                 filtrar(binding.textDesde.getText().toString(), binding.textHasta.getText().toString());

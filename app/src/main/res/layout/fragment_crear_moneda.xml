@@ -30,25 +30,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:text="@string/monedas"
         android:textAlignment="textStart"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="@+id/volver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/volver"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlCompat" />
 
     <ImageView
         android:id="@+id/volver"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
         android:src="@drawable/abc_vector_test"
+        app:layout_constraintBottom_toBottomOf="@+id/titulo"
+        app:layout_constraintEnd_toStartOf="@+id/titulo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/titulo"
         tools:ignore="PrivateResource" />
 
     <ScrollView

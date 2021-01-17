@@ -58,7 +58,10 @@ public class TagsFragment extends Fragment {
 
         cargarTags();
 
-        binding.buttonCancelar.setOnClickListener(v -> volverAPrincipal(false));
+        binding.volver.setOnClickListener(v -> volverAPrincipal(false));
+
+        //Cambiar
+        binding.buttonEliminar.setOnClickListener(v -> volverAPrincipal(false));
 
         binding.buttonCrearTag.setOnClickListener(v -> popupCrearTag());
 
@@ -116,9 +119,9 @@ public class TagsFragment extends Fragment {
 
         EditText crear_tag = vista.findViewById(R.id.edit_crear_tag);
 
-        builder.setTitle("Crear nuevo tag");
+        builder.setTitle(getResources().getString(R.string.crear_nuevo_tag));
         builder.setView(vista)
-                .setPositiveButton("Aceptar", (dialog, which) ->
+                .setPositiveButton(getResources().getString(R.string.aceptar), (dialog, which) ->
                         crearTag(crear_tag.getText().toString())
                 );
 
@@ -134,16 +137,19 @@ public class TagsFragment extends Fragment {
     }
 
     private void crearTag(String tag){
-        dataBase = new DataBase(requireContext());
-        boolean insertData = dataBase.addTag(tag);
-
-        if (insertData) {
-            Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+        if(tag.equals("")){
+            Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show();
         }
-        cargarTags();
+        else {
+            dataBase = new DataBase(requireContext());
+            boolean insertData = dataBase.addTag(tag);
 
-
+            if (insertData) {
+                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            }
+            cargarTags();
+        }
     }
 }

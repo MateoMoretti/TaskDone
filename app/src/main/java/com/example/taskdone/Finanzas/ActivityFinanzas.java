@@ -1,6 +1,7 @@
 package com.example.taskdone.Finanzas;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -11,13 +12,20 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ActivityFinanzas extends AppCompatActivity {
 
@@ -47,6 +55,12 @@ public class ActivityFinanzas extends AppCompatActivity {
         pesos.setIcon(dr_signo_pesos);
         stats.setIcon(dr_stats);
         historial.setIcon(dr_historial);
+
+        Preferences.deletePreferenceString(getApplicationContext(), "stats_desde");
+        Preferences.deletePreferenceString(getApplicationContext(), "stats_hasta");
+        Preferences.deletePreferenceString(getApplicationContext(), "historial_desde");
+        Preferences.deletePreferenceString(getApplicationContext(), "historial_hasta");
+        Preferences.deletePreferenceString(getApplicationContext(), "id_fragment_anterior");
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -89,5 +103,33 @@ public class ActivityFinanzas extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //On back pressed if nav destination igual a los 3 principales: queres salir de sesion wacho?
+
+    @Override
+    public void onBackPressed() {
+        ArrayList<Integer> destinos_principales = new ArrayList<>(Arrays.asList(R.id.principalFragment,R.id.historialFragment,R.id.statsFragment));
+        if (destinos_principales.contains(navController.getCurrentDestination().getId())) {
+            popupCerrarSesion();
+        }
+        else{
+            navController.navigate(Integer.parseInt(Preferences.getPreferenceString(getApplicationContext(), "id_fragment_anterior")));
+        }
+    }
+    private void popupCerrarSesion() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.salir));
+        builder.setMessage(getResources().getString(R.string.quieres_cerrar_sesion));
+        DialogInterface.OnClickListener c = (dialogInterface, i) -> {
+            Preferences.deleteAllPreferenceString(getApplicationContext());
+            finish();
+        };
+        builder.setPositiveButton(getResources().getString(R.string.si), c);
+        builder.setNegativeButton(getResources().getString(R.string.no), null);
+        builder.setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

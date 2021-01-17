@@ -24,15 +24,26 @@
         tools:srcCompat="@drawable/fondo"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/volver"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/abc_vector_test"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        tools:ignore="PrivateResource" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/frijole"
         android:text="@string/tags"
         android:textColor="@color/white"
-        android:textSize="40sp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -68,12 +79,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
-        android:id="@+id/button_cancelar"
+        android:id="@+id/button_eliminar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="#CD584F"
-        android:text="@string/cancelar"
+        android:text="@string/eliminar"
         app:layout_constraintBottom_toBottomOf="@+id/button_crear_tag"
         app:layout_constraintEnd_toStartOf="@+id/button_crear_tag"
         app:layout_constraintStart_toStartOf="parent"

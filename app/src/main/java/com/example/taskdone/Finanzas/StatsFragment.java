@@ -21,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.taskdone.DataBase;
 import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.Model.Gasto;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding;
@@ -63,15 +64,23 @@ public class StatsFragment extends Fragment {
         binding = FragmentFinanzasStatsBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
-        selected_date_hasta = getResources().getString(R.string.hoy);
-
-
         database = new DataBase(requireContext());
-        Calendar c= Calendar.getInstance();
-        c.add(Calendar.DATE, -29);
 
-        cargarStats(c, Calendar.getInstance());
+        String selected_date_desde = Preferences.getPreferenceString(requireContext(), "stats_desde");
+        String selected_date_hasta = Preferences.getPreferenceString(requireContext(), "stats_hasta");
+
+        if(selected_date_desde.equals("")) {
+            selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
+        }
+        if(selected_date_hasta.equals("")) {
+            selected_date_hasta = getResources().getString(R.string.hoy);
+        }
+
+        try {
+            filtrar(selected_date_desde, selected_date_hasta);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         binding.tituloDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
         binding.tituloHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
@@ -158,7 +167,7 @@ public class StatsFragment extends Fragment {
             @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
-            ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_gastos));
+            ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_ingresos));
             ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutIngresos.addView(view);
         }
@@ -298,9 +307,11 @@ public class StatsFragment extends Fragment {
             if(es_desde){
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_desde = selectedDate;
+                Preferences.savePreferenceString(requireContext(), selectedDate, "stats_desde");
             }else{
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_hasta = selectedDate;
+                Preferences.savePreferenceString(requireContext(), selectedDate, "stats_hasta");
             }
             try {
                 filtrar(binding.textDesde.getText().toString(), binding.textHasta.getText().toString());
