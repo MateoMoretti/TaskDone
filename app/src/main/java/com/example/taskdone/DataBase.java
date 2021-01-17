@@ -26,7 +26,7 @@ public class DataBase extends SQLiteOpenHelper {
     private static final String COL_PASSWORD = "contraseña";
 
     private static final String TABLE_TAG = "Tag";
-    private static final String COL_NOMBRE_TAG = "nombre_tag";            //string
+    private static final String COL_NOMBRE = "nombre";            //string
 
 
     private static final String TABLE_TAG_USUARIO = "Tag_Usuario";
@@ -40,7 +40,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     private static final String TABLE_MONEDA = "Moneda";
     //private static final String COL_ID_MONEDA_CANTIDAD = "id_moneda_cantidad";      //int  definido arriba
-    private static final String COL_NOMBRE = "nombre";    // string
+    //private static final String COL_NOMBRE = "nombre";    // definido arriba
     private static final String COL_CANTIDAD = "cantidad";    // int
     private static final String COL_SIMBOLO = "simbolo";    // string
     //private static final String COL_ID_USUARIO = "id_usuario";      //int  definido arriba
@@ -67,7 +67,7 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL(createTableUser);
 
 
-        String createTableTag = "CREATE TABLE " + TABLE_TAG + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_NOMBRE_TAG + " TEXT);";
+        String createTableTag = "CREATE TABLE " + TABLE_TAG + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_NOMBRE + " TEXT);";
         db.execSQL(createTableTag);
 
 
@@ -166,12 +166,28 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "SELECT COUNT(g."+COL_TOTAL_GASTO+"), SUM(g."+COL_TOTAL_GASTO+"), mc."+COL_NOMBRE+", mc."+COL_SIMBOLO
-                +", mc."+COL_NOMBRE+", mc."+COL_SIMBOLO
                 +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+ TABLE_MONEDA +" AS mc "
                 +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_INGRESO+" = '"+ingreso+"' AND g."+COL_FECHA+" BETWEEN '"+desde+"' AND '"+hasta+"'"
                 +" INNER JOIN "+TABLE_USUARIO+" AS u "
                 +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'"
                 +" GROUP BY mc."+COL_NOMBRE;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+    public Cursor getTotalGastosGroupByTagIngresoMoneda(String desde, String hasta){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT COUNT(g."+COL_TOTAL_GASTO+"), SUM(g."+COL_TOTAL_GASTO+"), mc."+COL_NOMBRE+", mc."+COL_SIMBOLO+", t."+COL_NOMBRE+", g."+COL_INGRESO
+                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+ TABLE_MONEDA +" AS mc "
+                +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_FECHA+" BETWEEN '"+desde+"' AND '"+hasta+"'"
+                +" INNER JOIN "+ TABLE_TAG_GASTO +" AS tg "
+                +"ON g."+ COL_ID +" = tg."+COL_ID_GASTO
+                +" INNER JOIN "+TABLE_USUARIO+" AS u "
+                +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'"
+                +" INNER JOIN "+TABLE_TAG+" AS t "
+                +"ON t."+COL_ID+" = tg."+COL_ID_TAG
+                +" GROUP BY g."+COL_INGRESO+", t."+COL_NOMBRE+", mc."+COL_ID;
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -242,13 +258,10 @@ public class DataBase extends SQLiteOpenHelper {
 
 
 
-
-
-
     public boolean addTag(String tag){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_NOMBRE_TAG, tag);
+        contentValues.put(COL_NOMBRE, tag);
 
         long result = db.insert(TABLE_TAG, null, contentValues);
 
@@ -283,9 +296,10 @@ public class DataBase extends SQLiteOpenHelper {
         return data;
     }
 
+
     public Cursor getTagByNombre(String nombre){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_TAG + " WHERE " + COL_NOMBRE_TAG + " = '" + nombre + "'";
+        String query = "SELECT * FROM " + TABLE_TAG + " WHERE " + COL_NOMBRE + " = '" + nombre + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }

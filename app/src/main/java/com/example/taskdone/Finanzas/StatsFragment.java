@@ -86,6 +86,7 @@ public class StatsFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void cargarStats(Calendar desde, Calendar hasta) throws ParseException {
         cleanLayouts();
@@ -109,10 +110,12 @@ public class StatsFragment extends Fragment {
 
             Gasto g = new Gasto(fecha, nombre_moneda, total_gasto, motivo, ingreso);
             all_gastos.add(g);
-            if(!monedas.contains(g.getNombre_moneda())) {
+            if (!monedas.contains(g.getNombre_moneda())) {
                 monedas.add(nombre_moneda);
                 simbolos.add(simbolo_moneda);
             }
+        }
+/*
 
             Cursor t_gasto = database.getTagsByGastoId(id);
             ArrayList<String> tags_asociados = new ArrayList<String>();
@@ -125,10 +128,17 @@ public class StatsFragment extends Fragment {
                 //ALMACENO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
                 for(String t:tags_asociados) {
                     if (!t.equals("")) {
-                        if (!total_tag_gastos.containsKey(ingreso + t)) {
-                            total_tag_gastos.put(ingreso + t, total_gasto);
-                        } else {
-                            total_tag_gastos.replace(ingreso + t, total_tag_gastos.get(ingreso + t) + total_gasto);
+                        boolean ya_agregado = false;
+                        for(HashMap<String, Float> h:total_tag_gastos) {
+                            if (h.containsKey(ingreso + t)) {
+                                h.replace(ingreso + t, h.get(ingreso + t) + total_gasto);
+                                ya_agregado = true;
+                            }
+                        }
+                        if(!ya_agregado){
+                            HashMap<String, Float> agregar = new HashMap<>();
+                            agregar.put(ingreso + t, total_gasto);
+                            total_tag_gastos.add()
                         }
                     }
                 }
@@ -148,6 +158,7 @@ public class StatsFragment extends Fragment {
                 }
             }
         }
+*/
 
         //AGREGO LINEAS DE GASTOS e INGRESOS
 
@@ -200,80 +211,84 @@ public class StatsFragment extends Fragment {
 
         //STATS AVANZADOS
 
-        if(total_tag_gastos.size()>0 || total_tag_ingresos.size()>0) {
 
-            //Titulo que diga que hay informacion de los tags
-            View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView) view.findViewById(R.id.total)).setText("Información sobre Tags");
-            ((TextView) view.findViewById(R.id.promedio)).setText("");
-            view.setPadding(0,0,0,15);
-            binding.layoutAvanzado.addView(view);
+        Cursor total_by_tags = database.getTotalGastosGroupByTagIngresoMoneda(Utils.calendarToString(desde), Utils.calendarToString(hasta));
 
+        boolean hay_tags = false;
+        boolean hay_gasto_tag = false;
+        boolean hay_ingreso_tag = false;
 
-            if (total_tag_gastos.size() > 0) {
+        //No hay informacion de los tags
+        View view = inflater.inflate(R.layout.item_stats, null);
+        ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+        ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_info_sobre_tags));
+        ((TextView) view.findViewById(R.id.promedio)).setText("");
+        view.setPadding(0,0,0,10);
+        binding.layoutAvanzado.addView(view);
+
+        while (total_by_tags.moveToNext()) {
+            if (!hay_tags) {
+                binding.layoutAvanzado.removeViewAt(1);
+
+                //Titulo que diga que hay informacion de los tags
                 view = inflater.inflate(R.layout.item_stats, null);
-                ((TextView) view.findViewById(R.id.tipo)).setText("Gastos");
-                ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.rojo_egreso));
                 ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
+                ((TextView) view.findViewById(R.id.total)).setText("Información sobre Tags");
+                ((TextView) view.findViewById(R.id.promedio)).setText("");
+                view.setPadding(0, 0, 0, 15);
                 binding.layoutAvanzado.addView(view);
-
-                Iterator it = total_tag_gastos.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry) it.next();
-                    view = inflater.inflate(R.layout.item_stats, null);
-                    String t = pair.getKey().toString().substring(1,2).toUpperCase() + pair.getKey().toString().substring(2);
-                    ((TextView) view.findViewById(R.id.tipo)).setText(t + ": ");
-                    ((TextView) view.findViewById(R.id.total)).setText("$ " + Utils.formatoCantidad(pair.getValue().toString()));
-                    float promedio = Float.parseFloat(pair.getValue().toString()) / cantidad_dias;
-                    ((TextView) view.findViewById(R.id.promedio)).setText("$ " + Utils.formatoCantidad(promedio));
-                    binding.layoutAvanzado.addView(view);
-                    it.remove(); // avoids a ConcurrentModificationException
-                }
+                hay_tags = true;
             }
-            if (total_tag_ingresos.size() > 0) {
-                view = inflater.inflate(R.layout.item_stats, null);
-                ((TextView) view.findViewById(R.id.tipo)).setText("Ingresos");
-                ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.verde_ingreso));
-                ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
-                view.setPadding(0, 15, 0, 0);
-                binding.layoutAvanzado.addView(view);
+            Float total = total_by_tags.getFloat(1);
+            String nombre_moneda = total_by_tags.getString(2);
+            String simbolo = total_by_tags.getString(3);
+            String nombre_tag = total_by_tags.getString(4);
+            String ingreso = total_by_tags.getString(5);
 
-                Iterator it = total_tag_ingresos.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry) it.next();
+            if (ingreso.equals("0")) {
+                if (!hay_gasto_tag) {
                     view = inflater.inflate(R.layout.item_stats, null);
-                    String t = pair.getKey().toString().substring(1,2).toUpperCase() + pair.getKey().toString().substring(2);
-                    ((TextView) view.findViewById(R.id.tipo)).setText(t + ": ");
-                    ((TextView) view.findViewById(R.id.total)).setText("$ " + Utils.formatoCantidad(pair.getValue().toString()));
-                    float promedio = Float.parseFloat(pair.getValue().toString()) / cantidad_dias;
-                    ((TextView) view.findViewById(R.id.promedio)).setText("$ " + Utils.formatoCantidad(promedio));
+                    ((TextView) view.findViewById(R.id.tipo)).setText("Gastos");
+                    ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.rojo_egreso));
+                    ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+                    ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
                     binding.layoutAvanzado.addView(view);
-                    it.remove(); // avoids a ConcurrentModificationException
+                    hay_gasto_tag = true;
                 }
+                view = inflater.inflate(R.layout.item_stats, null);
+                ((TextView) view.findViewById(R.id.tipo)).setText(nombre_tag + ": ");
+                ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
+                ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
+                binding.layoutAvanzado.addView(view);
+            } else {
+                if (!hay_ingreso_tag) {
+                    view = inflater.inflate(R.layout.item_stats, null);
+                    ((TextView) view.findViewById(R.id.tipo)).setText("Ingresos");
+                    ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.verde_ingreso));
+                    ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+                    ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
+                    view.setPadding(0, 15, 0, 0);
+                    binding.layoutAvanzado.addView(view);
+                    hay_ingreso_tag = true;
+                }
+                view = inflater.inflate(R.layout.item_stats, null);
+                ((TextView) view.findViewById(R.id.tipo)).setText(nombre_tag + ": ");
+                ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
+                ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
+                binding.layoutAvanzado.addView(view);
             }
         }
-        else{
-            //No hay informacion de los tags
-            View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_info_sobre_tags));
-            ((TextView) view.findViewById(R.id.promedio)).setText("");
-            view.setPadding(0,0,0,10);
-            binding.layoutAvanzado.addView(view);
-        }
+
     }
 
 
     @SuppressLint("SetTextI18n")
-    private void agregarGastoIngreso(String tipo, Float total, String simbolo, LinearLayout layout){
+    private void agregarGastoIngreso(String moneda, Float total, String simbolo, LinearLayout layout){
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
         View view = inflater.inflate(R.layout.item_stats, null);
-        ((TextView)view.findViewById(R.id.tipo)).setText(tipo + ": ");
+        ((TextView)view.findViewById(R.id.tipo)).setText(moneda + ": ");
         ((TextView)view.findViewById(R.id.total)).setText(simbolo + " "+ Utils.formatoCantidad(total));
         ((TextView)view.findViewById(R.id.promedio)).setText(simbolo + " "+ Utils.formatoCantidad(total/cantidad_dias));
         layout.addView(view);
