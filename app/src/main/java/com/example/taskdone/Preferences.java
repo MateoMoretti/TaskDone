@@ -7,11 +7,6 @@ public class Preferences {
 
     private static final String STRING_PREFERENCES = "Finanzas";
 
-    public static final String PREFERENCE_INFO_CARGADA = "INFO_CARGADA";
-    public static final String PREFERENCE_PESOS = "Pesos";
-    public static final String PREFERENCE_DOLARES = "Dolares";
-    public static final String PREFERENCE_EUROS = "Euros";
-
     public static void savePreferenceBoolean(Context c, boolean b, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         preferences.edit().putBoolean(key, b).apply();

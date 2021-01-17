@@ -10,6 +10,8 @@
         android:id="@+id/fondo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="-100dp"
+        android:layout_marginEnd="-100dp"
         android:background="#000000"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Finanzas"
+                android:text="@string/finanzas"
                 android:textColor="#FFFFFF"
                 android:textSize="36sp" />
 
@@ -61,23 +63,11 @@
                 android:paddingStart="30dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/sin_monedas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/no_has_creado_monedas"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/almost_black"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
+                android:paddingBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="2">
 
@@ -100,7 +90,7 @@
                     android:id="@+id/txt_fecha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fecha: "
+                    android:text="@string/fecha."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_fecha"
@@ -117,7 +107,6 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/fondo_blanco_redondeado"
                     android:gravity="center"
-                    android:text="2021/01/01"
                     android:textColor="@color/almost_black"
                     android:textSize="20sp"
                     app:layout_constraintStart_toEndOf="@+id/txt_fecha"
@@ -127,7 +116,7 @@
                     android:id="@+id/txt_tipo_moneda"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Moneda: "
+                    android:text="@string/moneda."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/spinner_moneda"
@@ -156,7 +145,7 @@
                     android:id="@+id/txt_cantidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cantidad: "
+                    android:text="@string/cantidad."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_cantidad"
@@ -184,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
-                    android:text="Motivo: "
+                    android:text="@string/motivo."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_motivo"
@@ -199,24 +188,28 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/fondo_blanco_redondeado"
                     android:ems="10"
+                    android:inputType="text"
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/edit_cantidad"
                     app:layout_constraintStart_toStartOf="@+id/edit_cantidad"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_cantidad" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_cantidad"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/txt_tag_seleccionados"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_marginTop="40dp"
                     android:layout_weight="0"
-                    android:text="0 seleccionados"
+                    android:text="@string/sin_seleccionados"
+                    android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
+                    app:layout_constraintEnd_toStartOf="@+id/agregar_tag"
                     app:layout_constraintStart_toEndOf="@+id/txt_tag"
                     app:layout_constraintTop_toBottomOf="@+id/edit_motivo" />
 
@@ -224,23 +217,22 @@
                     android:id="@+id/agregar_tag"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="30dp"
                     android:background="@android:drawable/ic_input_add"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="@+id/txt_tag_seleccionados"
-                    app:layout_constraintStart_toEndOf="@+id/txt_tag_seleccionados"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/edit_motivo"
                     app:layout_constraintTop_toTopOf="@+id/txt_tag_seleccionados" />
 
                 <TextView
                     android:id="@+id/txt_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tags: "
+                    android:layout_width="93dp"
+                    android:layout_height="25dp"
+                    android:text="@string/tags."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/txt_tag_seleccionados"
                     app:layout_constraintEnd_toEndOf="@+id/txt_motivo"
-                    app:layout_constraintStart_toStartOf="@+id/txt_motivo"
                     app:layout_constraintTop_toTopOf="@+id/txt_tag_seleccionados" />
 
                 <CheckBox
@@ -265,7 +257,7 @@
                     android:layout_height="75dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="50dp"
-                    android:layout_marginBottom="80dp"
+                    android:layout_marginBottom="50dp"
                     android:background="@drawable/button_celeste"
                     android:text="OK"
                     android:textSize="24sp"

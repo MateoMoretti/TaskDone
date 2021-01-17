@@ -38,6 +38,8 @@ public class CrearCuentaFragment extends Fragment {
         binding.contrasena.setInputType(129);
         binding.verPassword.setOnClickListener(v -> alternarVisibilidadPassword());
 
+        binding.volver.setOnClickListener(v -> navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment));
+
         return binding.getRoot();
     }
 
@@ -49,14 +51,14 @@ public class CrearCuentaFragment extends Fragment {
             existe = true;
         }
         if (existe) {
-            Toast.makeText(requireContext(), "Éste usuario ya existe", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.error_usuario_existente), Toast.LENGTH_SHORT).show();
         } else {
             boolean result = database.addUser(binding.usuario.getText().toString(), binding.contrasena.getText().toString());
             if (result) {
-                Toast.makeText(requireContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getResources().getString(R.string.usuario_creado), Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment);
             } else {
-                Toast.makeText(requireContext(), "Error al crear usuario", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(),  getResources().getString(R.string.error_crear_usuario), Toast.LENGTH_SHORT).show();
             }
         }
     }

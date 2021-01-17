@@ -10,15 +10,13 @@ import java.util.List;
 
 public class DataBase extends SQLiteOpenHelper {
 
-    private static final String TAG = "DatabaseHelper";
-
     private static final String TABLE_GASTO = "Gasto";
     private static final String COL_ID = "ID";
     private static final String COL_FECHA = "fecha";                // string
-    private static final String COL_TOTAL_GASTO = "total_gasto";          // int
+    private static final String COL_TOTAL_GASTO = "total_gasto";    // int
     private static final String COL_MOTIVO = "motivo";              // string
     private static final String COL_INGRESO = "ingreso";            // string
-    private static final String COL_ID_MONEDA = "id_moneda";    // int
+    private static final String COL_ID_MONEDA = "id_moneda";        // int
     private static final String COL_ID_USUARIO = "id_usuario";      // int
 
     private static final String TABLE_USUARIO = "Usuario";
@@ -26,7 +24,7 @@ public class DataBase extends SQLiteOpenHelper {
     private static final String COL_PASSWORD = "contraseña";
 
     private static final String TABLE_TAG = "Tag";
-    private static final String COL_NOMBRE = "nombre";            //string
+    private static final String COL_NOMBRE = "nombre";               //string
 
 
     private static final String TABLE_TAG_USUARIO = "Tag_Usuario";
@@ -39,11 +37,11 @@ public class DataBase extends SQLiteOpenHelper {
 
 
     private static final String TABLE_MONEDA = "Moneda";
-    //private static final String COL_ID_MONEDA_CANTIDAD = "id_moneda_cantidad";      //int  definido arriba
-    //private static final String COL_NOMBRE = "nombre";    // definido arriba
-    private static final String COL_CANTIDAD = "cantidad";    // int
-    private static final String COL_SIMBOLO = "simbolo";    // string
-    //private static final String COL_ID_USUARIO = "id_usuario";      //int  definido arriba
+    //private static final String COL_ID_MONEDA_CANTIDAD               //int  definido arriba
+    //private static final String COL_NOMBRE = "nombre";               // definido arriba
+    private static final String COL_CANTIDAD = "cantidad";             // int
+    private static final String COL_SIMBOLO = "simbolo";               // string
+    //private static final String COL_ID_USUARIO = "id_usuario";       //int  definido arriba
 
 
     Context context;
@@ -57,9 +55,9 @@ public class DataBase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createTableGastos = "CREATE TABLE " + TABLE_GASTO + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_FECHA + " TEXT, " +
                 COL_TOTAL_GASTO + " REAL, " + COL_MOTIVO + " TEXT, " + COL_INGRESO + " TEXT, "
-                + COL_ID_MONEDA + " INTEGER,  " + COL_ID_USUARIO + " INTEGER,  "
+                + COL_ID_MONEDA + " INTEGER, " + COL_ID_USUARIO + " INTEGER, "
                 + " FOREIGN KEY ("+COL_ID_MONEDA+") REFERENCES "+TABLE_MONEDA+"("+COL_ID+"), "
-                + " FOREIGN KEY ("+COL_ID_USUARIO+") REFERENCES "+TABLE_USUARIO+"("+COL_ID+"));";;
+                + " FOREIGN KEY ("+COL_ID_USUARIO+") REFERENCES "+TABLE_USUARIO+"("+COL_ID+"));";
         db.execSQL(createTableGastos);
 
 
@@ -133,18 +131,14 @@ public class DataBase extends SQLiteOpenHelper {
                 while (tag.moveToNext()) {
                     id_tag = tag.getInt(0);
                 }
-                addTagGasto(id_tag, (int)result);
+                boolean b = addTagGasto(id_tag, (int)result);
+                if(!b){
+                    return false;
+                }
             }
 
             return true;
         }
-    }
-
-    public Cursor getAllGastos(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_GASTO + " ORDER BY " + COL_FECHA + " DESC";
-        Cursor data = db.rawQuery(query, null);
-        return data;
     }
 
     // Devuelve -> fecha, cantidad, motivo, ingreso, nombreMoneda, simboloMoneda
@@ -157,8 +151,7 @@ public class DataBase extends SQLiteOpenHelper {
                 +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_FECHA+" BETWEEN '"+desde+"' AND '"+hasta+"'"
                 +" INNER JOIN "+TABLE_USUARIO+" AS u "
                 +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'";
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     //Devuelve cantidadGastos, total, nombreMoneda
@@ -171,8 +164,7 @@ public class DataBase extends SQLiteOpenHelper {
                 +" INNER JOIN "+TABLE_USUARIO+" AS u "
                 +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'"
                 +" GROUP BY mc."+COL_NOMBRE;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     public Cursor getTotalGastosGroupByTagIngresoMoneda(String desde, String hasta){
@@ -188,16 +180,14 @@ public class DataBase extends SQLiteOpenHelper {
                 +" INNER JOIN "+TABLE_TAG+" AS t "
                 +"ON t."+COL_ID+" = tg."+COL_ID_TAG
                 +" GROUP BY g."+COL_INGRESO+", t."+COL_NOMBRE+", mc."+COL_ID;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     public Cursor getMonedaIdByNombre(String nombre_moneda){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MONEDA + " WHERE " + COL_NOMBRE +"='"+nombre_moneda+"'"
                 + " AND " + COL_ID_USUARIO +"='"+ UsuarioSingleton.getInstance().getID()+"'";
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
 
@@ -210,23 +200,19 @@ public class DataBase extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_USUARIO, null, contentValues);
 
-        if(result == -1){
-            return false;
-        }
-        return true;
+        return result != -1;
     }
 
 
-    public boolean updateDineroUser(int id_moneda, float cantidad){
+    public void updateDineroUser(int id_moneda, float cantidad){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_CANTIDAD, cantidad);
 
 
         db.update(TABLE_MONEDA, contentValues, "ID = ?", new String[]{Integer.toString(id_moneda)});
-        return true;
     }
-
+/*
     public Cursor getAllUsers(){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_USUARIO;
@@ -239,20 +225,18 @@ public class DataBase extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE ID='" + id +"'";
         Cursor data = db.rawQuery(query, null);
         return data;
-    }
+    }*/
 
     public Cursor getUserByUsername(String username){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE usuario='" + username +"'";
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     public Cursor getUserByUsernameAndPassword(String username, String password){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE usuario='" + username + "' AND contraseña='" + password +"'";
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
 
@@ -268,40 +252,26 @@ public class DataBase extends SQLiteOpenHelper {
         if(result == -1){
             return false;
         }
-        addTagUsuario((int)result, UsuarioSingleton.getInstance().getID()); //Por ahora solo el 0, ya que solo permito una única cuenta
-        return true;
+        return addTagUsuario((int)result, UsuarioSingleton.getInstance().getID());
     }
 
-    public Cursor getAllTags(){
+   /* public Cursor getAllTags(){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_TAG ;
-        Cursor data = db.rawQuery(query, null);
-        return data;
-    }
+        return db.rawQuery(query, null);
+    }*/
 
     public Cursor getTagsByUserId(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + TABLE_TAG + ".* FROM " + TABLE_TAG + ", " + TABLE_TAG_USUARIO + " WHERE " + TABLE_TAG_USUARIO + "." +COL_ID_USUARIO +"='" + id + "' AND "
                 + TABLE_TAG +".ID=" + TABLE_TAG_USUARIO + "." + COL_ID_TAG;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
-
-
-    public Cursor getTagsByGastoId(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT " + TABLE_TAG + ".* FROM " + TABLE_TAG + " INNER JOIN " + TABLE_TAG_GASTO + " ON "+ TABLE_TAG +".ID=" + TABLE_TAG_GASTO + "." + COL_ID_TAG +
-                " WHERE " + TABLE_TAG_GASTO + "." +COL_ID_GASTO +"='" + id +"'";
-        Cursor data = db.rawQuery(query, null);
-        return data;
-    }
-
 
     public Cursor getTagByNombre(String nombre){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_TAG + " WHERE " + COL_NOMBRE + " = '" + nombre + "'";
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 
     private boolean addTagUsuario(int tag, int id_usuario){
@@ -312,10 +282,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_TAG_USUARIO, null, contentValues);
 
-        if(result == -1){
-            return false;
-        }
-        return true;
+        return result != 1;
     }
 
     private boolean addTagGasto(int tag, int id_gasto){
@@ -326,10 +293,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_TAG_GASTO, null, contentValues);
 
-        if(result == -1){
-            return false;
-        }
-        return true;
+        return result != -1;
     }
 
 
@@ -339,30 +303,25 @@ public class DataBase extends SQLiteOpenHelper {
         contentValues.put(COL_NOMBRE, moneda);
         contentValues.put(COL_CANTIDAD, cantidad);
         contentValues.put(COL_SIMBOLO, simbolo);
-        Integer test = UsuarioSingleton.getInstance().getID();
         contentValues.put(COL_ID_USUARIO, UsuarioSingleton.getInstance().getID());
 
         long result = db.insert(TABLE_MONEDA, null, contentValues);
 
-        if(result == -1){
-            return false;
-        }
-        return true;
+        return result != -1;
     }
 
-
+/*
     public Cursor getAllMonedas(){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MONEDA;
         Cursor data = db.rawQuery(query, null);
         return data;
 
-    }
+    }*/
 
     public Cursor getMonedasByUserId(int id_usuario){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MONEDA + " WHERE " + TABLE_MONEDA +"."+COL_ID_USUARIO + " = " + id_usuario;
-        Cursor data = db.rawQuery(query, null);
-        return data;
+        return db.rawQuery(query, null);
     }
 }

@@ -3,15 +3,12 @@ package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.R;
@@ -73,12 +70,11 @@ public class ListaTagsAdapter extends RecyclerView.Adapter<ListaTagsAdapter.View
         private void checkear(CheckBox tag){
             if(tag.isChecked()){
                 tag.setChecked(false);
-                TagToList(tag);
             }
             else{
                 tag.setChecked(true);
-                TagToList(tag);
             }
+            TagToList(tag);
         }
     }
 

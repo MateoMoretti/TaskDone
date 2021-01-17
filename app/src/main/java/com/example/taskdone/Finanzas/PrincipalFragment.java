@@ -28,6 +28,7 @@ import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -38,7 +39,6 @@ public class PrincipalFragment extends Fragment {
 
     private FragmentFinanzasPrincipalBinding binding;
 
-    private String titulo;
     NavController navController;
 
     DataBase dataBase;
@@ -74,9 +74,9 @@ public class PrincipalFragment extends Fragment {
             llenarLayoutMonedas();
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, monedas){
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, monedas){
             @RequiresApi(api = Build.VERSION_CODES.O)
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
 
                 ((TextView) v).setTextSize(20);
@@ -94,7 +94,13 @@ public class PrincipalFragment extends Fragment {
 
         dataBase = new DataBase(requireContext());
 
-        binding.ok.setOnClickListener(v -> addData());
+        binding.ok.setOnClickListener(v -> {
+            try {
+                addData();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
 
         tags = new ArrayList<>();
 
@@ -102,9 +108,20 @@ public class PrincipalFragment extends Fragment {
             if(getArguments().getStringArrayList("tags") != null){
                 tags = getArguments().getStringArrayList("tags");
             }
-            binding.txtTagSeleccionados.setText(tags.size() + " seleccionados");
+            assert tags != null;
+            String tags_seleccionados = "";
+            for(int x=0;x!=tags.size();x++){
+                tags_seleccionados += tags.get(x);
+                if(!(x+1==tags.size())){
+                    tags_seleccionados += ", ";
+                }
+            }
+            if(tags_seleccionados.equals("")){
+                tags_seleccionados = getResources().getString(R.string.sin_seleccionados);
+            }
+            binding.txtTagSeleccionados.setText(tags_seleccionados);
             binding.editFecha.setText(getArguments().getString("fecha"));
-            binding.spinnerMoneda.setSelection(Integer.parseInt(getArguments().getString("tipo_moneda")));
+            binding.spinnerMoneda.setSelection(Integer.parseInt(Objects.requireNonNull(getArguments().getString("tipo_moneda"))));
             binding.editCantidad.setText(getArguments().getString("cantidad"));
             binding.editMotivo.setText(getArguments().getString("motivo"));
             binding.checkIngreso.setChecked(getArguments().getBoolean("ingreso"));
@@ -145,7 +162,7 @@ public class PrincipalFragment extends Fragment {
         }
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         for(int x=0;x!=monedas.size();x++){
-            View view = inflater.inflate(R.layout.item_moneda_cantidad, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_moneda_cantidad, null);
             @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
             @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.cantidad);
             moneda.setText(monedas.get(x) +": ");
@@ -154,35 +171,27 @@ public class PrincipalFragment extends Fragment {
         }
     }
 
-    private final void scrollToTag(){
+    private void scrollToTag(){
         binding.scrollview.post(() -> binding.scrollview.fullScroll(ScrollView.FOCUS_DOWN));
     }
 
 
-    private boolean verificarCantidad(){
+    private void verificarCantidad(){
             if (!binding.editCantidad.getText().toString().equals("") && !binding.editCantidad.getText().toString().equals("0")) {
                 if (binding.editCantidad.getText().toString().substring(0, 1).equals("0")) {
                     binding.editCantidad.setText(binding.editCantidad.getText().toString().substring(1));
                     binding.editCantidad.setSelection(binding.editCantidad.length());
                 }
             }
-            return true;
     }
 
     private void showDatePickerDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
 
             String selectedDate = year + "/" + Utils.twoDigits(month + 1) + "/" + Utils.twoDigits(day);
-                if(selectedDate != null){
-                    final Calendar h = Calendar.getInstance();
-                    h.set(year,month,day);
-                    h.add(Calendar.DAY_OF_YEAR,1);
-                    int years = h.get(Calendar.YEAR);
-                    int months = h.get(Calendar.MONTH);
-                    int days = h.get(Calendar.DAY_OF_MONTH);
-                }else{
-                    selectedDate = year + "/" + Utils.twoDigits(month + 1) + "/" + Utils.twoDigits(day);
-                }
+            final Calendar h = Calendar.getInstance();
+            h.set(year,month,day);
+            h.add(Calendar.DAY_OF_YEAR,1);
             binding.editFecha.setText(selectedDate);
             }
 
@@ -190,24 +199,30 @@ public class PrincipalFragment extends Fragment {
         newFragment.show(Objects.requireNonNull(requireActivity()).getSupportFragmentManager(), "datePicker");
     }
 
-    public void addData() {
-        if (binding.editCantidad.getText().toString().equals("") || binding.editCantidad.getText().toString().equals("0")) {
-            Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show();
-        } else {
-            String ingreso = "0";
-            if (binding.checkIngreso.isChecked()) {
-                ingreso = "1";
-            }
-            boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerMoneda.getSelectedItem().toString(), Float.parseFloat(binding.editCantidad.getText().toString()), binding.editMotivo.getText().toString(), tags, ingreso);
-
-            if (insertData) {
-                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+    public void addData() throws ParseException {
+        if (Utils.fechaMayorQueHoy(binding.editFecha.getText().toString())) {
+            Toast.makeText(requireContext(), R.string.error_fecha_futura, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            if (binding.editCantidad.getText().toString().equals("") || binding.editCantidad.getText().toString().equals("0")) {
+                Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+                String ingreso = "0";
+                if (binding.checkIngreso.isChecked()) {
+                    ingreso = "1";
+                }
+                boolean insertData = dataBase.addGastos(binding.editFecha.getText().toString(), binding.spinnerMoneda.getSelectedItem().toString(), Float.parseFloat(binding.editCantidad.getText().toString()), binding.editMotivo.getText().toString(), tags, ingreso);
+
+                if (insertData) {
+                    Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+                }
+                cleanAndUpdate();
             }
-            cleanAndUpdate();
         }
     }
+
 
     @SuppressLint("SetTextI18n")
     private void cleanAndUpdate(){
@@ -215,7 +230,7 @@ public class PrincipalFragment extends Fragment {
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");
         binding.checkIngreso.setChecked(false);
-        binding.txtTagSeleccionados.setText("0 seleccionados");
+        binding.txtTagSeleccionados.setText(getResources().getString(R.string.sin_seleccionados));
 
         tags.clear();
         monedas.clear();

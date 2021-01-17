@@ -2,7 +2,6 @@ package com.example.taskdone.Acceso;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Binder;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;

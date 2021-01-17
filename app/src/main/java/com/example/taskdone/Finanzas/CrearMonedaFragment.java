@@ -1,6 +1,7 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,7 +26,7 @@ public class CrearMonedaFragment extends Fragment {
     private FragmentCrearMonedaBinding binding;
 
     NavController navController;
-    DataBase dataBaseFinanzas;
+    DataBase database;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -36,7 +37,7 @@ public class CrearMonedaFragment extends Fragment {
         binding = FragmentCrearMonedaBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        dataBaseFinanzas = new DataBase(requireContext());
+        database = new DataBase(requireContext());
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -63,14 +64,13 @@ public class CrearMonedaFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private boolean verificarCantidad(EditText e){
+    private void verificarCantidad(EditText e){
             if (!e.getText().toString().equals("") && !e.getText().toString().equals("0")) {
                 if (e.getText().toString().substring(0, 1).equals("0")) {
                     e.setText(e.getText().toString().substring(1));
                     e.setSelection(e.length());
                 }
             }
-            return true;
     }
 
     public void crearMoneda() {
@@ -78,19 +78,28 @@ public class CrearMonedaFragment extends Fragment {
         String cantidad_elegida = binding.editCantidad.getText().toString();
         String simbolo_persistir = binding.editSimbolo.getText().toString();
 
-        int cantidad_persistir =0;
-        if(!cantidad_elegida.equals("")){
-            cantidad_persistir = Integer.parseInt(cantidad_elegida);
+        Cursor data = database.getMonedaIdByNombre(nombre_moneda_persistir);
+        boolean existe = false;
+        while (data.moveToNext()) {
+            existe = true;
         }
-        boolean insertData = dataBaseFinanzas.addMonedaCantidad(nombre_moneda_persistir, cantidad_persistir, simbolo_persistir);
-
-        if (insertData) {
-            Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+        if (existe) {
+            Toast.makeText(requireContext(), getResources().getString(R.string.error_moneda_existente), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
-        }
+            int cantidad_persistir = 0;
+            if (!cantidad_elegida.equals("")) {
+                cantidad_persistir = Integer.parseInt(cantidad_elegida);
+            }
+            boolean insertData = database.addMonedaCantidad(nombre_moneda_persistir, cantidad_persistir, simbolo_persistir);
 
-        navController.navigate(R.id.principalFragment);
+            if (insertData) {
+                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            }
+
+            navController.navigate(R.id.principalFragment);
+        }
     }
 
 }

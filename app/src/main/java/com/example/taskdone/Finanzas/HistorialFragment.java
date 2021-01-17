@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskdone.DataBase;
 import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.R;
-import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
 
@@ -38,8 +37,8 @@ public class HistorialFragment extends Fragment {
 
     NavController navController;
 
-    String selected_date_desde = "Siempre";
-    String selected_date_hasta = "Hoy";
+    String selected_date_desde;
+    String selected_date_hasta;
 
     DataBase dataBase;
 
@@ -52,15 +51,14 @@ public class HistorialFragment extends Fragment {
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
+        selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
+        selected_date_hasta = getResources().getString(R.string.hoy);
+
         dataBase = new DataBase(requireContext());
 
         Calendar c= Calendar.getInstance();
         c.add(Calendar.DATE, -29);
-        try {
-            cargarHistorial(c.getTime(), Calendar.getInstance().getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        cargarHistorial(c.getTime(), Calendar.getInstance().getTime());
 
         binding.tituloDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
         binding.tituloHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
@@ -73,7 +71,7 @@ public class HistorialFragment extends Fragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void cargarHistorial(Date desde_date, Date hasta_date) throws ParseException {
+    private void cargarHistorial(Date desde_date, Date hasta_date) {
         cleanHistorial();
 
 
@@ -85,10 +83,10 @@ public class HistorialFragment extends Fragment {
 
         while (data.moveToNext()) {
             String fecha = data.getString(1);
-            Float total_gasto = data.getFloat(2);
+            float total_gasto = data.getFloat(2);
             String motivo = data.getString(3);
             String ingreso = data.getString(4);
-            String nombre_moneda = data.getString(5);
+            //String nombre_moneda = data.getString(5);
             String simbolo_moneda = data.getString(6);
 
             if (ingreso.equals("0")) {
@@ -126,33 +124,36 @@ public class HistorialFragment extends Fragment {
                     }
                 }
                 HistorialAdapter adapter = new HistorialAdapter(data_items_fecha, requireContext());
-                View view = inflater.inflate(R.layout.elementos_historial, null);
+                @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.elementos_historial, null);
                 binding.layoutHistorial.addView(view);
                 TextView fecha = view.findViewById(R.id.fecha);
                 RecyclerView rec = view.findViewById(R.id.recycler);
                 rec.setLayoutManager(new LinearLayoutManager(getContext()));
                 fecha.setText(Utils.getDiaFormateado(fechas.get(x)));
                 rec.setAdapter(adapter);
+                if(x==0){
+                    view.findViewById(R.id.linea).setVisibility(View.INVISIBLE);
+                }
             }
         }
     }
 
     private void cleanHistorial(){
-        binding.textDesde.setText("Siempre");
-        binding.textHasta.setText("Hoy");
+        binding.textDesde.setText(getResources().getString(R.string.comienzo_de_mes));
+        binding.textHasta.setText(getResources().getString(R.string.hoy));
 
-        for(int x=0;0!=binding.layoutHistorial.getChildCount(); x++) {
+        while(binding.layoutHistorial.getChildCount()!=0){
             binding.layoutHistorial.removeViewAt(0);
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void filtrar(String desde, String hasta) throws ParseException {
-        String text_desde = "Siempre";
-        String text_hasta = "Hoy";
+        String text_desde = getResources().getString(R.string.comienzo_de_mes);
+        String text_hasta = getResources().getString(R.string.hoy);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-        Date desde_date = sdf.parse("1900/01/01");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        Date desde_date = sdf.parse(Utils.calendarToString(Utils.getPrimerDiaDelMes()));
         Date hasta_date = Calendar.getInstance().getTime();
 
         if (!desde.equals(text_desde)) {

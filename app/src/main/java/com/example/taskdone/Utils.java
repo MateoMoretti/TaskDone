@@ -6,26 +6,13 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 public class Utils {
-
-
-    //BISIESTOS 2020-2024-2028
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static int diasMes(int año, int mes){
-        YearMonth yearMonthObject = YearMonth.of(año, mes);
-        return yearMonthObject.lengthOfMonth();
-    }
 
     public static String getMes(int mes){
         switch (mes){
@@ -76,17 +63,28 @@ public class Utils {
     }
 
     public static String calendarToString(Calendar c){
-
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
         return year + "/" + twoDigits(month + 1) + "/" + twoDigits(day);
+    }
 
+    public static Boolean fechaMayorQueHoy(String f) throws ParseException {
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        Date fecha = sdf.parse(f);
+        assert fecha != null;
+        return fecha.after(Calendar.getInstance().getTime());
+    }
+
+    public static Calendar getPrimerDiaDelMes() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        return c;
     }
 
     public static String dateToString(Date d){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-        String a = sdf.format(d);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
         return sdf.format(d);
 
     }
@@ -94,15 +92,6 @@ public class Utils {
 
     public static String twoDigits(int n) {
         return (n <= 9) ? ("0" + n) : String.valueOf(n);
-    }
-
-    public static String formatoCantidad(String c){
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
-        if(c.contains("-")) {
-            c = c.replaceAll("-", "");
-        }
-        return df.format(Float.parseFloat(c));
     }
 
     //Agrega los puntos y lo hace bonito

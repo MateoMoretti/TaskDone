@@ -1,10 +1,5 @@
 package com.example.taskdone;
 
-
-import android.graphics.Bitmap;
-
-import java.util.List;
-
 public class UsuarioSingleton {
     private int ID;
     private String username;
@@ -21,9 +16,9 @@ public class UsuarioSingleton {
         return (INSTANCE);
     }
 
-    public static void reset() {
+    /*public static void reset() {
         INSTANCE = new UsuarioSingleton();
-    }
+    }*/
 
     public int getID() {
         return ID;

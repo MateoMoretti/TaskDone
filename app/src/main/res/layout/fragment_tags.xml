@@ -7,13 +7,30 @@
     android:background="@color/almost_black"
     tools:context=".Finanzas.TagsFragment">
 
+    <ImageView
+        android:id="@+id/fondo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-100dp"
+        android:layout_marginEnd="-100dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/fondo"
+        tools:srcCompat="@drawable/fondo"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/frijole"
-        android:text="Tags"
+        android:text="@string/tags"
         android:textColor="@color/white"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +44,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/fondo_blanco_redondeado"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/button_crear_tag"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
@@ -41,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:text="Aún no tienes tags, crea uno"
+        android:text="@string/sin_tags"
         android:textSize="23sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_tags"
@@ -49,30 +67,38 @@
         app:layout_constraintStart_toStartOf="@+id/recycler_tags"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/button_cancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#CD584F"
+        android:text="@string/cancelar"
+        app:layout_constraintBottom_toBottomOf="@+id/button_crear_tag"
+        app:layout_constraintEnd_toStartOf="@+id/button_crear_tag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_crear_tag" />
+
+    <Button
+        android:id="@+id/button_crear_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@color/naranja"
+        android:text="@string/crear"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/button_crear_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="80dp"
-            android:background="@color/naranja"
-            android:text="Crear tag" />
-
-        <Button
-            android:id="@+id/button_aceptar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#4CAF50"
-            android:text="Aceptar" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_aceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4CAF50"
+        android:text="@string/aceptar"
+        app:layout_constraintBottom_toBottomOf="@+id/button_crear_tag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_crear_tag"
+        app:layout_constraintTop_toTopOf="@+id/button_crear_tag" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

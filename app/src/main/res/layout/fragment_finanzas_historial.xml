@@ -10,6 +10,8 @@
         android:id="@+id/fondo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="-100dp"
+        android:layout_marginEnd="-100dp"
         android:background="#000000"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Historial"
+        android:text="@string/historial"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Desde"
+                android:text="@string/desde"
                 android:textColor="@color/very_light_green"
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
@@ -89,7 +91,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="dd/mm/yyyy"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -113,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Hasta"
+                android:text="@string/hasta"
                 android:textColor="@color/very_light_green"
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
@@ -145,7 +146,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:text="dd/mm/yyyy"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -177,9 +177,11 @@
 
     <TextView
         android:id="@+id/sin_datos"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="No has registrado nada entre éstas fechas"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="@string/sin_registros"
         android:textAlignment="center"
         android:textSize="22sp"
         android:visibility="invisible"

@@ -11,13 +11,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,7 +27,6 @@ import com.example.taskdone.databinding.FragmentTagsBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TagsFragment extends Fragment {
 
@@ -38,6 +35,7 @@ public class TagsFragment extends Fragment {
     DataBase database;
 
     ArrayList<String> tags_bundle;
+    ArrayList<String> tags_backup; //Sirve para cancelar
 
     ListaTagsAdapter adapter_tags;
     DataBase dataBase;
@@ -51,17 +49,20 @@ public class TagsFragment extends Fragment {
         binding = FragmentTagsBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        //Eliminar si funciona Bundle bundle = getArguments();
-
+        assert getArguments() != null;
         tags_bundle = getArguments().getStringArrayList("tags");
+        assert tags_bundle != null;
+        tags_backup = (ArrayList<String>) tags_bundle.clone();
 
         database = new DataBase(requireContext());
 
         cargarTags();
 
+        binding.buttonCancelar.setOnClickListener(v -> volverAPrincipal(false));
+
         binding.buttonCrearTag.setOnClickListener(v -> popupCrearTag());
 
-        binding.buttonAceptar.setOnClickListener(v -> volverAPrincipal());
+        binding.buttonAceptar.setOnClickListener(v -> volverAPrincipal(true));
 
         return binding.getRoot();
     }
@@ -87,18 +88,25 @@ public class TagsFragment extends Fragment {
         binding.recyclerTags.setAdapter(adapter_tags);
     }
 
-    private void volverAPrincipal(){
+    private void volverAPrincipal(boolean aceptar){
         Bundle bundle = getArguments();
+        assert bundle != null;
         bundle.putString("fecha", getArguments().getString("fecha"));
         bundle.putString("tipo_moneda", getArguments().getString("tipo_moneda"));
         bundle.putString("cantidad", getArguments().getString("cantidad"));
         bundle.putString("motivo", getArguments().getString("motivo"));
-        bundle.putStringArrayList("tags", adapter_tags.getTagsElegidos());
+        if(aceptar) {
+            bundle.putStringArrayList("tags", adapter_tags.getTagsElegidos());
+        }
+        else{
+            bundle.putStringArrayList("tags", tags_backup);
+        }
         bundle.putBoolean("ingreso", getArguments().getBoolean("ingreso"));
 
         navController.navigate(R.id.action_tagsFragment_to_principalFragment, bundle);
     }
 
+    @SuppressLint("RtlHardcoded")
     private void popupCrearTag(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());

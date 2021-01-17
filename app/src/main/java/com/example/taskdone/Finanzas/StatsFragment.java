@@ -31,9 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 
 public class StatsFragment extends Fragment {
@@ -51,8 +48,8 @@ public class StatsFragment extends Fragment {
     ArrayList<ArrayList<Gasto>> gastos = new ArrayList<>();
     ArrayList<ArrayList<Gasto>> ingresos = new ArrayList<>();
 
-    String selected_date_desde = "Siempre";
-    String selected_date_hasta = "Hoy";
+    String selected_date_desde;
+    String selected_date_hasta;
 
     Long cantidad_dias = 0L;
 
@@ -66,15 +63,15 @@ public class StatsFragment extends Fragment {
         binding = FragmentFinanzasStatsBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
+        selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
+        selected_date_hasta = getResources().getString(R.string.hoy);
+
+
         database = new DataBase(requireContext());
         Calendar c= Calendar.getInstance();
         c.add(Calendar.DATE, -29);
 
-        try {
-            cargarStats(c, Calendar.getInstance());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        cargarStats(c, Calendar.getInstance());
 
         binding.tituloDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
         binding.tituloHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
@@ -86,21 +83,18 @@ public class StatsFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "InflateParams"})
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void cargarStats(Calendar desde, Calendar hasta) throws ParseException {
+    private void cargarStats(Calendar desde, Calendar hasta)  {
         cleanLayouts();
-        HashMap<String, Float> total_tag_ingresos = new HashMap<>();
-        HashMap<String, Float> total_tag_gastos = new HashMap<>();
 
         cantidad_dias = Utils.diferenciaDeDias(desde, hasta);
 
 
         Cursor data = database.getGastosBySessionUser(Utils.calendarToString(desde), Utils.calendarToString(hasta));
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
         while (data.moveToNext()) {
-            int id = data.getInt(0);
+            //int id_gasto = data.getInt(0);
             String fecha = data.getString(1);
             Float total_gasto = data.getFloat(2);
             String motivo = data.getString(3);
@@ -115,50 +109,6 @@ public class StatsFragment extends Fragment {
                 simbolos.add(simbolo_moneda);
             }
         }
-/*
-
-            Cursor t_gasto = database.getTagsByGastoId(id);
-            ArrayList<String> tags_asociados = new ArrayList<String>();
-            while (t_gasto.moveToNext()) {
-                tags_asociados.add(t_gasto.getString(1));
-            }
-
-            //Tag gastos
-            if (ingreso.equals("0")) {
-                //ALMACENO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
-                for(String t:tags_asociados) {
-                    if (!t.equals("")) {
-                        boolean ya_agregado = false;
-                        for(HashMap<String, Float> h:total_tag_gastos) {
-                            if (h.containsKey(ingreso + t)) {
-                                h.replace(ingreso + t, h.get(ingreso + t) + total_gasto);
-                                ya_agregado = true;
-                            }
-                        }
-                        if(!ya_agregado){
-                            HashMap<String, Float> agregar = new HashMap<>();
-                            agregar.put(ingreso + t, total_gasto);
-                            total_tag_gastos.add()
-                        }
-                    }
-                }
-            }
-            //Tag ingresos
-            else {
-                //ALMACENO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
-                for(String t:tags_asociados) {
-                    if(!t.equals("")){
-                        if(!total_tag_ingresos.containsKey(ingreso+t)){
-                            total_tag_ingresos.put(ingreso+t, total_gasto);
-                        }
-                        else {
-                            total_tag_ingresos.replace(ingreso + t, total_tag_ingresos.get(ingreso + t) + total_gasto);
-                        }
-                    }
-                }
-            }
-        }
-*/
 
         //AGREGO LINEAS DE GASTOS e INGRESOS
 
@@ -170,18 +120,20 @@ public class StatsFragment extends Fragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         while (total_gastos.moveToNext()){
-            hay_gastos = true;
-            View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
-            binding.layoutGastos.addView(view);
+            if(!hay_gastos) {
+                @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
+                ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+                ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
+                binding.layoutGastos.addView(view);
+                hay_gastos = true;
+            }
 
             agregarGastoIngreso(total_gastos.getString(2), total_gastos.getFloat(1), total_gastos.getString(3), binding.layoutGastos);
         }
         total_gastos.moveToFirst();
 
         if(!hay_gastos){
-            View view = inflater.inflate(R.layout.item_stats, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
             ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_gastos));
@@ -190,18 +142,20 @@ public class StatsFragment extends Fragment {
         }
 
         while (total_ingresos.moveToNext()){
-            hay_ingresos = true;
-            View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
-            binding.layoutIngresos.addView(view);
+            if(!hay_ingresos) {
+                hay_ingresos = true;
+                View view = inflater.inflate(R.layout.item_stats, null);
+                ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
+                ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
+                binding.layoutIngresos.addView(view);
+            }
 
             agregarGastoIngreso(total_ingresos.getString(2), total_ingresos.getFloat(1), total_ingresos.getString(3), binding.layoutIngresos);
         }
         total_ingresos.moveToFirst();
 
         if(!hay_ingresos){
-            View view = inflater.inflate(R.layout.item_stats, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
             ((TextView)view.findViewById(R.id.tipo)).setText("");
             ((TextView)view.findViewById(R.id.promedio)).setText("");
             ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_gastos));
@@ -219,7 +173,7 @@ public class StatsFragment extends Fragment {
         boolean hay_ingreso_tag = false;
 
         //No hay informacion de los tags
-        View view = inflater.inflate(R.layout.item_stats, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
         ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
         ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_info_sobre_tags));
         ((TextView) view.findViewById(R.id.promedio)).setText("");
@@ -233,14 +187,14 @@ public class StatsFragment extends Fragment {
                 //Titulo que diga que hay informacion de los tags
                 view = inflater.inflate(R.layout.item_stats, null);
                 ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView) view.findViewById(R.id.total)).setText("Información sobre Tags");
+                ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.informacion_sobre_tags));
                 ((TextView) view.findViewById(R.id.promedio)).setText("");
                 view.setPadding(0, 0, 0, 15);
                 binding.layoutAvanzado.addView(view);
                 hay_tags = true;
             }
-            Float total = total_by_tags.getFloat(1);
-            String nombre_moneda = total_by_tags.getString(2);
+            float total = total_by_tags.getFloat(1);
+            //String nombre_moneda = total_by_tags.getString(2);
             String simbolo = total_by_tags.getString(3);
             String nombre_tag = total_by_tags.getString(4);
             String ingreso = total_by_tags.getString(5);
@@ -248,22 +202,17 @@ public class StatsFragment extends Fragment {
             if (ingreso.equals("0")) {
                 if (!hay_gasto_tag) {
                     view = inflater.inflate(R.layout.item_stats, null);
-                    ((TextView) view.findViewById(R.id.tipo)).setText("Gastos");
+                    ((TextView) view.findViewById(R.id.tipo)).setText(getResources().getString(R.string.gastos));
                     ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.rojo_egreso));
                     ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                     ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
                     binding.layoutAvanzado.addView(view);
                     hay_gasto_tag = true;
                 }
-                view = inflater.inflate(R.layout.item_stats, null);
-                ((TextView) view.findViewById(R.id.tipo)).setText(nombre_tag + ": ");
-                ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
-                ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
-                binding.layoutAvanzado.addView(view);
             } else {
                 if (!hay_ingreso_tag) {
                     view = inflater.inflate(R.layout.item_stats, null);
-                    ((TextView) view.findViewById(R.id.tipo)).setText("Ingresos");
+                    ((TextView) view.findViewById(R.id.tipo)).setText(getResources().getString(R.string.ingresos));
                     ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.verde_ingreso));
                     ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                     ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
@@ -271,12 +220,12 @@ public class StatsFragment extends Fragment {
                     binding.layoutAvanzado.addView(view);
                     hay_ingreso_tag = true;
                 }
-                view = inflater.inflate(R.layout.item_stats, null);
-                ((TextView) view.findViewById(R.id.tipo)).setText(nombre_tag + ": ");
-                ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
-                ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
-                binding.layoutAvanzado.addView(view);
             }
+            view = inflater.inflate(R.layout.item_stats, null);
+            ((TextView) view.findViewById(R.id.tipo)).setText(nombre_tag + ": ");
+            ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
+            ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
+            binding.layoutAvanzado.addView(view);
         }
 
     }
@@ -287,7 +236,7 @@ public class StatsFragment extends Fragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        View view = inflater.inflate(R.layout.item_stats, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
         ((TextView)view.findViewById(R.id.tipo)).setText(moneda + ": ");
         ((TextView)view.findViewById(R.id.total)).setText(simbolo + " "+ Utils.formatoCantidad(total));
         ((TextView)view.findViewById(R.id.promedio)).setText(simbolo + " "+ Utils.formatoCantidad(total/cantidad_dias));
@@ -297,11 +246,11 @@ public class StatsFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void filtrar(String desde, String hasta) throws ParseException {
 
-        String text_desde = "Siempre";
-        String text_hasta = "Hoy";
+        String text_desde = getResources().getString(R.string.comienzo_de_mes);
+        String text_hasta = getResources().getString(R.string.hoy);
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-        Date desde_date = sdf.parse("1900/01/01");
+        Date desde_date = sdf.parse(Utils.calendarToString(Utils.getPrimerDiaDelMes()));
         Date hasta_date = Calendar.getInstance().getTime();
 
         if (!desde.equals(text_desde)) {
@@ -323,17 +272,18 @@ public class StatsFragment extends Fragment {
         gastos.clear();
         ingresos.clear();
 
-        binding.textDesde.setText("Siempre");
-        binding.textHasta.setText("Hoy");
+        binding.textDesde.setText(getResources().getString(R.string.comienzo_de_mes));
+        binding.textHasta.setText(getResources().getString(R.string.hoy));
 
 
         while(binding.layoutGastos.getChildCount() != 1){
             binding.layoutGastos.removeViewAt(1);
         }
-        for(int x = 1; 1!= binding.layoutIngresos.getChildCount(); x++) {
+        while(binding.layoutIngresos.getChildCount() != 1){
             binding.layoutIngresos.removeViewAt(1);
         }
-        for(int x = 1; 1!= binding.layoutAvanzado.getChildCount(); x++) {
+
+        while(binding.layoutAvanzado.getChildCount() != 1){
             binding.layoutAvanzado.removeViewAt(1);
         }
     }

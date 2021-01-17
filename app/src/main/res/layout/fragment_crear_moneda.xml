@@ -10,6 +10,8 @@
         android:id="@+id/fondo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="-100dp"
+        android:layout_marginEnd="-100dp"
         android:background="#000000"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +37,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/volver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/volver" />
+        app:layout_constraintTop_toTopOf="@+id/volver"
+        tools:ignore="RtlCompat" />
 
     <ImageView
         android:id="@+id/volver"
@@ -45,7 +48,8 @@
         android:layout_marginTop="15dp"
         android:src="@drawable/abc_vector_test"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="PrivateResource" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -82,8 +86,10 @@
                     android:layout_width="135dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="30dp"
+                    android:autofillHints=""
                     android:background="@drawable/fondo_blanco_redondeado"
-                    android:hint="@string/Dolares"
+                    android:hint="@string/example_moneda"
+                    android:inputType="text"
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="20sp"
@@ -97,8 +103,10 @@
                     android:layout_width="135dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="30dp"
+                    android:autofillHints=""
                     android:background="@drawable/fondo_blanco_redondeado"
-                    android:hint="$"
+                    android:hint="@string/example_simbolo"
+                    android:inputType="text"
                     android:textAlignment="center"
                     android:textColor="@color/almost_black"
                     android:textSize="22sp"
@@ -123,7 +131,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.1"
                     app:layout_constraintStart_toEndOf="@+id/txt_cantidad"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_simbolo" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_simbolo"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/txt_moneda"
