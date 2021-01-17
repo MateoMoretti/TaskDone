@@ -92,14 +92,11 @@ public class StatsFragment extends Fragment {
         HashMap<String, Float> total_tag_ingresos = new HashMap<>();
         HashMap<String, Float> total_tag_gastos = new HashMap<>();
 
-        Date desde_date = desde.getTime();
-        Date hasta_date = hasta.getTime();
-
         cantidad_dias = Utils.diferenciaDeDias(desde, hasta);
 
 
-        Cursor data = database.getGastosBySessionUser();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Cursor data = database.getGastosBySessionUser(Utils.calendarToString(desde), Utils.calendarToString(hasta));
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
         while (data.moveToNext()) {
             int id = data.getInt(0);
@@ -117,49 +114,45 @@ public class StatsFragment extends Fragment {
                 simbolos.add(simbolo_moneda);
             }
 
-            Date fecha_gasto = sdf.parse(fecha);
+            Cursor t_gasto = database.getTagsByGastoId(id);
+            ArrayList<String> tags_asociados = new ArrayList<String>();
+            while (t_gasto.moveToNext()) {
+                tags_asociados.add(t_gasto.getString(1));
+            }
 
-            assert fecha_gasto != null;
-            if ((desde_date.before(fecha_gasto)||desde_date.getDay()==fecha_gasto.getDay())  && (hasta_date.after(fecha_gasto) || hasta_date.getDay()==fecha_gasto.getDay())) {
-
-                Cursor t_gasto = database.getTagsByGastoId(id);
-                ArrayList<String> tags_asociados = new ArrayList<String>();
-                while (t_gasto.moveToNext()) {
-                    tags_asociados.add(t_gasto.getString(1));
-                }
-
-                if (ingreso.equals("0")) {
-                    //OBTENGO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
-                    for(String t:tags_asociados) {
-                        if (!t.equals("")) {
-                            if (!total_tag_gastos.containsKey(ingreso + t)) {
-                                total_tag_gastos.put(ingreso + t, total_gasto);
-                            } else {
-                                Float a = total_tag_gastos.get(ingreso + t);
-                                total_tag_gastos.replace(ingreso + t, total_tag_gastos.get(ingreso + t) + total_gasto);
-                            }
+            //Tag gastos
+            if (ingreso.equals("0")) {
+                //ALMACENO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
+                for(String t:tags_asociados) {
+                    if (!t.equals("")) {
+                        if (!total_tag_gastos.containsKey(ingreso + t)) {
+                            total_tag_gastos.put(ingreso + t, total_gasto);
+                        } else {
+                            total_tag_gastos.replace(ingreso + t, total_tag_gastos.get(ingreso + t) + total_gasto);
                         }
                     }
-                } else {
-                    //GUARDO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
-                    for(String t:tags_asociados) {
-                        if(!t.equals("")){
-                            if(!total_tag_ingresos.containsKey(ingreso+t)){
-                                total_tag_ingresos.put(ingreso+t, total_gasto);
-                            }
-                            else {
-                                total_tag_ingresos.replace(ingreso + t, total_tag_ingresos.get(ingreso + t) + total_gasto);
-                            }
+                }
+            }
+            //Tag ingresos
+            else {
+                //ALMACENO ingreso+tag. Ejemplo:   0Comida (indica un gasto en comida)   1trabajo (indica ingreso por trabajo)
+                for(String t:tags_asociados) {
+                    if(!t.equals("")){
+                        if(!total_tag_ingresos.containsKey(ingreso+t)){
+                            total_tag_ingresos.put(ingreso+t, total_gasto);
+                        }
+                        else {
+                            total_tag_ingresos.replace(ingreso + t, total_tag_ingresos.get(ingreso + t) + total_gasto);
                         }
                     }
                 }
             }
         }
 
-        //AGREGO LINEAS DE GASTOS EJ:    PESOS  280 (TOTAL)   53,333 (PROMEDIO)
+        //AGREGO LINEAS DE GASTOS e INGRESOS
 
-        Cursor total_gastos = database.getTotalGastosGroupByMonedas("0");
-        Cursor total_ingresos = database.getTotalGastosGroupByMonedas("1");
+        Cursor total_gastos = database.getTotalGastosBetweenFechasGroupByMonedas(Utils.calendarToString(desde), Utils.calendarToString(hasta), "0");
+        Cursor total_ingresos = database.getTotalGastosBetweenFechasGroupByMonedas(Utils.calendarToString(desde), Utils.calendarToString(hasta),"1");
 
         boolean hay_gastos = false;
         boolean hay_ingresos = false;
@@ -174,6 +167,7 @@ public class StatsFragment extends Fragment {
 
             agregarGastoIngreso(total_gastos.getString(2), total_gastos.getFloat(1), total_gastos.getString(3), binding.layoutGastos);
         }
+        total_gastos.moveToFirst();
 
         if(!hay_gastos){
             View view = inflater.inflate(R.layout.item_stats, null);
@@ -184,8 +178,6 @@ public class StatsFragment extends Fragment {
             binding.layoutGastos.addView(view);
         }
 
-        //LINEAS DE INGRESOS
-
         while (total_ingresos.moveToNext()){
             hay_ingresos = true;
             View view = inflater.inflate(R.layout.item_stats, null);
@@ -195,6 +187,7 @@ public class StatsFragment extends Fragment {
 
             agregarGastoIngreso(total_ingresos.getString(2), total_ingresos.getFloat(1), total_ingresos.getString(3), binding.layoutIngresos);
         }
+        total_ingresos.moveToFirst();
 
         if(!hay_ingresos){
             View view = inflater.inflate(R.layout.item_stats, null);
@@ -305,7 +298,7 @@ public class StatsFragment extends Fragment {
             text_hasta = hasta;
         }
         
-        cargarStats(Utils.toCalendar(desde_date), Utils.toCalendar(hasta_date));
+        cargarStats(Utils.dateToCalendar(desde_date), Utils.dateToCalendar(hasta_date));
         binding.textDesde.setText(text_desde);
         binding.textHasta.setText(text_hasta);
     }

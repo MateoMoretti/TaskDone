@@ -148,13 +148,13 @@ public class DataBase extends SQLiteOpenHelper {
     }
 
     // Devuelve -> fecha, cantidad, motivo, ingreso, nombreMoneda, simboloMoneda
-    public Cursor getGastosBySessionUser(){
+    public Cursor getGastosBySessionUser(String desde, String hasta){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "SELECT g. "+COL_ID+", g."+COL_FECHA+", g."+COL_TOTAL_GASTO+", g."+COL_MOTIVO+", g."+COL_INGRESO
                 +", mc."+COL_NOMBRE+", mc."+COL_SIMBOLO
                 +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+ TABLE_MONEDA +" AS mc "
-                +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID
+                +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_FECHA+" BETWEEN '"+desde+"' AND '"+hasta+"'"
                 +" INNER JOIN "+TABLE_USUARIO+" AS u "
                 +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'";
         Cursor data = db.rawQuery(query, null);
@@ -162,13 +162,13 @@ public class DataBase extends SQLiteOpenHelper {
     }
 
     //Devuelve cantidadGastos, total, nombreMoneda
-    public Cursor getTotalGastosGroupByMonedas(String ingreso){
+    public Cursor getTotalGastosBetweenFechasGroupByMonedas(String desde, String hasta, String ingreso){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "SELECT COUNT(g."+COL_TOTAL_GASTO+"), SUM(g."+COL_TOTAL_GASTO+"), mc."+COL_NOMBRE+", mc."+COL_SIMBOLO
                 +", mc."+COL_NOMBRE+", mc."+COL_SIMBOLO
                 +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+ TABLE_MONEDA +" AS mc "
-                +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_INGRESO+" = '"+ingreso+"'"
+                +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_INGRESO+" = '"+ingreso+"' AND g."+COL_FECHA+" BETWEEN '"+desde+"' AND '"+hasta+"'"
                 +" INNER JOIN "+TABLE_USUARIO+" AS u "
                 +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'"
                 +" GROUP BY mc."+COL_NOMBRE;

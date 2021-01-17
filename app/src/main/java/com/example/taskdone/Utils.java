@@ -27,38 +27,6 @@ public class Utils {
         return yearMonthObject.lengthOfMonth();
     }
 
-    public static List<String> diasOrdenadosPorMesAno(int mes, int año){
-
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        Date d;
-        d = new Date(año, mes, 1);
-        String dia_elegido =  sdf.format(d);
-
-        if(dia_elegido.equals("lunes")){
-             return new ArrayList<>(Arrays.asList("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"));
-        }
-        if(dia_elegido.equals("martes")) {
-            return new ArrayList<>(Arrays.asList("Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo", "Lunes"));
-        }
-        if(dia_elegido.equals("miércoles")){
-            return new ArrayList<>(Arrays.asList("Miercoles", "Jueves", "Viernes", "Sabado", "Domingo", "Lunes", "Martes"));
-        }
-        if(dia_elegido.equals("jueves")){
-            return new ArrayList<>(Arrays.asList("Jueves", "Viernes", "Sabado", "Domingo", "Lunes", "Martes", "Miercoles"));
-        }
-        if(dia_elegido.equals("viernes")){
-            return new ArrayList<>(Arrays.asList("Viernes", "Sabado", "Domingo", "Lunes", "Martes", "Miercoles", "Jueves"));
-        }
-        if(dia_elegido.equals("sábado")){
-            return new ArrayList<>(Arrays.asList("Sabado", "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes"));
-        }
-        if(dia_elegido.equals("domingo")){
-            return new ArrayList<>(Arrays.asList("Domingo","Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"));
-        }
-        return null;
-    }
-
-
     public static String getMes(int mes){
         switch (mes){
             case 1:
@@ -101,27 +69,25 @@ public class Utils {
 
     }
 
-    public static String getDiaHoy(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE");
-        Calendar cal = new GregorianCalendar();
-        dateFormat.setTimeZone(cal.getTimeZone());
-        return dateFormat.format(cal.getTime());
-    }
-
-    public static Calendar toCalendar(Date date){
+    public static Calendar dateToCalendar(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;
     }
 
-    public static String getFechaHoy(){
-
-        final Calendar c = Calendar.getInstance();
+    public static String calendarToString(Calendar c){
 
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        return year + "-" + twoDigits(month + 1) + "-" + twoDigits(day);
+        return year + "/" + twoDigits(month + 1) + "/" + twoDigits(day);
+
+    }
+
+    public static String dateToString(Date d){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        String a = sdf.format(d);
+        return sdf.format(d);
 
     }
 
@@ -151,6 +117,8 @@ public class Utils {
     public static long diferenciaDeDias(Calendar desde, Calendar hasta){
         return ChronoUnit.DAYS.between(desde.getTime().toInstant(), hasta.getTime().toInstant()) +1;
     }
+
+
 
 
 }

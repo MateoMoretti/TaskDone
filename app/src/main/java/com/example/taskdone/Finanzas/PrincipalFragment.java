@@ -114,7 +114,7 @@ public class PrincipalFragment extends Fragment {
         }
 
         binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
-        binding.editFecha.setText(Utils.getFechaHoy());
+        binding.editFecha.setText(Utils.calendarToString(Calendar.getInstance()));
 
         binding.agregarMoneda.setOnClickListener(v -> navController.navigate(R.id.crearMonedaFragment));
 
@@ -172,7 +172,7 @@ public class PrincipalFragment extends Fragment {
     private void showDatePickerDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
 
-            String selectedDate = year + "-" + Utils.twoDigits(month + 1) + "-" + Utils.twoDigits(day);
+            String selectedDate = year + "/" + Utils.twoDigits(month + 1) + "/" + Utils.twoDigits(day);
                 if(selectedDate != null){
                     final Calendar h = Calendar.getInstance();
                     h.set(year,month,day);
@@ -181,7 +181,7 @@ public class PrincipalFragment extends Fragment {
                     int months = h.get(Calendar.MONTH);
                     int days = h.get(Calendar.DAY_OF_MONTH);
                 }else{
-                    selectedDate = year + "-" + Utils.twoDigits(month + 1) + "-" + Utils.twoDigits(day);
+                    selectedDate = year + "/" + Utils.twoDigits(month + 1) + "/" + Utils.twoDigits(day);
                 }
             binding.editFecha.setText(selectedDate);
             }

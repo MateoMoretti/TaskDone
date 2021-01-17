@@ -75,7 +75,9 @@ public class HistorialFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void cargarHistorial(Date desde_date, Date hasta_date) throws ParseException {
         cleanHistorial();
-        Cursor data = dataBase.getGastosBySessionUser();
+
+
+        Cursor data = dataBase.getGastosBySessionUser(Utils.dateToString(desde_date), Utils.dateToString(hasta_date));
 
         ArrayList<ItemHistorial> data_items = new ArrayList<>();
         ArrayList<String> fechas = new ArrayList<>();
@@ -89,30 +91,23 @@ public class HistorialFragment extends Fragment {
             String nombre_moneda = data.getString(5);
             String simbolo_moneda = data.getString(6);
 
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date fecha_gasto = sdf.parse(fecha);
-
-            assert fecha_gasto != null;
-            if ((desde_date.before(fecha_gasto) || desde_date.getDay() == fecha_gasto.getDay()) && (hasta_date.after(fecha_gasto) || hasta_date.getDay() == fecha_gasto.getDay())) {
-
-                if (ingreso.equals("0")) {
-                    ingreso = "-";
-                } else {
-                    ingreso = "+";
-                }
-                if (!fechas.contains(fecha)) {
-                    fechas.add(fecha);
-                }
-
-                ItemHistorial i = new ItemHistorial();
-                i.fecha = fecha;
-                i.signo = ingreso;
-                i.simbolo = simbolo_moneda;
-                i.cantidad = Utils.formatoCantidad(total_gasto);
-                i.motivo = motivo;
-
-                data_items.add(i);
+            if (ingreso.equals("0")) {
+                ingreso = "-";
+            } else {
+                ingreso = "+";
             }
+            if (!fechas.contains(fecha)) {
+                fechas.add(fecha);
+            }
+
+            ItemHistorial i = new ItemHistorial();
+            i.fecha = fecha;
+            i.signo = ingreso;
+            i.simbolo = simbolo_moneda;
+            i.cantidad = Utils.formatoCantidad(total_gasto);
+            i.motivo = motivo;
+
+            data_items.add(i);
         }
 
         //LLENO LOS TITULOS DE FECHAS
