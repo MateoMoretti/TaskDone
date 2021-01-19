@@ -2,9 +2,9 @@
     <string name="app_name">Task Done</string>
     <string name="action_settings">Configuración</string>
 
-    <string name="elige_idioma">Elige idioma...</string>
+    <string name="elige_idioma">Elige idioma…</string>
     <string name="espanol">Español</string>
-    <string name="ingles">Ingles</string>
+    <string name="ingles">Inglés</string>
 
     <!-- TITULOS -->
 
@@ -33,6 +33,7 @@
 
     <!-- FINANZAS -->
 
+    <string name="tu_dinero">Tu dinero</string>
     <string name="registrar_gasto">Registrar gasto</string>
     <string name="guardado_exito">Guardado con éxito !</string>
     <string name="sin_gastos">No has gastado nada en estos días</string>
@@ -97,19 +98,5 @@
     <string name="error_usuario_vacio">Error: Debes ingresar un nombre de usuario</string>
     <string name="error_usuario_existente">Error: Éste usuario ya existe</string>
     <string name="error_moneda_existente">Error: Ésta moneda ya existe</string>
-
-
-    <string-array name="meses">
-        <item>Enero</item>  <item>Febrero</item>    <item>Marzo</item>  <item>Abril</item>
-        <item>Mayo</item>        <item>Junio</item>        <item>Julio</item>        <item>Agosto</item>
-        <item>Septiembre</item>        <item>Octubre</item>        <item>Noviembre</item>        <item>Diciembre</item>
-    </string-array>
-
-    <string-array name="anos">
-        <item>2020</item>        <item>2021</item>        <item>2022</item>        <item>2023</item>
-        <item>2024</item>        <item>2025</item>        <item>2026</item>        <item>2027</item>
-        <item>2028</item>        <item>2029</item>        <item>2030</item>        <item>2031</item>
-        <item>2032</item>        <item>2033</item>        <item>2034</item>        <item>2035</item>
-    </string-array>
 
 </resources>

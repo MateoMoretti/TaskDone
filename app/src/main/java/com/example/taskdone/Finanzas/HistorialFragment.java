@@ -138,7 +138,7 @@ public class HistorialFragment extends Fragment {
                 TextView fecha = view.findViewById(R.id.fecha);
                 RecyclerView rec = view.findViewById(R.id.recycler);
                 rec.setLayoutManager(new LinearLayoutManager(getContext()));
-                fecha.setText(Utils.getDiaFormateado(fechas.get(x)));
+                fecha.setText(Utils.getDia(fechas.get(x)));
                 rec.setAdapter(adapter);
                 if(x==0){
                     view.findViewById(R.id.linea).setVisibility(View.INVISIBLE);

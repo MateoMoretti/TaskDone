@@ -45,9 +45,9 @@ public class LoginFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        cargarIdioma();
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
-        cargarIdioma();
 
 
         database = new DataBase(requireContext());
@@ -87,10 +87,10 @@ public class LoginFragment extends Fragment {
         dialog.show();
     }
 
-    void setIdioma(String lenguaje){
-        Locale locale = new Locale(lenguaje);
-        if(lenguaje.equals("")){
-            Locale.getDefault();
+    void setIdioma(String idioma){
+        Locale locale = new Locale(idioma);
+        if(idioma.equals("")){
+            Locale.setDefault(Locale.getDefault());
         }
         else {
             Locale.setDefault(locale);
@@ -98,13 +98,12 @@ public class LoginFragment extends Fragment {
         Configuration config = new Configuration();
         config.setLocale(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        Preferences.savePreferenceString(requireContext(), lenguaje,"idioma");
+        Preferences.savePreferenceString(requireContext(), idioma,"idioma");
     }
 
     void cargarIdioma(){
         String idioma = Preferences.getPreferenceString(requireContext(), "idioma");
         setIdioma(idioma);
-
     }
 
     void crearCuenta(){

@@ -1,18 +1,30 @@
 package com.example.taskdone;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.taskdone.Acceso.ActivityLogin;
+
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
+
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
+
+    public static void setContext(Context context) {
+        Utils.context = context;
+    }
 
     public static String getMes(int mes){
         switch (mes){
@@ -46,14 +58,19 @@ public class Utils {
 
     public static String getDia(String fecha){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String idioma = Preferences.getPreferenceString(context, "idioma");
+        DateFormat df;
+        if(idioma.equals("")){
+            Locale.setDefault(Locale.getDefault());
+            df = DateFormat.getDateInstance(DateFormat.FULL, context.getResources().getConfiguration().locale);
+        }
+        else {
+            df = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+        }
         Calendar c = Calendar.getInstance();
         c.set(Integer.parseInt(fecha.substring(0,4)), Integer.parseInt(fecha.substring(5,7))-1, Integer.parseInt(fecha.substring(8,10)));
-        return sdf.format(c.getTime());
-    }
-
-    public static String getDiaFormateado(String fecha){
-        return getDia(fecha).toUpperCase() + " " + fecha.substring(8,10) + ", " + getMes(Integer.parseInt(fecha.substring(5,7))) + " " + fecha.substring(0,4);
-
+        String dia = df.format(c.getTime());
+        return dia.substring(0, 1).toUpperCase() + dia.substring(1);
     }
 
     public static Calendar dateToCalendar(Date date){

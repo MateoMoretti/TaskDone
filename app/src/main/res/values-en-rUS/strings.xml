@@ -72,4 +72,5 @@
     <string name="espanol">Spanish</string>
     <string name="ingles">English</string>
     <string name="elige_idioma">Choose language...</string>
+    <string name="tu_dinero">Your money</string>
 </resources>

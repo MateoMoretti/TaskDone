@@ -21,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
+import com.example.taskdone.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.lang.reflect.Array;
@@ -55,6 +56,8 @@ public class ActivityFinanzas extends AppCompatActivity {
         pesos.setIcon(dr_signo_pesos);
         stats.setIcon(dr_stats);
         historial.setIcon(dr_historial);
+
+        Utils.setContext(getApplicationContext());
 
         Preferences.deletePreferenceString(getApplicationContext(), "stats_desde");
         Preferences.deletePreferenceString(getApplicationContext(), "stats_hasta");
