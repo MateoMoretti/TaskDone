@@ -91,7 +91,7 @@ public class PrincipalFragment extends Fragment {
         binding.spinnerMoneda.setAdapter(spinnerArrayAdapter);
         binding.spinnerMoneda.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
         binding.spinnerMoneda.setGravity(Gravity.CENTER);
-        binding.agregarTag.setOnClickListener(v -> this.seleccionarTags());
+        binding.agregarTag.setOnClickListener(v -> this.irATags());
 
         dataBase = new DataBase(requireContext());
 
@@ -159,6 +159,22 @@ public class PrincipalFragment extends Fragment {
     private void irACrearMoneda(){
         Preferences.savePreferenceString(requireContext(), ""+R.id.principalFragment, "id_fragment_anterior");
         navController.navigate(R.id.crearMonedaFragment);
+    }
+
+
+
+    void irATags() {
+        Preferences.savePreferenceString(requireContext(), ""+R.id.principalFragment, "id_fragment_anterior");
+        Bundle bundle = new Bundle();
+        bundle.putString("fecha", binding.editFecha.getText().toString());
+        bundle.putString("tipo_moneda", Integer.toString(binding.spinnerMoneda.getSelectedItemPosition()));
+        bundle.putString("cantidad", binding.editCantidad.getText().toString());
+        bundle.putString("motivo", binding.editMotivo.getText().toString());
+        bundle.putStringArrayList("tags", tags);
+        bundle.putBoolean("ingreso", binding.checkIngreso.isChecked());
+
+        navController.navigate(R.id.action_principalFragment_to_tagsFragment, bundle);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -254,19 +270,5 @@ public class PrincipalFragment extends Fragment {
 
     }
 
-
-
-    void seleccionarTags() {
-        Bundle bundle = new Bundle();
-        bundle.putString("fecha", binding.editFecha.getText().toString());
-        bundle.putString("tipo_moneda", Integer.toString(binding.spinnerMoneda.getSelectedItemPosition()));
-        bundle.putString("cantidad", binding.editCantidad.getText().toString());
-        bundle.putString("motivo", binding.editMotivo.getText().toString());
-        bundle.putStringArrayList("tags", tags);
-        bundle.putBoolean("ingreso", binding.checkIngreso.isChecked());
-
-        navController.navigate(R.id.action_principalFragment_to_tagsFragment, bundle);
-
-    }
 
 }

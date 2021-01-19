@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Task Done</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuración</string>
+
+    <string name="elige_idioma">Elige idioma...</string>
+    <string name="espanol">Español</string>
+    <string name="ingles">Ingles</string>
 
     <!-- TITULOS -->
 
@@ -13,11 +17,12 @@
     <string name="registrarse">Registrarse</string>
 
     <!-- LOGIN -->
+    <string name="bienvenido">Bienvenido !</string>
     <string name="nombre_de_usuario">Nombre de usuario</string>
     <string name="password">Contraseña</string>
     <string name="usuario">Usuario</string>
     <string name="inicia_sesion">Inicia sesión</string>
-    <string name="ingresar">Ingresar</string>
+    <string name="idioma">Idioma</string>
     <string name="usuario_creado">Usuario creado con éxito !</string>
     <string name="salir">Salir</string>
     <string name="quieres_cerrar_sesion">Quieres cerrar sesión?</string>
@@ -29,10 +34,9 @@
     <!-- FINANZAS -->
 
     <string name="registrar_gasto">Registrar gasto</string>
-    <string name="f_checkbox_ingreso">Es ingreso</string>
     <string name="guardado_exito">Guardado con éxito !</string>
-    <string name="sin_gastos">No has gastado nada</string>
-    <string name="sin_ingresos">No has tenido un ingreso</string>
+    <string name="sin_gastos">No has gastado nada en estos días</string>
+    <string name="sin_ingresos">No has tenido un ingreso en estos días</string>
     <string name="sin_info_sobre_tags">No tienes información sobre Etiquetas en estos días</string>
     <string name="sin_registros">No has registrado nada entre éstas fechas</string>
     <string name="sin_tags">Aún no tienes etiquetas, crea una</string>

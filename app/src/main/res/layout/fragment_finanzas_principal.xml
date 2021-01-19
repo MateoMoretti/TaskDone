@@ -172,13 +172,12 @@
                     android:id="@+id/txt_motivo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="5dp"
                     android:text="@string/motivo."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_motivo"
                     app:layout_constraintEnd_toStartOf="@+id/edit_motivo"
-                    app:layout_constraintStart_toStartOf="@+id/txt_cantidad"
                     app:layout_constraintTop_toTopOf="@+id/edit_motivo" />
 
                 <EditText
@@ -201,7 +200,7 @@
 
                 <TextView
                     android:id="@+id/txt_tag_seleccionados"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
                     android:layout_weight="0"
@@ -209,20 +208,18 @@
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@+id/agregar_tag"
-                    app:layout_constraintStart_toEndOf="@+id/txt_tag"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_motivo"
+                    app:layout_constraintStart_toEndOf="@+id/txt_motivo"
                     app:layout_constraintTop_toBottomOf="@+id/edit_motivo" />
 
                 <Button
                     android:id="@+id/agregar_tag"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginEnd="40dp"
                     android:background="@android:drawable/ic_input_add"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="@+id/txt_tag_seleccionados"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/edit_motivo"
+                    app:layout_constraintStart_toEndOf="@+id/txt_tag_seleccionados"
                     app:layout_constraintTop_toTopOf="@+id/txt_tag_seleccionados" />
 
                 <TextView
@@ -232,7 +229,7 @@
                     android:text="@string/tags."
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/txt_motivo"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_tag_seleccionados"
                     app:layout_constraintTop_toTopOf="@+id/txt_tag_seleccionados" />
 
                 <CheckBox
@@ -243,7 +240,7 @@
                     android:layout_weight="2"
                     android:background="@drawable/fondo_blanco_redondeado"
                     android:paddingStart="5dp"
-                    android:text="@string/f_checkbox_ingreso"
+                    android:text="@string/es_ingreso"
                     android:textAlignment="textStart"
                     android:textColor="#000000"
                     android:textSize="18sp"
