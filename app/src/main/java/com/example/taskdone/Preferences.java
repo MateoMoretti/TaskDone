@@ -37,6 +37,16 @@ public class Preferences {
         preferences.edit().clear().apply();
     }
 
+    public static void cleanPreferencesGastoPendiente(Context c){
+        Preferences.deletePreferenceString(c, "gasto_fecha");
+        Preferences.deletePreferenceString(c, "gasto_moneda_index");
+        Preferences.deletePreferenceString(c, "gasto_cantidad");
+        Preferences.deletePreferenceString(c, "gasto_motivo");
+        Preferences.deletePreferenceString(c, "gasto_ingreso");
+        Preferences.deletePreferenceString(c, "gasto_tags");
+        Preferences.deletePreferenceString(c, "scroll_tags");
+    }
+
 }
 
 

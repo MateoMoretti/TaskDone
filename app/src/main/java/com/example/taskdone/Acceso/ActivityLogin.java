@@ -35,6 +35,7 @@ public class ActivityLogin extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
+        Preferences.cleanPreferencesGastoPendiente(getApplicationContext());
 
         database = new DataBase(getApplicationContext());
 

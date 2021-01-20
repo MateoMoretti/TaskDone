@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -91,6 +93,18 @@ public class PrincipalFragment extends Fragment {
         binding.spinnerMoneda.setAdapter(spinnerArrayAdapter);
         binding.spinnerMoneda.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
         binding.spinnerMoneda.setGravity(Gravity.CENTER);
+        binding.spinnerMoneda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Preferences.savePreferenceString(requireContext(), Integer.toString(binding.spinnerMoneda.getSelectedItemPosition()), "gasto_moneda_index");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         binding.agregarTag.setOnClickListener(v -> this.irATags());
 
         dataBase = new DataBase(requireContext());
@@ -106,33 +120,12 @@ public class PrincipalFragment extends Fragment {
         tags = new ArrayList<>();
 
         if(getArguments() != null){
-            if(getArguments().getStringArrayList("tags") != null){
-                tags = getArguments().getStringArrayList("tags");
+            if(getArguments().getString("scroll_tags") != null) {
+                scrollToTag();
             }
-            assert tags != null;
-            String tags_seleccionados = "";
-            for(int x=0;x!=tags.size();x++){
-                tags_seleccionados += tags.get(x);
-                if(!(x+1==tags.size())){
-                    tags_seleccionados += ", ";
-                }
-            }
-            if(tags_seleccionados.equals("")){
-                tags_seleccionados = getResources().getString(R.string.sin_seleccionados);
-            }
-            binding.txtTagSeleccionados.setText(tags_seleccionados);
-            binding.editFecha.setText(getArguments().getString("fecha"));
-            binding.spinnerMoneda.setSelection(Integer.parseInt(Objects.requireNonNull(getArguments().getString("tipo_moneda"))));
-            binding.editCantidad.setText(getArguments().getString("cantidad"));
-            binding.editMotivo.setText(getArguments().getString("motivo"));
-            binding.checkIngreso.setChecked(getArguments().getBoolean("ingreso"));
-
-            scrollToTag();
-
         }
 
         binding.editFecha.setOnClickListener(v -> showDatePickerDialog());
-        binding.editFecha.setText(Utils.calendarToString(Calendar.getInstance()));
 
         binding.agregarMoneda.setOnClickListener(v -> irACrearMoneda());
 
@@ -145,6 +138,22 @@ public class PrincipalFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 verificarCantidad();
+                Preferences.savePreferenceString(requireContext(), binding.editCantidad.getText().toString(), "gasto_cantidad");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+        binding.editMotivo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Preferences.savePreferenceString(requireContext(), binding.editMotivo.getText().toString(), "gasto_motivo");
             }
 
             @Override
@@ -152,8 +161,19 @@ public class PrincipalFragment extends Fragment {
             }
         });
 
+        binding.checkIngreso.setOnCheckedChangeListener((compoundButton, b) -> guardarIngresoPendiente(b));
+
+        cargarGastoPendiente();
+
 
         return binding.getRoot();
+    }
+
+    void guardarIngresoPendiente(boolean b){
+        Preferences.savePreferenceString(requireContext(), "0", "gasto_ingreso");
+        if(b){
+            Preferences.savePreferenceString(requireContext(), "1", "gasto_ingreso");
+        }
     }
 
     private void irACrearMoneda(){
@@ -161,21 +181,47 @@ public class PrincipalFragment extends Fragment {
         navController.navigate(R.id.crearMonedaFragment);
     }
 
-
-
     void irATags() {
         Preferences.savePreferenceString(requireContext(), ""+R.id.principalFragment, "id_fragment_anterior");
-        Bundle bundle = new Bundle();
-        bundle.putString("fecha", binding.editFecha.getText().toString());
-        bundle.putString("tipo_moneda", Integer.toString(binding.spinnerMoneda.getSelectedItemPosition()));
-        bundle.putString("cantidad", binding.editCantidad.getText().toString());
-        bundle.putString("motivo", binding.editMotivo.getText().toString());
-        bundle.putStringArrayList("tags", tags);
-        bundle.putBoolean("ingreso", binding.checkIngreso.isChecked());
-
-        navController.navigate(R.id.action_principalFragment_to_tagsFragment, bundle);
-
+        navController.navigate(R.id.action_principalFragment_to_tagsFragment);
     }
+
+    void cargarGastoPendiente(){
+        String fecha = Preferences.getPreferenceString(requireContext(), "gasto_fecha");
+        String moneda_index =Preferences.getPreferenceString(requireContext(), "gasto_moneda_index");
+        String cantidad = Preferences.getPreferenceString(requireContext(), "gasto_cantidad");
+        String motivo = Preferences.getPreferenceString(requireContext(), "gasto_motivo");
+        String ingreso = Preferences.getPreferenceString(requireContext(), "gasto_ingreso");
+        String tags_concatenados = Preferences.getPreferenceString(requireContext(), "gasto_tags");
+
+        binding.editFecha.setText(Utils.calendarToString(Calendar.getInstance()));
+        if(!fecha.equals("")) {
+            binding.editFecha.setText(fecha);
+        }
+        if(!moneda_index.equals("")){
+            binding.spinnerMoneda.setSelection(Integer.parseInt(moneda_index));
+        }
+        if(!cantidad.equals("")) {
+            binding.editCantidad.setText(cantidad);
+        }
+        if(!motivo.equals("")) {
+            binding.editMotivo.setText(motivo);
+        }
+        if(ingreso.equals("1")) {
+            binding.checkIngreso.setChecked(true);
+        }
+        StringBuilder tags_seleccionados = new StringBuilder();
+        if(!tags_concatenados.equals("")) {
+            tags.addAll(Arrays.asList(tags_concatenados.split(", ")));
+            tags_seleccionados.append(Utils.arrayListToString(tags));
+
+        }
+        else{
+            tags_seleccionados.append(getResources().getString(R.string.sin_seleccionados));
+        }
+        binding.txtTagSeleccionados.setText(tags_seleccionados);
+    }
+
 
     @SuppressLint("SetTextI18n")
     private void llenarLayoutMonedas(){
@@ -205,6 +251,7 @@ public class PrincipalFragment extends Fragment {
                     binding.editCantidad.setSelection(binding.editCantidad.length());
                 }
             }
+
     }
 
     private void showDatePickerDialog() {
@@ -215,6 +262,7 @@ public class PrincipalFragment extends Fragment {
             h.set(year,month,day);
             h.add(Calendar.DAY_OF_YEAR,1);
             binding.editFecha.setText(selectedDate);
+            Preferences.savePreferenceString(requireContext(), binding.editFecha.getText().toString(), "gasto_fecha");
             }
 
         );
@@ -248,6 +296,7 @@ public class PrincipalFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void cleanAndUpdate(){
+        Preferences.cleanPreferencesGastoPendiente(requireContext());
         binding.spinnerMoneda.setSelection(0);
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");

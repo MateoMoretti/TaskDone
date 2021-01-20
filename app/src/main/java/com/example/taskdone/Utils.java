@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -122,6 +123,17 @@ public class Utils {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static long diferenciaDeDias(Calendar desde, Calendar hasta){
         return ChronoUnit.DAYS.between(desde.getTime().toInstant(), hasta.getTime().toInstant()) +1;
+    }
+
+    public static String arrayListToString(ArrayList<String> a){
+        StringBuilder concatenada = new StringBuilder();
+        for (int x = 0; x != a.size(); x++) {
+            concatenada.append(a.get(x));
+            if (!(x + 1 == a.size())) {
+                concatenada.append(", ");
+            }
+        }
+        return concatenada.toString();
     }
 
 

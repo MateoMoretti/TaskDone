@@ -126,6 +126,7 @@ public class ActivityFinanzas extends AppCompatActivity {
         builder.setMessage(getResources().getString(R.string.quieres_cerrar_sesion));
         DialogInterface.OnClickListener c = (dialogInterface, i) -> {
             Preferences.deleteAllPreferenceString(getApplicationContext());
+            Preferences.cleanPreferencesGastoPendiente(getApplicationContext());
             finish();
         };
         builder.setPositiveButton(getResources().getString(R.string.si), c);

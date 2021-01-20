@@ -21,11 +21,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.taskdone.DataBase;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.UsuarioSingleton;
+import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentTagsBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TagsFragment extends Fragment {
@@ -34,8 +37,7 @@ public class TagsFragment extends Fragment {
     NavController navController;
     DataBase database;
 
-    ArrayList<String> tags_bundle;
-    ArrayList<String> tags_backup; //Sirve para cancelar
+    ArrayList<String> tags_actual = new ArrayList<String>();
 
     ListaTagsAdapter adapter_tags;
     DataBase dataBase;
@@ -49,10 +51,11 @@ public class TagsFragment extends Fragment {
         binding = FragmentTagsBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
-        assert getArguments() != null;
-        tags_bundle = getArguments().getStringArrayList("tags");
-        assert tags_bundle != null;
-        tags_backup = (ArrayList<String>) tags_bundle.clone();
+
+        String tags_concatenados = Preferences.getPreferenceString(requireContext(), "gasto_tags");
+        if(!tags_concatenados.equals("")){
+            tags_actual.addAll(Arrays.asList(tags_concatenados.split(", ")));
+        }
 
         database = new DataBase(requireContext());
 
@@ -79,7 +82,7 @@ public class TagsFragment extends Fragment {
             tags_nombre.add(i);
         }
 
-        adapter_tags = new ListaTagsAdapter(tags_nombre, tags_bundle, requireContext());
+        adapter_tags = new ListaTagsAdapter(tags_nombre, tags_actual, requireContext());
 
         if(tags_nombre.isEmpty()){
             binding.txtSinTags.setVisibility(View.VISIBLE);
@@ -92,20 +95,12 @@ public class TagsFragment extends Fragment {
     }
 
     private void volverAPrincipal(boolean aceptar){
-        Bundle bundle = getArguments();
-        assert bundle != null;
-        bundle.putString("fecha", getArguments().getString("fecha"));
-        bundle.putString("tipo_moneda", getArguments().getString("tipo_moneda"));
-        bundle.putString("cantidad", getArguments().getString("cantidad"));
-        bundle.putString("motivo", getArguments().getString("motivo"));
-        if(aceptar) {
-            bundle.putStringArrayList("tags", adapter_tags.getTagsElegidos());
-        }
-        else{
-            bundle.putStringArrayList("tags", tags_backup);
-        }
-        bundle.putBoolean("ingreso", getArguments().getBoolean("ingreso"));
+        Bundle bundle = new Bundle();
 
+        if(aceptar) {
+            Preferences.savePreferenceString(requireContext(), Utils.arrayListToString(tags_actual), "gasto_tags");
+        }
+        bundle.putBoolean("scroll_tags", true);
         navController.navigate(R.id.action_tagsFragment_to_principalFragment, bundle);
     }
 
