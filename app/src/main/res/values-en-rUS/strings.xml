@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Task Done</string>
+    <string name="app_name">My Daily Finances</string>
     <string name="tags">Tags</string>
     <string name="monedas">Currencies</string>
     <string name="historial">Records</string>
@@ -20,10 +20,10 @@
     <string name="si">Yes</string>
     <string name="no">No</string>
     <string name="credenciales_incorrectas">Incorrect username or password</string>
-    <string name="mantener_sesion">Keep me signed in</string>
-    <string name="registrar_gasto">Record expense</string>
+    <string name="mantener_sesion">Keep me logged in</string>
+    <string name="agregar_registro">Add record</string>
     <string name="guardado_exito">Saved successfully !</string>
-    <string name="sin_gastos">you haven\'t had expenses these days</string>
+    <string name="sin_gastos">You haven\'t had expenses these days</string>
     <string name="sin_ingresos">You haven\'t had an income these days</string>
     <string name="sin_info_sobre_tags">You have no information about Tags these days</string>
     <string name="sin_registros">You have not registered anything between those dates</string>
@@ -35,7 +35,7 @@
     <string name="ingresos">Income</string>
     <string name="avanzado">Advanced</string>
     <string name="total">Total</string>
-    <string name="promedio">Average</string>
+    <string name="por_dia">Per day</string>
     <string name="moneda">Currency</string>
     <string name="simbolo">Symbol</string>
     <string name="cantidad">Amount</string>

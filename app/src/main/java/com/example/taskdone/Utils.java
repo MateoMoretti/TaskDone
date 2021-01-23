@@ -101,6 +101,19 @@ public class Utils {
         return c;
     }
 
+    public static boolean isPrimerDiaDelMes(String fecha){
+        return getPrimerDiaDelMes().get(Calendar.YEAR) == Integer.parseInt(fecha.substring(0,4))
+                && getPrimerDiaDelMes().get(Calendar.MONTH)+1 == Integer.parseInt(fecha.substring(5,7))
+                && getPrimerDiaDelMes().get(Calendar.DAY_OF_MONTH) == Integer.parseInt(fecha.substring(8,10));
+    }
+
+
+    public static boolean isHoy(String fecha){
+        return Calendar.getInstance().get(Calendar.YEAR) == Integer.parseInt(fecha.substring(0,4))
+                && Calendar.getInstance().get(Calendar.MONTH)+1 == Integer.parseInt(fecha.substring(5,7))
+                && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == Integer.parseInt(fecha.substring(8,10));
+    }
+
     public static String dateToString(Date d){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
         return sdf.format(d);

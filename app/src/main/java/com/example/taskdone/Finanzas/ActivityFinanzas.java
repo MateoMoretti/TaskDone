@@ -2,7 +2,6 @@ package com.example.taskdone.Finanzas;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -14,9 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.Preferences;
@@ -24,9 +21,9 @@ import com.example.taskdone.R;
 import com.example.taskdone.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ActivityFinanzas extends AppCompatActivity {
 
@@ -113,7 +110,9 @@ public class ActivityFinanzas extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         ArrayList<Integer> destinos_principales = new ArrayList<>(Arrays.asList(R.id.principalFragment,R.id.historialFragment,R.id.statsFragment));
-        if (destinos_principales.contains(navController.getCurrentDestination().getId())) {
+        if (destinos_principales.contains(Objects.requireNonNull(navController.getCurrentDestination()).getId())
+                ||  ((navController.getCurrentDestination().getId() == R.id.crearMonedaFragment
+                && Preferences.getPreferenceString(getApplicationContext(), "id_fragment_anterior").equals("")))) {
             popupCerrarSesion();
         }
         else{
@@ -125,8 +124,9 @@ public class ActivityFinanzas extends AppCompatActivity {
         builder.setTitle(getResources().getString(R.string.salir));
         builder.setMessage(getResources().getString(R.string.quieres_cerrar_sesion));
         DialogInterface.OnClickListener c = (dialogInterface, i) -> {
-            Preferences.deleteAllPreferenceString(getApplicationContext());
-            Preferences.cleanPreferencesGastoPendiente(getApplicationContext());
+            Preferences.deleteFiltros(getApplicationContext());
+            Preferences.deleteUser(getApplicationContext());
+            Preferences.deletePreferencesGastoPendiente(getApplicationContext());
             finish();
         };
         builder.setPositiveButton(getResources().getString(R.string.si), c);

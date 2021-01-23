@@ -45,7 +45,6 @@ public class LoginFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        cargarIdioma();
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
 
@@ -101,11 +100,6 @@ public class LoginFragment extends Fragment {
         Preferences.savePreferenceString(requireContext(), idioma,"idioma");
     }
 
-    void cargarIdioma(){
-        String idioma = Preferences.getPreferenceString(requireContext(), "idioma");
-        setIdioma(idioma);
-    }
-
     void crearCuenta(){
         Preferences.savePreferenceString(requireContext(), ""+R.id.loginFragment, "id_fragment_anterior");
         navController.navigate(R.id.action_loginFragment_to_crearCuentaFragment);
@@ -118,6 +112,7 @@ public class LoginFragment extends Fragment {
         while (data.moveToNext()) {
             UsuarioSingleton.getInstance().setID(data.getInt(0));
             UsuarioSingleton.getInstance().setUsername(data.getString(1));
+            password = data.getString(2);
             permitido = true;
         }
 

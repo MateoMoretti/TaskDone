@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Task Done</string>
+    <string name="app_name">Mis Finanzas Diarias </string>
     <string name="action_settings">Configuración</string>
 
     <string name="elige_idioma">Elige idioma…</string>
@@ -34,7 +34,7 @@
     <!-- FINANZAS -->
 
     <string name="tu_dinero">Tu dinero</string>
-    <string name="registrar_gasto">Registrar gasto</string>
+    <string name="agregar_registro">Agregar registro</string>
     <string name="guardado_exito">Guardado con éxito !</string>
     <string name="sin_gastos">No has gastado nada en estos días</string>
     <string name="sin_ingresos">No has tenido un ingreso en estos días</string>
@@ -50,7 +50,7 @@
     <string name="ingresos">Ingresos</string>
     <string name="avanzado">Avanzado</string>
     <string name="total">Total</string>
-    <string name="promedio">Promedio</string>
+    <string name="por_dia">Por día</string>
 
     <!-- MONEDAS -->
 

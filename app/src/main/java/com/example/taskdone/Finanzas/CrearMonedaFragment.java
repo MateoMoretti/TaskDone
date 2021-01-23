@@ -17,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.taskdone.DataBase;
+import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.databinding.FragmentCrearMonedaBinding;
 
@@ -38,6 +39,10 @@ public class CrearMonedaFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
 
         database = new DataBase(requireContext());
+
+        if(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior").equals("")){
+            binding.volver.setVisibility(View.INVISIBLE);
+        }
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override

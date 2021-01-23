@@ -169,8 +169,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/layout_gastos"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_gastos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
@@ -178,26 +178,78 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/fondo_blanco_redondeado"
                 android:backgroundTint="@color/rojo_egreso_fondo"
-                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:id="@+id/gastos"
-                    style="@style/Titulos"
-                    android:layout_width="match_parent"
+                    android:id="@+id/un_tercio"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/gastos"
-                    android:textColor="@color/rojo_egreso"
-                    android:textSize="28sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.33"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_ingresos"
+                <LinearLayout
+                    android:id="@+id/layout_titulo_gasto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/gastos"
+                        style="@style/Titulos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/gastos"
+                        android:textColor="@color/rojo_egreso"
+                        android:textSize="28sp" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/scroll_tipo_gasto"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toStartOf="@+id/un_tercio"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_titulo_gasto">
+
+                    <LinearLayout
+                        android:id="@+id/layout_tipo_gastos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/scroll_tipo_gasto"
+                    app:layout_constraintTop_toTopOf="@id/scroll_tipo_gasto">
+
+                    <LinearLayout
+                        android:id="@+id/layout_gastos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical" />
+                </HorizontalScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_ingresos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
@@ -205,26 +257,76 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/fondo_blanco_redondeado"
                 android:backgroundTint="@color/verde_ingreso_fondo"
-                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:id="@+id/ingresos"
-                    style="@style/Titulos"
-                    android:layout_width="match_parent"
+                    android:id="@+id/un_tercio2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/ingresos"
-                    android:textColor="@color/verde_ingreso"
-                    android:textSize="28sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.33"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_avanzado"
+                <LinearLayout
+                    android:id="@+id/layout_titulo_ingresos"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/ingresos"
+                        style="@style/Titulos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/ingresos"
+                        android:textColor="@color/verde_ingreso"
+                        android:textSize="28sp" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/scroll_tipo_ingresos"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toStartOf="@+id/un_tercio2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_titulo_ingresos">
+
+                    <LinearLayout
+                        android:id="@+id/layout_tipo_ingresos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
+                        android:orientation="vertical"></LinearLayout>
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/scroll_tipo_ingresos"
+                    app:layout_constraintTop_toTopOf="@+id/scroll_tipo_ingresos">
+
+                    <LinearLayout
+                        android:id="@+id/layout_ingresos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_avanzado"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
@@ -232,23 +334,73 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/fondo_blanco_redondeado"
                 android:backgroundTint="#E3FFFC"
-                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:id="@+id/avanzado"
-                    style="@style/Titulos"
-                    android:layout_width="match_parent"
+                    android:id="@+id/un_tercio3"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/avanzado"
-                    android:textColor="@color/very_light_green"
-                    android:textSize="28sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.33"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_titulo_avanzado"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/avanzado"
+                        style="@style/Titulos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/avanzado"
+                        android:textColor="@color/very_light_green"
+                        android:textSize="28sp" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/scroll_tipo_avanzado"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toStartOf="@+id/un_tercio3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_titulo_avanzado">
+
+                    <LinearLayout
+                        android:id="@+id/layout_tipo_avanzado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
+                        android:orientation="vertical"></LinearLayout>
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/scroll_tipo_avanzado"
+                    app:layout_constraintTop_toTopOf="@id/scroll_tipo_avanzado">
+
+                    <LinearLayout
+                        android:id="@+id/layout_avanzado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>

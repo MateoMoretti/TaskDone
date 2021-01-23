@@ -37,7 +37,19 @@ public class Preferences {
         preferences.edit().clear().apply();
     }
 
-    public static void cleanPreferencesGastoPendiente(Context c){
+    public static void deleteFiltros(Context c) {
+        Preferences.deletePreferenceString(c, "stats_desde");
+        Preferences.deletePreferenceString(c, "stats_hasta");
+        Preferences.deletePreferenceString(c, "historial_desde");
+        Preferences.deletePreferenceString(c, "historial_hasta");
+    }
+
+    public static void deleteUser(Context c) {
+        Preferences.deletePreferenceString(c, "usuario");
+        Preferences.deletePreferenceString(c, "password");
+    }
+
+    public static void deletePreferencesGastoPendiente(Context c){
         Preferences.deletePreferenceString(c, "gasto_fecha");
         Preferences.deletePreferenceString(c, "gasto_moneda_index");
         Preferences.deletePreferenceString(c, "gasto_cantidad");

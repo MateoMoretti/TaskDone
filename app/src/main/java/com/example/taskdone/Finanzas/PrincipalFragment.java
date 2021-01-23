@@ -296,7 +296,7 @@ public class PrincipalFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void cleanAndUpdate(){
-        Preferences.cleanPreferencesGastoPendiente(requireContext());
+        Preferences.deletePreferencesGastoPendiente(requireContext());
         binding.spinnerMoneda.setSelection(0);
         binding.editCantidad.setText("0");
         binding.editMotivo.setText("");

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,11 @@ public class StatsFragment extends Fragment {
         if(selected_date_desde.equals("")) {
             selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
         }
-        if(selected_date_hasta.equals("")) {
+        else if(Utils.isHoy(selected_date_desde)){
+            selected_date_desde = getResources().getString(R.string.hoy);
+        }
+
+        if(selected_date_hasta.equals("") || Utils.isHoy(selected_date_hasta)) {
             selected_date_hasta = getResources().getString(R.string.hoy);
         }
 
@@ -130,6 +135,8 @@ public class StatsFragment extends Fragment {
 
         while (total_gastos.moveToNext()){
             if(!hay_gastos) {
+                @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                binding.layoutTipoGastos.addView(view_tipo);
                 @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
                 ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                 ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
@@ -137,39 +144,37 @@ public class StatsFragment extends Fragment {
                 hay_gastos = true;
             }
 
-            agregarGastoIngreso(total_gastos.getString(2), total_gastos.getFloat(1), total_gastos.getString(3), binding.layoutGastos);
+            agregarGastoIngreso(total_gastos.getString(2), total_gastos.getFloat(1), total_gastos.getString(3), binding.layoutGastos, binding.layoutTipoGastos);
         }
         total_gastos.moveToFirst();
 
         if(!hay_gastos){
-            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView)view.findViewById(R.id.tipo)).setText("");
-            ((TextView)view.findViewById(R.id.promedio)).setText("");
-            ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_gastos));
-            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            binding.layoutGastos.addView(view);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_linea_simple, null);
+            ((TextView)view.findViewById(R.id.texto)).setText(getResources().getString(R.string.sin_gastos));
+            ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+            binding.layoutTituloGasto.addView(view);
         }
 
         while (total_ingresos.moveToNext()){
             if(!hay_ingresos) {
                 hay_ingresos = true;
+                @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                binding.layoutTipoIngresos.addView(view_tipo);
                 View view = inflater.inflate(R.layout.item_stats, null);
                 ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                 ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
                 binding.layoutIngresos.addView(view);
             }
 
-            agregarGastoIngreso(total_ingresos.getString(2), total_ingresos.getFloat(1), total_ingresos.getString(3), binding.layoutIngresos);
+            agregarGastoIngreso(total_ingresos.getString(2), total_ingresos.getFloat(1), total_ingresos.getString(3), binding.layoutIngresos, binding.layoutTipoIngresos);
         }
         total_ingresos.moveToFirst();
 
         if(!hay_ingresos){
-            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView)view.findViewById(R.id.tipo)).setText("");
-            ((TextView)view.findViewById(R.id.promedio)).setText("");
-            ((TextView)view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_ingresos));
-            ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-            binding.layoutIngresos.addView(view);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_linea_simple, null);
+            ((TextView)view.findViewById(R.id.texto)).setText(getResources().getString(R.string.sin_ingresos));
+            ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+            binding.layoutTituloIngresos.addView(view);
         }
 
         //STATS AVANZADOS
@@ -182,24 +187,21 @@ public class StatsFragment extends Fragment {
         boolean hay_ingreso_tag = false;
 
         //No hay informacion de los tags
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
-        ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-        ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.sin_info_sobre_tags));
-        ((TextView) view.findViewById(R.id.promedio)).setText("");
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_linea_simple, null);
+        ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+        ((TextView) view.findViewById(R.id.texto)).setText(getResources().getString(R.string.sin_info_sobre_tags));
         view.setPadding(0,0,0,10);
-        binding.layoutAvanzado.addView(view);
+        binding.layoutTituloAvanzado.addView(view);
 
         while (total_by_tags.moveToNext()) {
             if (!hay_tags) {
-                binding.layoutAvanzado.removeViewAt(1);
-
+                binding.layoutTituloAvanzado.removeViewAt(1);
                 //Titulo que diga que hay informacion de los tags
-                view = inflater.inflate(R.layout.item_stats, null);
-                ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView) view.findViewById(R.id.total)).setText(getResources().getString(R.string.informacion_sobre_tags));
-                ((TextView) view.findViewById(R.id.promedio)).setText("");
+                view = inflater.inflate(R.layout.item_linea_simple, null);
+                ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+                ((TextView) view.findViewById(R.id.texto)).setText(getResources().getString(R.string.informacion_sobre_tags));
                 view.setPadding(0, 0, 0, 15);
-                binding.layoutAvanzado.addView(view);
+                binding.layoutTituloAvanzado.addView(view);
                 hay_tags = true;
             }
             float total = total_by_tags.getFloat(1);
@@ -210,9 +212,13 @@ public class StatsFragment extends Fragment {
 
             if (ingreso.equals("0")) {
                 if (!hay_gasto_tag) {
+                    @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                    ((TextView) view_tipo.findViewById(R.id.texto)).setText(getResources().getString(R.string.gastos));
+                    ((TextView) view_tipo.findViewById(R.id.texto)).setTextColor(getResources().getColor(R.color.rojo_egreso));
+                    ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+                    binding.layoutTipoAvanzado.addView(view_tipo);
+
                     view = inflater.inflate(R.layout.item_stats, null);
-                    ((TextView) view.findViewById(R.id.tipo)).setText(getResources().getString(R.string.gastos));
-                    ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.rojo_egreso));
                     ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                     ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
                     binding.layoutAvanzado.addView(view);
@@ -220,33 +226,43 @@ public class StatsFragment extends Fragment {
                 }
             } else {
                 if (!hay_ingreso_tag) {
+                    @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                    ((TextView) view_tipo.findViewById(R.id.texto)).setText(getResources().getString(R.string.ingresos));
+                    ((TextView) view_tipo.findViewById(R.id.texto)).setTextColor(getResources().getColor(R.color.verde_ingreso));
+                    ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+                    view_tipo.setPadding(0, 20, 0, 0);
+                    binding.layoutTipoAvanzado.addView(view_tipo);
+
                     view = inflater.inflate(R.layout.item_stats, null);
-                    ((TextView) view.findViewById(R.id.tipo)).setText(getResources().getString(R.string.ingresos));
-                    ((TextView) view.findViewById(R.id.tipo)).setTextColor(getResources().getColor(R.color.verde_ingreso));
                     ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                     ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
-                    view.setPadding(0, 15, 0, 0);
+                    view.setPadding(0, 20, 0, 0);
                     binding.layoutAvanzado.addView(view);
                     hay_ingreso_tag = true;
                 }
             }
+            @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+            ((TextView) view_tipo.findViewById(R.id.texto)).setText(nombre_tag + ": ");
+            ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+            binding.layoutTipoAvanzado.addView(view_tipo);
             view = inflater.inflate(R.layout.item_stats, null);
-            ((TextView) view.findViewById(R.id.tipo)).setText(nombre_tag + ": ");
             ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
             ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
             binding.layoutAvanzado.addView(view);
         }
-
     }
 
 
     @SuppressLint("SetTextI18n")
-    private void agregarGastoIngreso(String moneda, Float total, String simbolo, LinearLayout layout){
+    private void agregarGastoIngreso(String moneda, Float total, String simbolo, LinearLayout layout, LinearLayout layout_tipo){
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
+        @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+        ((TextView)view_tipo.findViewById(R.id.texto)).setText(moneda + ": ");
+        ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
+        layout_tipo.addView(view_tipo);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
-        ((TextView)view.findViewById(R.id.tipo)).setText(moneda + ": ");
         ((TextView)view.findViewById(R.id.total)).setText(simbolo + " "+ Utils.formatoCantidad(total));
         ((TextView)view.findViewById(R.id.promedio)).setText(simbolo + " "+ Utils.formatoCantidad(total/cantidad_dias));
         layout.addView(view);
@@ -263,8 +279,14 @@ public class StatsFragment extends Fragment {
         Date hasta_date = Calendar.getInstance().getTime();
 
         if (!desde.equals(text_desde)) {
-            desde_date = sdf.parse(desde);
-            text_desde = desde;
+            if(desde.equals(text_hasta)){
+                text_desde = text_hasta;
+                desde_date = hasta_date;
+            }
+            else {
+                desde_date = sdf.parse(desde);
+                text_desde = desde;
+            }
         }
         if (!hasta.equals(text_hasta)) {
             hasta_date = sdf.parse(hasta);
@@ -284,16 +306,28 @@ public class StatsFragment extends Fragment {
         binding.textDesde.setText(getResources().getString(R.string.comienzo_de_mes));
         binding.textHasta.setText(getResources().getString(R.string.hoy));
 
-
-        while(binding.layoutGastos.getChildCount() != 1){
-            binding.layoutGastos.removeViewAt(1);
+        while(binding.layoutTituloGasto.getChildCount() != 1){
+            binding.layoutTituloGasto.removeViewAt(1);
         }
-        while(binding.layoutIngresos.getChildCount() != 1){
-            binding.layoutIngresos.removeViewAt(1);
+        while(binding.layoutTituloIngresos.getChildCount() != 1){
+            binding.layoutTituloIngresos.removeViewAt(1);
+        }
+        while(binding.layoutTituloAvanzado.getChildCount() != 1){
+            binding.layoutTituloAvanzado.removeViewAt(1);
         }
 
-        while(binding.layoutAvanzado.getChildCount() != 1){
-            binding.layoutAvanzado.removeViewAt(1);
+        while(binding.layoutGastos.getChildCount() != 0){
+            binding.layoutGastos.removeViewAt(0);
+            binding.layoutTipoGastos.removeViewAt(0);
+        }
+        while(binding.layoutIngresos.getChildCount() != 0){
+            binding.layoutIngresos.removeViewAt(0);
+            binding.layoutTipoIngresos.removeViewAt(0);
+        }
+
+        while(binding.layoutAvanzado.getChildCount() != 0){
+            binding.layoutAvanzado.removeViewAt(0);
+            binding.layoutTipoAvanzado.removeViewAt(0);
         }
     }
 
@@ -308,10 +342,16 @@ public class StatsFragment extends Fragment {
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_desde = selectedDate;
                 Preferences.savePreferenceString(requireContext(), selectedDate, "stats_desde");
+                if(Utils.isHoy(selected_date_desde)){
+                    fecha_a_actualizar.setText(getResources().getString(R.string.hoy));
+                }
             }else{
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_hasta = selectedDate;
                 Preferences.savePreferenceString(requireContext(), selectedDate, "stats_hasta");
+                if(Utils.isHoy(selected_date_hasta)){
+                    fecha_a_actualizar.setText(getResources().getString(R.string.hoy));
+                }
             }
             try {
                 filtrar(binding.textDesde.getText().toString(), binding.textHasta.getText().toString());

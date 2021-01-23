@@ -57,7 +57,12 @@ public class HistorialFragment extends Fragment {
         if(selected_date_desde.equals("")) {
             selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
         }
-        if(selected_date_hasta.equals("")) {
+        else if(Utils.isHoy(selected_date_desde)){
+            selected_date_desde = getResources().getString(R.string.hoy);
+        }
+
+
+        if(selected_date_hasta.equals("") || Utils.isHoy(selected_date_hasta)) {
             selected_date_hasta = getResources().getString(R.string.hoy);
         }
 
@@ -166,8 +171,14 @@ public class HistorialFragment extends Fragment {
         Date hasta_date = Calendar.getInstance().getTime();
 
         if (!desde.equals(text_desde)) {
-            desde_date = sdf.parse(desde);
-            text_desde = desde;
+            if(desde.equals(text_hasta)){
+                text_desde = text_hasta;
+                desde_date = hasta_date;
+            }
+            else {
+                desde_date = sdf.parse(desde);
+                text_desde = desde;
+            }
         }
         if (!hasta.equals(text_hasta)) {
             hasta_date = sdf.parse(hasta);
@@ -188,10 +199,16 @@ public class HistorialFragment extends Fragment {
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_desde = selectedDate;
                 Preferences.savePreferenceString(requireContext(), selectedDate,"historial_desde");
+                if(Utils.isHoy(selected_date_desde)){
+                    fecha_a_actualizar.setText(getResources().getString(R.string.hoy));
+                }
             }else{
                 fecha_a_actualizar.setText(selectedDate);
                 selected_date_hasta = selectedDate;
                 Preferences.savePreferenceString(requireContext(), selectedDate,"historial_hasta");
+                if(Utils.isHoy(selected_date_hasta)){
+                    fecha_a_actualizar.setText(getResources().getString(R.string.hoy));
+                }
             }
             try {
                 filtrar(binding.textDesde.getText().toString(), binding.textHasta.getText().toString());

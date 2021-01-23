@@ -2,11 +2,11 @@ package com.example.taskdone.Acceso;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,7 @@ import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.UsuarioSingleton;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class ActivityLogin extends AppCompatActivity {
@@ -35,9 +36,11 @@ public class ActivityLogin extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
-        Preferences.cleanPreferencesGastoPendiente(getApplicationContext());
+        Preferences.deletePreferencesGastoPendiente(getApplicationContext());
 
         database = new DataBase(getApplicationContext());
+
+        cargarIdioma();
 
         String usuario_loggeado = Preferences.getPreferenceString(getApplicationContext(), "usuario");
         String password = Preferences.getPreferenceString(getApplicationContext(), "password");
@@ -73,5 +76,24 @@ public class ActivityLogin extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), ActivityFinanzas.class);
             startActivity(i);
         }
+    }
+
+    void setIdioma(String idioma){
+        Locale locale = new Locale(idioma);
+        if(idioma.equals("")){
+            Locale.setDefault(Locale.getDefault());
+        }
+        else {
+            Locale.setDefault(locale);
+        }
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        Preferences.savePreferenceString(getApplicationContext(), idioma,"idioma");
+    }
+
+    void cargarIdioma(){
+        String idioma = Preferences.getPreferenceString(getApplicationContext(), "idioma");
+        setIdioma(idioma);
     }
 }
