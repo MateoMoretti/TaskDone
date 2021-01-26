@@ -73,4 +73,6 @@
     <string name="ingles">English</string>
     <string name="elige_idioma">Choose language...</string>
     <string name="tu_dinero">Your money</string>
+    <string name="editar">Edit</string>
+    <string name="guardar">Save</string>
 </resources>

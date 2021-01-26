@@ -150,7 +150,8 @@ public class DataBase extends SQLiteOpenHelper {
                 +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+ TABLE_MONEDA +" AS mc "
                 +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND g."+COL_FECHA+" BETWEEN '"+desde+"' AND '"+hasta+"'"
                 +" INNER JOIN "+TABLE_USUARIO+" AS u "
-                +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'";
+                +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'"
+                +" ORDER BY g."+COL_FECHA+" DESC";
         return db.rawQuery(query, null);
     }
 

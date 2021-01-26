@@ -4,9 +4,16 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,13 +22,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.DataBase;
 import com.example.taskdone.DatePickerFragment;
 import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
+import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding;
 
@@ -40,6 +46,12 @@ public class HistorialFragment extends Fragment {
 
     String selected_date_desde;
     String selected_date_hasta;
+
+    ArrayList<String> tags;
+
+    ArrayList<String> monedas = new ArrayList<>();
+    ArrayList<Float> cantidades = new ArrayList<>();
+    ArrayList<String> simbolos = new ArrayList<>();
 
     DataBase dataBase;
 
@@ -67,6 +79,13 @@ public class HistorialFragment extends Fragment {
         }
 
         dataBase = new DataBase(requireContext());
+
+        Cursor data = dataBase.getMonedasByUserId(UsuarioSingleton.getInstance().getID());
+        while (data.moveToNext()) {
+            monedas.add(data.getString(1));
+            cantidades.add(data.getFloat(2));
+            simbolos.add(data.getString(3));
+        }
 
         try {
             filtrar(selected_date_desde, selected_date_hasta);
@@ -96,29 +115,23 @@ public class HistorialFragment extends Fragment {
 
 
         while (data.moveToNext()) {
-            String fecha = data.getString(1);
-            float total_gasto = data.getFloat(2);
-            String motivo = data.getString(3);
-            String ingreso = data.getString(4);
-            //String nombre_moneda = data.getString(5);
-            String simbolo_moneda = data.getString(6);
-
-            if (ingreso.equals("0")) {
-                ingreso = "-";
-            } else {
-                ingreso = "+";
-            }
-            if (!fechas.contains(fecha)) {
-                fechas.add(fecha);
-            }
-
             ItemHistorial i = new ItemHistorial();
-            i.fecha = fecha;
-            i.signo = ingreso;
-            i.simbolo = simbolo_moneda;
-            i.cantidad = Utils.formatoCantidad(total_gasto);
-            i.motivo = motivo;
+            i.id = data.getInt(0);;
+            i.fecha = data.getString(1);
+            i.cantidad = Utils.formatoCantidad(data.getFloat(2));
+            i.motivo = data.getString(3);
+            i.signo = data.getString(4);        //Llega como 0 | 1, que se transforma a - | +
+            i.nombre_moneda = data.getString(5);
+            i.simbolo = data.getString(6);
 
+            if (i.signo.equals("0")) {
+                i.signo = "-";
+            } else {
+                i.signo = "+";
+            }
+            if (!fechas.contains(i.fecha)) {
+                fechas.add(i.fecha);
+            }
             data_items.add(i);
         }
 
@@ -131,25 +144,78 @@ public class HistorialFragment extends Fragment {
             binding.sinDatos.setVisibility(View.INVISIBLE);
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             for (int x = 0; x != fechas.size(); x++) {
-                ArrayList<ItemHistorial> data_items_fecha = new ArrayList<>();
-                for (ItemHistorial i : data_items) {
-                    if (i.fecha.equals(fechas.get(x))) {
-                        data_items_fecha.add(i);
-                    }
-                }
-                HistorialAdapter adapter = new HistorialAdapter(data_items_fecha, requireContext());
                 @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.elementos_historial, null);
-                binding.layoutHistorial.addView(view);
-                TextView fecha = view.findViewById(R.id.fecha);
-                RecyclerView rec = view.findViewById(R.id.recycler);
-                rec.setLayoutManager(new LinearLayoutManager(getContext()));
-                fecha.setText(Utils.getDia(fechas.get(x)));
-                rec.setAdapter(adapter);
                 if(x==0){
                     view.findViewById(R.id.linea).setVisibility(View.INVISIBLE);
                 }
+
+                LinearLayout layout_items = view.findViewById(R.id.layout_item_historial);
+                binding.layoutHistorial.addView(view);
+                TextView fecha = view.findViewById(R.id.fecha);
+                fecha.setText(Utils.getDia(fechas.get(x)));
+
+                for (ItemHistorial i : data_items) {
+                    if (i.fecha.equals(fechas.get(x))) {
+                        @SuppressLint("InflateParams") View item = inflater.inflate(R.layout.item_historial, null);
+
+                        if(i.signo.equals("-")) {
+                            ((TextView)item.findViewById(R.id.signo_ingreso)).setTextColor(requireContext().getResources().getColor(R.color.rojo_egreso));
+                            ((TextView)item.findViewById(R.id.txt_simbolo)).setTextColor(requireContext().getResources().getColor(R.color.rojo_egreso));
+                            ((TextView)item.findViewById(R.id.txt_cantidad)).setTextColor(requireContext().getResources().getColor(R.color.rojo_egreso));
+                        }
+                        ((TextView)item.findViewById(R.id.signo_ingreso)).setText(i.signo);
+                        ((TextView)item.findViewById(R.id.txt_simbolo)).setText(i.simbolo);
+                        ((TextView)item.findViewById(R.id.txt_cantidad)).setText(i.cantidad);
+                        ((TextView)item.findViewById(R.id.txt_motivo)).setText(i.motivo);
+
+                        item.findViewById(R.id.editar).setOnClickListener(v-> irAEditarGasto(i));
+
+                        layout_items.addView(item);
+                    }
+                }
             }
         }
+    }
+
+    @SuppressLint({"UseCompatLoadingForDrawables"})
+    private void irAEditarGasto(ItemHistorial item){
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.popup_edicion_gasto, null);
+        ((TextView)view.findViewById(R.id.edit_fecha)).setText(item.fecha);
+        ((EditText)view.findViewById(R.id.edit_cantidad)).setText(item.cantidad);
+        ((EditText)view.findViewById(R.id.edit_motivo)).setText(item.motivo);
+
+
+
+        if(item.signo.equals("+")){
+            ((CheckBox)view.findViewById(R.id.check_ingreso)).setChecked(true);
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, monedas){
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTextSize(20);
+                ((TextView) v).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                return v;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        Spinner spinnerMoneda = ((Spinner)view.findViewById(R.id.spinner_moneda));
+        spinnerMoneda.setAdapter(spinnerArrayAdapter);
+        spinnerMoneda.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
+        spinnerMoneda.setGravity(Gravity.CENTER);
+        for(int x=0;x!=spinnerMoneda.getChildCount();x++){
+            if(Objects.equals(spinnerMoneda.getItemAtPosition(x), item.nombre_moneda)){
+                spinnerMoneda.setSelection(x);
+            }
+        }
+
+        binding.constraintEdicion.addView(view);
+
+
     }
 
     private void cleanHistorial(){

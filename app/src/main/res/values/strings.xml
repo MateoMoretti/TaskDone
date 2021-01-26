@@ -15,6 +15,7 @@
     <string name="tags">Etiquetas</string>
     <string name="acceso">Acceso</string>
     <string name="registrarse">Registrarse</string>
+    <string name="editar">Editar</string>
 
     <!-- LOGIN -->
     <string name="bienvenido">Bienvenido !</string>
@@ -88,6 +89,7 @@
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
     <string name="eliminar">Eliminar</string>
+    <string name="guardar">Guardar</string>
 
 
     <!-- ERRORES -->

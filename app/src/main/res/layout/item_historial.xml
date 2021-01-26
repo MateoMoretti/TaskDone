@@ -21,6 +21,12 @@
             android:layout_marginEnd="10dp"
             android:gravity="center">
 
+            <Button
+                android:id="@+id/editar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/signo_ingreso"
                 android:layout_width="wrap_content"
@@ -31,7 +37,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/txt_tipo"
+                android:id="@+id/txt_simbolo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

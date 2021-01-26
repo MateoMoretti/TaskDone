@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_blanco_redondeado"
+    android:backgroundTint="@color/almost_black">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="2">
+
+                <ImageView
+                    android:id="@+id/cerrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/titulo"
+                    app:srcCompat="@android:drawable/btn_dialog" />
+
+                <TextView
+                    android:id="@+id/titulo"
+                    style="@style/Titulos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/editar"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_fecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fecha."
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_fecha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.27"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/edit_fecha" />
+
+                <TextView
+                    android:id="@+id/edit_fecha"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    android:gravity="center"
+                    android:textColor="@color/almost_black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_fecha"
+                    app:layout_constraintTop_toBottomOf="@+id/titulo" />
+
+                <TextView
+                    android:id="@+id/txt_tipo_moneda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moneda."
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_moneda"
+                    app:layout_constraintEnd_toEndOf="@+id/txt_fecha"
+                    app:layout_constraintStart_toStartOf="@+id/txt_fecha"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_moneda" />
+
+                <Button
+                    android:id="@+id/agregar_moneda"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:drawable/ic_input_add"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_moneda"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_moneda"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_moneda" />
+
+                <Spinner
+                    android:id="@+id/spinner_moneda"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="@+id/edit_fecha"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_fecha" />
+
+                <TextView
+                    android:id="@+id/txt_cantidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cantidad."
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_cantidad"
+                    app:layout_constraintEnd_toEndOf="@+id/txt_tipo_moneda"
+                    app:layout_constraintStart_toStartOf="@+id/txt_tipo_moneda"
+                    app:layout_constraintTop_toTopOf="@+id/edit_cantidad" />
+
+                <EditText
+                    android:id="@+id/edit_cantidad"
+                    android:layout_width="135dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/almost_black"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/spinner_moneda"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_moneda" />
+
+                <TextView
+                    android:id="@+id/txt_motivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/motivo."
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_motivo"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_motivo"
+                    app:layout_constraintTop_toTopOf="@+id/edit_motivo" />
+
+                <EditText
+                    android:id="@+id/edit_motivo"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:autofillHints=""
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/almost_black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_cantidad"
+                    app:layout_constraintStart_toStartOf="@+id/edit_cantidad"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_cantidad"
+                    tools:ignore="LabelFor" />
+
+                <TextView
+                    android:id="@+id/txt_tag_seleccionados"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_weight="0"
+                    android:text="@string/sin_seleccionados"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_cantidad"
+                    app:layout_constraintStart_toEndOf="@+id/txt_motivo"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_motivo" />
+
+                <Button
+                    android:id="@+id/agregar_tag"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:drawable/ic_input_add"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_tag_seleccionados"
+                    app:layout_constraintStart_toEndOf="@+id/txt_tag_seleccionados"
+                    app:layout_constraintTop_toTopOf="@+id/txt_tag_seleccionados" />
+
+                <TextView
+                    android:id="@+id/txt_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags."
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_tag_seleccionados"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_tag_seleccionados"
+                    app:layout_constraintTop_toTopOf="@+id/txt_tag_seleccionados" />
+
+                <CheckBox
+                    android:id="@+id/check_ingreso"
+                    android:layout_width="140dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    android:paddingStart="5dp"
+                    android:text="@string/es_ingreso"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_tag_seleccionados" />
+
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="50dp"
+                    android:background="@drawable/button_celeste"
+                    android:text="OK"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/check_ingreso" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
