@@ -59,6 +59,18 @@ public class Preferences {
         Preferences.deletePreferenceString(c, "scroll_tags");
     }
 
+
+    public static void deletePreferencesEdicionGasto(Context c){
+        Preferences.deletePreferenceString(c, "edicion_gasto_id");
+        Preferences.deletePreferenceString(c, "edicion_gasto_fecha");
+        Preferences.deletePreferenceString(c, "edicion_gasto_moneda_index");
+        Preferences.deletePreferenceString(c, "edicion_gasto_cantidad");
+        Preferences.deletePreferenceString(c, "edicion_gasto_motivo");
+        Preferences.deletePreferenceString(c, "edicion_gasto_ingreso");
+        Preferences.deletePreferenceString(c, "edicion_gasto_tags");
+        Preferences.deletePreferenceString(c, "scroll_tags");
+    }
+
 }
 
 

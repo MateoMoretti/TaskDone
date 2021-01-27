@@ -37,6 +37,8 @@
     <string name="tu_dinero">Tu dinero</string>
     <string name="agregar_registro">Agregar registro</string>
     <string name="guardado_exito">Guardado con éxito !</string>
+    <string name="editado_exito">Editado con éxito !</string>
+    <string name="eliminado_exito">Eliminado con éxito !</string>
     <string name="sin_gastos">No has gastado nada en estos días</string>
     <string name="sin_ingresos">No has tenido un ingreso en estos días</string>
     <string name="sin_info_sobre_tags">No tienes información sobre Etiquetas en estos días</string>
@@ -90,10 +92,13 @@
     <string name="cancelar">Cancelar</string>
     <string name="eliminar">Eliminar</string>
     <string name="guardar">Guardar</string>
+    <string name="estas_seguro">Estas seguro? Los datos borrados no pueden recuperarse</string>
 
 
     <!-- ERRORES -->
     <string name="error_guardado">Error al guardar datos</string>
+    <string name="error_editado">Error al intentar editar</string>
+    <string name="error_eliminado">Error al intentar eliminar</string>
     <string name="error_cantidad_null">Error: Debe ingresar cantidad</string>
     <string name="error_fecha_futura">Error: Fecha superior al día de hoy</string>
     <string name="error_crear_usuario">Error al crear usuario</string>

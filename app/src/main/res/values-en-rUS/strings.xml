@@ -75,4 +75,9 @@
     <string name="tu_dinero">Your money</string>
     <string name="editar">Edit</string>
     <string name="guardar">Save</string>
+    <string name="editado_exito">Edited successfully  !</string>
+    <string name="eliminado_exito">Deleted successfully !</string>
+    <string name="error_eliminado">"Error trying to delete "</string>
+    <string name="error_editado">Error trying to edit</string>
+    <string name="estas_seguro">"Are you sure? Deleted data cannot be recovered "</string>
 </resources>

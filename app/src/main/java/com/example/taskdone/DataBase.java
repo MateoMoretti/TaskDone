@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.taskdone.Finanzas.ItemHistorial;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataBase extends SQLiteOpenHelper {
@@ -91,11 +94,18 @@ public class DataBase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+    public Cursor getGastoById(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_GASTO + " WHERE " + TABLE_GASTO +"."+COL_ID + " = " + id;
+        return db.rawQuery(query, null);
+    }
+
     public boolean addGastos(String fecha, String nombre_moneda, Float total_gasto, String motivo, List<String> tags, String ingreso){
         SQLiteDatabase db = this.getWritableDatabase();
 
         DataBase dataBase = new DataBase(context);
-        Cursor moneda = dataBase.getMonedaIdByNombre(nombre_moneda);
+        Cursor moneda = dataBase.getMonedaByNombre(nombre_moneda);
         int id_moneda = 0;
         float cantidad = 0;
         while (moneda.moveToNext()){
@@ -141,6 +151,146 @@ public class DataBase extends SQLiteOpenHelper {
         }
     }
 
+
+    public boolean editGasto(int id, String fecha, String nombre_moneda, Float total_gasto, String motivo, List<String> tags, String ingreso){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor moneda = getMonedaByNombre(nombre_moneda);
+        int id_moneda = 0;
+        float cantidad = 0;
+        while (moneda.moveToNext()){
+            id_moneda = moneda.getInt(0);
+            cantidad = moneda.getFloat(2);
+        }
+
+        Cursor gasto_antiguo = getGastoById(id);
+        float total_gasto_antiguo = 0f;
+        String nombre_moneda_antiguo = "";
+        int id_moneda_antigua = 0;
+        String ingreso_antiguo = "";
+        while (gasto_antiguo.moveToNext()){
+            total_gasto_antiguo = gasto_antiguo.getFloat(2);
+            id_moneda_antigua = gasto_antiguo.getInt(5);
+            ingreso_antiguo = gasto_antiguo.getString(4);
+        }
+
+        Cursor moneda_antigua = getMonedaById(id_moneda_antigua);
+        float cantidad_antigua = 0;
+        while (moneda_antigua.moveToNext()){
+            id_moneda_antigua = moneda_antigua.getInt(0);
+            nombre_moneda_antiguo = moneda_antigua.getString(1);
+            cantidad_antigua = moneda_antigua.getFloat(2);
+        }
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_FECHA, fecha);
+        contentValues.put(COL_TOTAL_GASTO, total_gasto);
+        contentValues.put(COL_MOTIVO, motivo);
+        contentValues.put(COL_INGRESO, ingreso);
+        contentValues.put(COL_ID_MONEDA, id_moneda);
+        contentValues.put(COL_ID_USUARIO, UsuarioSingleton.getInstance().getID());
+
+        long result = db.update(TABLE_GASTO, contentValues, "ID = ?", new String[]{Integer.toString(id)});
+
+        if(result == -1){
+            return false;
+        }
+        else {
+            boolean deleted_exito = deleteTagsByGastoId(id);
+            for(String t:tags){
+                Cursor tag = getTagByNombre(t);
+                int id_tag = 0;
+                while (tag.moveToNext()) {
+                    id_tag = tag.getInt(0);
+                }
+
+                boolean b = addTagGasto(id_tag, id);
+                if(!b){
+                    return false;
+                }
+            }
+
+
+
+            //Si no editó la moneda...
+            if(nombre_moneda_antiguo.equals(nombre_moneda)){
+                if(ingreso.equals(ingreso_antiguo)){
+                    total_gasto = Math.abs(total_gasto - total_gasto_antiguo);
+                }
+                else{
+                    total_gasto = Math.abs(total_gasto + total_gasto_antiguo);
+                }
+
+                if(ingreso.equals("0")){
+                    cantidad = cantidad - total_gasto;
+                }
+                else{
+                    cantidad = cantidad + total_gasto;
+                }
+                updateDineroUser(nombre_moneda, cantidad);
+            }
+            //Si cambió la moneda
+            else{
+                if(ingreso.equals("0")){
+                    updateDineroUser(nombre_moneda, cantidad-total_gasto);
+                }
+                else{
+                    updateDineroUser(nombre_moneda, cantidad+total_gasto);
+                }
+
+                //Si era un gasto, al desaparecer se suma
+                if(ingreso_antiguo.equals("0")){
+                    updateDineroUser(id_moneda_antigua, cantidad_antigua+total_gasto_antiguo);
+                }
+                else{
+                    updateDineroUser(id_moneda_antigua, cantidad_antigua-total_gasto);
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean deleteTagsByGastoId(int id)
+    {
+        Cursor gasto = getTagsByGastoId(id);
+        String test ;
+        while (gasto.moveToNext()){
+            test = gasto.getString(1);
+        }
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result =  db.delete(TABLE_TAG_GASTO, COL_ID_GASTO+" = ?", new String[]{Integer.toString(id)});
+        return result > 0;
+    }
+
+
+    public boolean deleteGastoById(int id, float total, String ingreso, String nombre_moneda)
+    {
+        Cursor moneda = getMonedaByNombre(nombre_moneda);
+        int id_moneda = 0;
+        float cantidad = 0;
+        while (moneda.moveToNext()){
+            id_moneda = moneda.getInt(0);
+            cantidad = moneda.getFloat(2);
+        }
+
+        //Si se elimina un gasto, se recupera el dinero
+        if(ingreso.equals("0")){
+            cantidad += total;
+        }
+        else{
+            cantidad -= total;
+        }
+
+        updateDineroUser(id_moneda, cantidad);
+
+        deleteTagsByGastoId(id);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_GASTO, COL_ID + "=" + id, null) > 0;
+    }
+
+
     // Devuelve -> fecha, cantidad, motivo, ingreso, nombreMoneda, simboloMoneda
     public Cursor getGastosBySessionUser(String desde, String hasta){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -184,10 +334,16 @@ public class DataBase extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getMonedaIdByNombre(String nombre_moneda){
+    public Cursor getMonedaByNombre(String nombre_moneda){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_MONEDA + " WHERE " + COL_NOMBRE +"='"+nombre_moneda+"'"
                 + " AND " + COL_ID_USUARIO +"='"+ UsuarioSingleton.getInstance().getID()+"'";
+        return db.rawQuery(query, null);
+    }
+
+    public Cursor getMonedaById(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MONEDA + " WHERE " + TABLE_MONEDA +"."+COL_ID + " = " + id;
         return db.rawQuery(query, null);
     }
 
@@ -212,6 +368,14 @@ public class DataBase extends SQLiteOpenHelper {
 
 
         db.update(TABLE_MONEDA, contentValues, "ID = ?", new String[]{Integer.toString(id_moneda)});
+    }
+
+    public void updateDineroUser(String nombre_moneda, float cantidad){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_CANTIDAD, cantidad);
+
+        db.update(TABLE_MONEDA, contentValues, COL_NOMBRE+" = ?", new String[]{nombre_moneda});
     }
 /*
     public Cursor getAllUsers(){
@@ -266,6 +430,13 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + TABLE_TAG + ".* FROM " + TABLE_TAG + ", " + TABLE_TAG_USUARIO + " WHERE " + TABLE_TAG_USUARIO + "." +COL_ID_USUARIO +"='" + id + "' AND "
                 + TABLE_TAG +".ID=" + TABLE_TAG_USUARIO + "." + COL_ID_TAG;
+        return db.rawQuery(query, null);
+    }
+
+    public Cursor getTagsByGastoId(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + TABLE_TAG + ".* FROM " + TABLE_TAG + ", " + TABLE_TAG_GASTO + " WHERE " + TABLE_TAG_GASTO + "." +COL_ID_GASTO +"='" + id + "' AND "
+                + TABLE_TAG +".ID=" + TABLE_TAG_GASTO + "." + COL_ID_TAG;
         return db.rawQuery(query, null);
     }
 

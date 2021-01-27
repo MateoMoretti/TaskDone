@@ -132,6 +132,11 @@ public class Utils {
         return df.format(f);
     }
 
+    public static Number stringToFloat(String s) throws ParseException {
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(0);
+        return df.parse(s);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static long diferenciaDeDias(Calendar desde, Calendar hasta){

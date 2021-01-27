@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_blanco_redondeado"
-    android:backgroundTint="@color/almost_black">
+    android:background="@drawable/fondo_negro_redondeado">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -36,6 +35,17 @@
                     app:layout_constraintTop_toTopOf="@+id/titulo"
                     app:srcCompat="@android:drawable/btn_dialog" />
 
+                <ImageView
+                    android:id="@+id/borrar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    app:tint="#FF1B1B"
+                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/titulo"
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
+
                 <TextView
                     android:id="@+id/titulo"
                     style="@style/Titulos"
@@ -58,7 +68,7 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_fecha"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.27"
+                    app:layout_constraintHorizontal_bias="0.24"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/edit_fecha" />
 

@@ -6,6 +6,7 @@ public class ItemHistorial {
     public String simbolo;
     public String signo;
     public String cantidad;
+    public float cantidad_float;
     public String nombre_moneda;
     public String motivo;
 }

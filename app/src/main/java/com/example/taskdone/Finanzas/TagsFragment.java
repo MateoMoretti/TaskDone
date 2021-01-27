@@ -52,9 +52,17 @@ public class TagsFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
 
 
-        String tags_concatenados = Preferences.getPreferenceString(requireContext(), "gasto_tags");
-        if(!tags_concatenados.equals("")){
-            tags_actual.addAll(Arrays.asList(tags_concatenados.split(", ")));
+        if(Long.parseLong(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")) == R.id.principalFragment){
+            String tags_concatenados = Preferences.getPreferenceString(requireContext(), "gasto_tags");
+            if (!tags_concatenados.equals("")) {
+                tags_actual.addAll(Arrays.asList(tags_concatenados.split(", ")));
+            }
+        }
+        else if(Long.parseLong(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")) == R.id.historialFragment) {
+            String tags_concatenados = Preferences.getPreferenceString(requireContext(), "edicion_gasto_tags");
+            if (!tags_concatenados.equals("")) {
+                tags_actual.addAll(Arrays.asList(tags_concatenados.split(", ")));
+            }
         }
 
         database = new DataBase(requireContext());
@@ -98,10 +106,15 @@ public class TagsFragment extends Fragment {
         Bundle bundle = new Bundle();
 
         if(aceptar) {
-            Preferences.savePreferenceString(requireContext(), Utils.arrayListToString(tags_actual), "gasto_tags");
+            if(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")) == R.id.principalFragment){
+                Preferences.savePreferenceString(requireContext(), Utils.arrayListToString(tags_actual), "gasto_tags");
+            }
+            else if(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")) == R.id.historialFragment){
+                Preferences.savePreferenceString(requireContext(), Utils.arrayListToString(tags_actual), "edicion_gasto_tags");
+            }
         }
         bundle.putBoolean("scroll_tags", true);
-        navController.navigate(R.id.action_tagsFragment_to_principalFragment, bundle);
+        navController.navigate(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")), bundle);
     }
 
     @SuppressLint("RtlHardcoded")

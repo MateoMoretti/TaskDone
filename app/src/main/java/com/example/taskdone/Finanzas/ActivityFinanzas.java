@@ -127,6 +127,7 @@ public class ActivityFinanzas extends AppCompatActivity {
             Preferences.deleteFiltros(getApplicationContext());
             Preferences.deleteUser(getApplicationContext());
             Preferences.deletePreferencesGastoPendiente(getApplicationContext());
+            Preferences.deletePreferencesEdicionGasto(getApplicationContext());
             finish();
         };
         builder.setPositiveButton(getResources().getString(R.string.si), c);

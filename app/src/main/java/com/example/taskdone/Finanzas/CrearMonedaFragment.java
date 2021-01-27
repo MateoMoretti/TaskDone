@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.taskdone.Acceso.ActivityLogin;
 import com.example.taskdone.DataBase;
 import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
@@ -61,7 +62,7 @@ public class CrearMonedaFragment extends Fragment {
             }
         });
 
-        binding.volver.setOnClickListener(v-> navController.navigate(R.id.principalFragment));
+        binding.volver.setOnClickListener(v-> navController.navigate(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior"))));
 
 
         binding.buttonCrear.setOnClickListener(v -> crearMoneda());
@@ -83,7 +84,7 @@ public class CrearMonedaFragment extends Fragment {
         String cantidad_elegida = binding.editCantidad.getText().toString();
         String simbolo_persistir = binding.editSimbolo.getText().toString();
 
-        Cursor data = database.getMonedaIdByNombre(nombre_moneda_persistir);
+        Cursor data = database.getMonedaByNombre(nombre_moneda_persistir);
         boolean existe = false;
         while (data.moveToNext()) {
             existe = true;
@@ -103,7 +104,7 @@ public class CrearMonedaFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
             }
 
-            navController.navigate(R.id.principalFragment);
+            navController.navigate(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")));
         }
     }
 

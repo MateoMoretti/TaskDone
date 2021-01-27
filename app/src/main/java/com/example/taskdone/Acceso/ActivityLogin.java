@@ -37,6 +37,7 @@ public class ActivityLogin extends AppCompatActivity {
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         Preferences.deletePreferencesGastoPendiente(getApplicationContext());
+        Preferences.deletePreferencesEdicionGasto(getApplicationContext());
 
         database = new DataBase(getApplicationContext());
 
