@@ -2,6 +2,7 @@ package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -40,7 +41,6 @@ public class TagsFragment extends Fragment {
     ArrayList<String> tags_actual = new ArrayList<String>();
 
     ListaTagsAdapter adapter_tags;
-    DataBase dataBase;
 
 
     @Override
@@ -72,7 +72,7 @@ public class TagsFragment extends Fragment {
         binding.volver.setOnClickListener(v -> volverAPrincipal(false));
 
         //Cambiar
-        binding.buttonEliminar.setOnClickListener(v -> volverAPrincipal(false));
+        binding.buttonEliminar.setOnClickListener(v -> popupBorrarTags());
 
         binding.buttonCrearTag.setOnClickListener(v -> popupCrearTag());
 
@@ -80,6 +80,53 @@ public class TagsFragment extends Fragment {
 
         return binding.getRoot();
     }
+
+
+    private void popupBorrarTags() {
+        if(tags_actual.isEmpty()){
+            Toast.makeText(requireContext(), getResources().getString(R.string.sin_tags_seleccionados), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle(getResources().getString(R.string.eliminar));
+            builder.setMessage(getResources().getString(R.string.estas_seguro_tags));
+            DialogInterface.OnClickListener c = (dialogInterface, i) -> {
+                borrarTags();
+            };
+            builder.setPositiveButton(getResources().getString(R.string.si), c);
+            builder.setNegativeButton(getResources().getString(R.string.no), null);
+            builder.setCancelable(true);
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void borrarTags(){
+        boolean resultado = true;
+        for(String s:tags_actual) {
+            boolean result = database.deleteTagsByNombre(s);
+            if(!result){
+                resultado = false;
+            }
+        }
+        if(resultado){
+            Toast.makeText(requireContext(), getResources().getString(R.string.eliminado_exito), Toast.LENGTH_SHORT).show();
+
+            if(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")) == R.id.principalFragment){
+                Preferences.savePreferenceString(requireContext(), "","gasto_tags");
+            }
+            else if(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")) == R.id.historialFragment){
+                Preferences.savePreferenceString(requireContext(), "","edicion_gasto_tags");
+            }
+
+            navController.navigate(R.id.tagsFragment);
+        }
+        else{
+            Toast.makeText(requireContext(), getResources().getString(R.string.error_eliminado), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void cargarTags(){
         Cursor tags = database.getTagsByUserId(UsuarioSingleton.getInstance().getID()); //Reemplazar por getTagsByUsuarioId si permito más cuentas en un futuro
@@ -149,8 +196,7 @@ public class TagsFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show();
         }
         else {
-            dataBase = new DataBase(requireContext());
-            boolean insertData = dataBase.addTag(tag);
+            boolean insertData = database.addTag(tag);
 
             if (insertData) {
                 Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();

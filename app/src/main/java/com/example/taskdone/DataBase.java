@@ -263,6 +263,14 @@ public class DataBase extends SQLiteOpenHelper {
         return result > 0;
     }
 
+    public boolean deleteTagsByNombre(String nombre){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long id_tag =  db.delete(TABLE_TAG, COL_NOMBRE+" = ?", new String[]{nombre});
+        long result =  db.delete(TABLE_TAG_GASTO, COL_ID_TAG+" = ?", new String[]{Long.toString(id_tag)});
+        return id_tag != 0;
+    }
+
 
     public boolean deleteGastoById(int id, float total, String ingreso, String nombre_moneda)
     {

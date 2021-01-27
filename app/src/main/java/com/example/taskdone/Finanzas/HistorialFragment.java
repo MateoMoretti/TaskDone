@@ -348,7 +348,7 @@ public class HistorialFragment extends Fragment {
 
         ((ImageView) view.findViewById(R.id.cerrar)).setOnClickListener(v -> cerrarEdicion());
 
-        ((ImageView) view.findViewById(R.id.borrar)).setOnClickListener(v -> popupCerrarSesion(view));
+        ((ImageView) view.findViewById(R.id.borrar)).setOnClickListener(v -> popupBorrarGasto(view));
 
         ((Button) view.findViewById(R.id.ok)).setOnClickListener(v -> {
             try {
@@ -361,8 +361,7 @@ public class HistorialFragment extends Fragment {
         binding.constraintEdicion.addView(view);
     }
 
-
-    private void popupCerrarSesion(View view) {
+    private void popupBorrarGasto(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(getResources().getString(R.string.eliminar));
         builder.setMessage(getResources().getString(R.string.estas_seguro));
@@ -376,7 +375,6 @@ public class HistorialFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
     private void borrarGasto(View view){
         boolean result = dataBase.deleteGastoById(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "edicion_gasto_id")), Float.parseFloat(Preferences.getPreferenceString(requireContext(), "edicion_gasto_cantidad")), Preferences.getPreferenceString(requireContext(), "edicion_gasto_ingreso"), ((Spinner)view.findViewById(R.id.spinner_moneda)).getSelectedItem().toString());
