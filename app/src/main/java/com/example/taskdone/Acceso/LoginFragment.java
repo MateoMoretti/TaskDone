@@ -117,6 +117,7 @@ public class LoginFragment extends Fragment {
         }
 
         if(permitido) {
+            Preferences.savePreferenceString(requireContext(), ""+R.id.loginFragment, "id_fragment_anterior");
             if(binding.mantenerSesion.isChecked()){
                 Preferences.savePreferenceString(requireContext(),UsuarioSingleton.getInstance().getUsername(),"usuario");
                 Preferences.savePreferenceString(requireContext(),password,"password");

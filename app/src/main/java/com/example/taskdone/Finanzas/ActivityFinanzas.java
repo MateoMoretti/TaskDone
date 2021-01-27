@@ -112,7 +112,7 @@ public class ActivityFinanzas extends AppCompatActivity {
         ArrayList<Integer> destinos_principales = new ArrayList<>(Arrays.asList(R.id.principalFragment,R.id.historialFragment,R.id.statsFragment));
         if (destinos_principales.contains(Objects.requireNonNull(navController.getCurrentDestination()).getId())
                 ||  ((navController.getCurrentDestination().getId() == R.id.crearMonedaFragment
-                && Preferences.getPreferenceString(getApplicationContext(), "id_fragment_anterior").equals("")))) {
+                && Preferences.getPreferenceString(getApplicationContext(), "id_fragment_anterior").equals(""+R.id.loginFragment)))) {
             popupCerrarSesion();
         }
         else{

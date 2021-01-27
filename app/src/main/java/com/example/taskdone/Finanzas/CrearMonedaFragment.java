@@ -45,6 +45,8 @@ public class CrearMonedaFragment extends Fragment {
     ArrayList<Float> cantidades = new ArrayList<>();
     ArrayList<String> simbolos = new ArrayList<>();
 
+    String fragment_anterior;
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(
@@ -56,9 +58,7 @@ public class CrearMonedaFragment extends Fragment {
 
         database = new DataBase(requireContext());
 
-        if(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior").equals("")){
-            binding.volver.setVisibility(View.INVISIBLE);
-        }
+        fragment_anterior = Preferences.getPreferenceString(requireContext(), "id_fragment_anterior");
 
         binding.editCantidad.addTextChangedListener(new TextWatcher() {
             @Override
@@ -124,8 +124,13 @@ public class CrearMonedaFragment extends Fragment {
                 } else {
                     Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
                 }
-                monedas.clear();
-                cargarMonedas();
+                if(monedas.size()==0){
+                    navController.navigate(R.id.principalFragment);
+                }
+                else {
+                    monedas.clear();
+                    cargarMonedas();
+                }
             }
         }
     }
@@ -138,13 +143,7 @@ public class CrearMonedaFragment extends Fragment {
             cantidades.add(data.getFloat(2));
             simbolos.add(data.getString(3));
         }
-        if(monedas.isEmpty()){
-            binding.layoutMonedas.setVisibility(View.INVISIBLE);
-        }
-        else{
-            binding.layoutMonedas.setVisibility(View.VISIBLE);
-            llenarLayoutMonedas();
-        }
+        llenarLayoutMonedas();
     }
 
     @SuppressLint("SetTextI18n")
@@ -153,16 +152,28 @@ public class CrearMonedaFragment extends Fragment {
             binding.layoutMonedas.removeViewAt(0);
         }
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        for(int x=0;x!=monedas.size();x++){
-            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_moneda_cantidad_editable, null);
-            @SuppressLint("CutPasteId") Button editar = view.findViewById(R.id.editar);
-            @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
-            @SuppressLint("CutPasteId") TextView simbolo = view.findViewById(R.id.simbolo);
-            int index = x;
-            editar.setOnClickListener(v -> popupEditarMoneda(monedas.get(index), simbolo.getText().toString()));
-            moneda.setText(monedas.get(x));
-            simbolo.setText(simbolos.get(x));
-            binding.layoutMonedas.addView(view);
+        if (monedas.isEmpty()){
+            binding.volver.setVisibility(View.INVISIBLE);
+            binding.subtitulo.setVisibility(View.GONE);
+            binding.layoutMonedas.setVisibility(View.GONE);
+            Preferences.savePreferenceString(requireContext(), ""+R.id.loginFragment, "id_fragment_anterior");
+        }
+        else{
+            binding.volver.setVisibility(View.VISIBLE);
+            binding.subtitulo.setVisibility(View.VISIBLE);
+            binding.layoutMonedas.setVisibility(View.VISIBLE);
+            Preferences.savePreferenceString(requireContext(), fragment_anterior, "id_fragment_anterior");
+            for(int x=0;x!=monedas.size();x++){
+                @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_moneda_cantidad_editable, null);
+                @SuppressLint("CutPasteId") Button editar = view.findViewById(R.id.editar);
+                @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
+                @SuppressLint("CutPasteId") TextView simbolo = view.findViewById(R.id.simbolo);
+                int index = x;
+                editar.setOnClickListener(v -> popupEditarMoneda(monedas.get(index), simbolo.getText().toString()));
+                moneda.setText(monedas.get(x));
+                simbolo.setText(simbolos.get(x));
+                binding.layoutMonedas.addView(view);
+            }
         }
     }
 
