@@ -35,6 +35,7 @@
     <!-- FINANZAS -->
 
     <string name="tu_dinero">Tu dinero</string>
+    <string name="tus_monedas">Tus monedas</string>
     <string name="agregar_registro">Agregar registro</string>
     <string name="guardado_exito">Guardado con éxito !</string>
     <string name="editado_exito">Editado con éxito !</string>
@@ -47,7 +48,10 @@
     <string name="sin_tags_seleccionados">No has seleccionado ninguna etiqueta</string>
     <string name="informacion_sobre_tags">Información sobre Etiquetas</string>
     <string name="crear_nuevo_tag">Crear nueva etiqueta</string>
+    <string name="editar_tag">Editar etiqueta</string>
+    <string name="editar_moneda">Editar moneda</string>
     <string name="tag_vacio">No puedes crear una etiqueta vacía</string>
+    <string name="moneda_nombre_vacio">No puedes crear una moneda con nombre vacío</string>
 
     <!-- GASTOS -->
     <string name="gastos">Gastos</string>
@@ -80,6 +84,8 @@
     <string name="motivo.">Motivo:</string>
     <string name="tags.">Etiquetas:</string>
     <string name="tag...">Etiqueta…</string>
+    <string name="nombre...">Nombre…</string>
+    <string name="simbolo...">Simbolo…</string>
     <string name="sin_seleccionados">0 seleccionadas</string>
     <string name="seleccionados">seleccionadas</string>
     <string name="es_ingreso">Es ingreso</string>
@@ -94,6 +100,7 @@
     <string name="eliminar">Eliminar</string>
     <string name="guardar">Guardar</string>
     <string name="estas_seguro">Estás seguro? Los datos borrados no pueden recuperarse</string>
+    <string name="estas_seguro_monedas">Estás seguro? Se borraran también todos los registros asociados a ésta moneda</string>
     <string name="estas_seguro_tags">Quieres borrar las etiquetas seleccionadas? Los datos borrados no pueden recuperarse</string>
 
 
@@ -107,5 +114,6 @@
     <string name="error_usuario_vacio">Error: Debes ingresar un nombre de usuario</string>
     <string name="error_usuario_existente">Error: Éste usuario ya existe</string>
     <string name="error_moneda_existente">Error: Ésta moneda ya existe</string>
+    <string name="error_caracter_invalido">Error: Caracter inválido</string>
 
 </resources>

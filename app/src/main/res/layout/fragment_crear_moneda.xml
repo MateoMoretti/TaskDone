@@ -24,6 +24,17 @@
         tools:srcCompat="@drawable/fondo"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/volver"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/abc_vector_test"
+        app:layout_constraintBottom_toBottomOf="@+id/titulo"
+        app:layout_constraintEnd_toStartOf="@+id/titulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/titulo"
+        tools:ignore="PrivateResource" />
+
     <TextView
         android:id="@+id/titulo"
         style="@style/Titulos"
@@ -37,32 +48,49 @@
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fondo"
         tools:ignore="RtlCompat" />
-
-    <ImageView
-        android:id="@+id/volver"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/abc_vector_test"
-        app:layout_constraintBottom_toBottomOf="@+id/titulo"
-        app:layout_constraintEnd_toStartOf="@+id/titulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titulo"
-        tools:ignore="PrivateResource" />
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/fondo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo">
+        app:layout_constraintTop_toBottomOf="@+id/titulo"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tus_monedas"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layout_monedas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/fondo_blanco_redondeado"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingStart="30dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -71,12 +99,14 @@
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="70dp"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/frijole"
+                    android:gravity="center"
                     android:text="@string/crea_una_moneda"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="22sp"
+                    android:textColor="@color/naranja"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +116,7 @@
                     android:id="@+id/edit_moneda"
                     android:layout_width="135dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:autofillHints=""
                     android:background="@drawable/fondo_blanco_redondeado"
                     android:hint="@string/example_moneda"
@@ -122,6 +152,7 @@
                     android:layout_width="135dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="30dp"
+                    android:autofillHints=""
                     android:background="@drawable/fondo_blanco_redondeado"
                     android:inputType="number"
                     android:text="0"
@@ -133,7 +164,6 @@
                     app:layout_constraintHorizontal_bias="0.1"
                     app:layout_constraintStart_toEndOf="@+id/txt_cantidad"
                     app:layout_constraintTop_toBottomOf="@+id/edit_simbolo"
-                    android:autofillHints=""
                     tools:ignore="LabelFor" />
 
                 <TextView
@@ -176,7 +206,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="50dp"
                     android:background="@color/naranja"
                     android:text="@string/crear"
                     app:layout_constraintBottom_toBottomOf="parent"

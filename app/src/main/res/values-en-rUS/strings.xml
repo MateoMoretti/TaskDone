@@ -82,4 +82,12 @@
     <string name="estas_seguro">"Are you sure? Deleted data cannot be recovered "</string>
     <string name="estas_seguro_tags">"Do you want to delete the selected tags? Deleted data cannot be recovered "</string>
     <string name="sin_tags_seleccionados">"You have not selected any tag "</string>
+    <string name="editar_tag">Edit tag</string>
+    <string name="tus_monedas">Your currencies</string>
+    <string name="moneda_nombre_vacio">"You cannot create a currency with an empty name "</string>
+    <string name="nombre...">Name...</string>
+    <string name="simbolo...">Symbol...</string>
+    <string name="editar_moneda">Edit currency</string>
+    <string name="estas_seguro_monedas">Are you sure? All the records associated with this currency will also be deleted.</string>
+    <string name="error_caracter_invalido">Error: Invalid character</string>
 </resources>

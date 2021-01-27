@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.taskdone.Finanzas.ItemHistorial;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class DataBase extends SQLiteOpenHelper {
@@ -196,7 +193,7 @@ public class DataBase extends SQLiteOpenHelper {
             return false;
         }
         else {
-            boolean deleted_exito = deleteTagsByGastoId(id);
+            deleteTagsByGastoId(id);
             for(String t:tags){
                 Cursor tag = getTagByNombre(t);
                 int id_tag = 0;
@@ -252,12 +249,6 @@ public class DataBase extends SQLiteOpenHelper {
 
     public boolean deleteTagsByGastoId(int id)
     {
-        Cursor gasto = getTagsByGastoId(id);
-        String test ;
-        while (gasto.moveToNext()){
-            test = gasto.getString(1);
-        }
-
         SQLiteDatabase db = this.getWritableDatabase();
         long result =  db.delete(TABLE_TAG_GASTO, COL_ID_GASTO+" = ?", new String[]{Integer.toString(id)});
         return result > 0;
@@ -267,8 +258,26 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         long id_tag =  db.delete(TABLE_TAG, COL_NOMBRE+" = ?", new String[]{nombre});
-        long result =  db.delete(TABLE_TAG_GASTO, COL_ID_TAG+" = ?", new String[]{Long.toString(id_tag)});
+        db.delete(TABLE_TAG_GASTO, COL_ID_TAG+" = ?", new String[]{Long.toString(id_tag)});
         return id_tag != 0;
+    }
+
+    public boolean deleteMonedaByNombre(String nombre){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Obtener gastos, y tag_gasto
+        Cursor gastos_a_borrar =  getGastosByMonedaNombre(nombre);
+        while (gastos_a_borrar.moveToNext()){
+            deleteGastoById(gastos_a_borrar.getInt(0), gastos_a_borrar.getFloat(2), gastos_a_borrar.getString(4), nombre);
+        }
+
+        Cursor moneda_a_borrar = getMonedaByNombre(nombre);
+        long result = -1;
+        while (moneda_a_borrar.moveToNext()){
+            result =  db.delete(TABLE_MONEDA, COL_ID+" = ?", new String[]{Integer.toString(moneda_a_borrar.getInt(0))});
+        }
+
+        return result != 0;
     }
 
 
@@ -298,6 +307,17 @@ public class DataBase extends SQLiteOpenHelper {
         return db.delete(TABLE_GASTO, COL_ID + "=" + id, null) > 0;
     }
 
+    public Cursor getGastosByMonedaNombre(String nombre){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT g."+COL_ID+", g."+COL_FECHA+", g."+COL_TOTAL_GASTO+", g."+COL_MOTIVO+", g."+COL_INGRESO
+                +", mc."+COL_NOMBRE+", mc."+COL_SIMBOLO
+                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+ TABLE_MONEDA +" AS mc "
+                +"ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND mc."+COL_NOMBRE+" = '"+nombre+"'"
+                +" INNER JOIN "+TABLE_USUARIO+" AS u "
+                +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"'";
+        return db.rawQuery(query, null);
+    }
 
     // Devuelve -> fecha, cantidad, motivo, ingreso, nombreMoneda, simboloMoneda
     public Cursor getGastosBySessionUser(String desde, String hasta){
@@ -426,6 +446,28 @@ public class DataBase extends SQLiteOpenHelper {
             return false;
         }
         return addTagUsuario((int)result, UsuarioSingleton.getInstance().getID());
+    }
+
+    public boolean updateTag(String tag_viejo, String tag_nuevo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_NOMBRE, tag_nuevo);
+
+        long result = db.update(TABLE_TAG, contentValues, COL_NOMBRE+" = ?", new String[]{tag_viejo});
+
+        return result != -1;
+    }
+
+
+    public boolean updateMoneda(String nombre_viejo, String nombre, String simbolo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_NOMBRE, nombre);
+        contentValues.put(COL_SIMBOLO, simbolo);
+
+        long result = db.update(TABLE_MONEDA, contentValues, COL_NOMBRE+" = ?", new String[]{nombre_viejo});
+
+        return result != -1;
     }
 
    /* public Cursor getAllTags(){

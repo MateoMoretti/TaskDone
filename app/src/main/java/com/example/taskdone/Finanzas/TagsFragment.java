@@ -38,7 +38,7 @@ public class TagsFragment extends Fragment {
     NavController navController;
     DataBase database;
 
-    ArrayList<String> tags_actual = new ArrayList<String>();
+    ArrayList<String> tags_actual = new ArrayList<>();
 
     ListaTagsAdapter adapter_tags;
 
@@ -90,9 +90,9 @@ public class TagsFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setTitle(getResources().getString(R.string.eliminar));
             builder.setMessage(getResources().getString(R.string.estas_seguro_tags));
-            DialogInterface.OnClickListener c = (dialogInterface, i) -> {
-                borrarTags();
-            };
+
+            DialogInterface.OnClickListener c = (dialogInterface, i) -> borrarTags();
+
             builder.setPositiveButton(getResources().getString(R.string.si), c);
             builder.setNegativeButton(getResources().getString(R.string.no), null);
             builder.setCancelable(true);
@@ -131,13 +131,13 @@ public class TagsFragment extends Fragment {
     private void cargarTags(){
         Cursor tags = database.getTagsByUserId(UsuarioSingleton.getInstance().getID()); //Reemplazar por getTagsByUsuarioId si permito más cuentas en un futuro
         List<ItemTag> tags_nombre = new ArrayList<>();
-            while (tags.moveToNext()) {
+        while (tags.moveToNext()) {
             ItemTag i = new ItemTag();
             i.nombre_tag = tags.getString(1);
             tags_nombre.add(i);
         }
 
-        adapter_tags = new ListaTagsAdapter(tags_nombre, tags_actual, requireContext());
+        adapter_tags = new ListaTagsAdapter(tags_nombre, tags_actual, requireContext(), this);
 
         if(tags_nombre.isEmpty()){
             binding.txtSinTags.setVisibility(View.VISIBLE);
@@ -162,6 +162,52 @@ public class TagsFragment extends Fragment {
         }
         bundle.putBoolean("scroll_tags", true);
         navController.navigate(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")), bundle);
+    }
+
+    @SuppressLint("RtlHardcoded")
+    public void popupEditarTag(String tag_viejo){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View vista = inflater.inflate(R.layout.popup_crear_tag, null);
+
+        EditText crear_tag = vista.findViewById(R.id.edit_crear_tag);
+        crear_tag.setText(tag_viejo);
+
+        builder.setTitle(getResources().getString(R.string.editar_tag));
+        builder.setView(vista)
+                .setPositiveButton(getResources().getString(R.string.aceptar), (dialog, which) ->
+                        editarTag(tag_viejo, crear_tag.getText().toString())
+                );
+        builder.setNegativeButton(getResources().getString(R.string.cancelar), null);
+        builder.setCancelable(true);
+
+        Dialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setGravity(Gravity.CENTER | Gravity.RIGHT);
+        }
+
+        dialog.show();
+        dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+    private void editarTag(String tag_viejo, String tag_nuevo){
+        if(tag_nuevo.equals("")){
+            Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            boolean insertData = database.updateTag(tag_viejo, tag_nuevo);
+
+            if (insertData) {
+                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            }
+            cargarTags();
+        }
     }
 
     @SuppressLint("RtlHardcoded")

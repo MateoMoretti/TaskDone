@@ -6,12 +6,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +25,18 @@ public class ListaTagsAdapter extends RecyclerView.Adapter<ListaTagsAdapter.View
     List<ItemTag> items;
     ArrayList<String> tags_elegidos;
 
+    TagsFragment fragment;
+
     Context context;
 
-    public ListaTagsAdapter(List<ItemTag> items, ArrayList<String> tags_bundle, Context context) {
+    public ListaTagsAdapter(List<ItemTag> items, ArrayList<String> tags_bundle, Context context, TagsFragment fragment) {
         this.items = items;
         this.context = context;
         tags_elegidos = new ArrayList<>();
         if(tags_bundle != null){
             this.tags_elegidos = tags_bundle;
         }
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -58,12 +64,16 @@ public class ListaTagsAdapter extends RecyclerView.Adapter<ListaTagsAdapter.View
     }
 
     public class ViewHolderAdapter extends RecyclerView.ViewHolder {
+        Button editar;
         CheckBox tag;
 
         public ViewHolderAdapter(@NonNull View itemView) {
             super(itemView);
             tag = itemView.findViewById(R.id.check_tag);
             tag.setOnClickListener(v -> TagToList(tag));
+            editar = itemView.findViewById(R.id.editar);
+            editar.setOnClickListener(v -> fragment.popupEditarTag(tag.getText().toString()));
+
             itemView.setOnClickListener(v -> checkear(tag));
         }
 
@@ -91,4 +101,7 @@ public class ListaTagsAdapter extends RecyclerView.Adapter<ListaTagsAdapter.View
     public ArrayList<String> getTagsElegidos() {
         return tags_elegidos;
     }
+
+
+
 }

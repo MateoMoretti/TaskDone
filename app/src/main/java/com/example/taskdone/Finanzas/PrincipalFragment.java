@@ -233,7 +233,7 @@ public class PrincipalFragment extends Fragment {
             @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_moneda_cantidad, null);
             @SuppressLint("CutPasteId") TextView moneda = view.findViewById(R.id.moneda);
             @SuppressLint("CutPasteId") TextView cantidad = view.findViewById(R.id.cantidad);
-            moneda.setText(monedas.get(x) +": ");
+            moneda.setText(monedas.get(x));
             cantidad.setText(simbolos.get(x)+" "+Utils.formatoCantidad(cantidades.get(x)));
             binding.layoutMonedas.addView(view);
         }
