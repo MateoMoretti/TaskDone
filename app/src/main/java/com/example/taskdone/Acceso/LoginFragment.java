@@ -124,6 +124,8 @@ public class LoginFragment extends Fragment {
             }
             Intent i = new Intent(requireContext(), ActivityFinanzas.class);
             startActivity(i);
+            binding.usuario.setText("");
+            binding.contrasena.setText("");
         }
         else{
             Toast.makeText(requireContext(), getResources().getString(R.string.credenciales_incorrectas), Toast.LENGTH_SHORT).show();

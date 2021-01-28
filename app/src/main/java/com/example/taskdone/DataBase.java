@@ -224,15 +224,15 @@ public class DataBase extends SQLiteOpenHelper {
                 else{
                     cantidad = cantidad + total_gasto;
                 }
-                updateDineroUser(nombre_moneda, cantidad);
+                updateDineroUser(id_moneda_antigua, cantidad);
             }
             //Si cambió la moneda
             else{
                 if(ingreso.equals("0")){
-                    updateDineroUser(nombre_moneda, cantidad-total_gasto);
+                    updateDineroUser(id_moneda_antigua, cantidad-total_gasto);
                 }
                 else{
-                    updateDineroUser(nombre_moneda, cantidad+total_gasto);
+                    updateDineroUser(id_moneda_antigua, cantidad+total_gasto);
                 }
 
                 //Si era un gasto, al desaparecer se suma
@@ -257,7 +257,13 @@ public class DataBase extends SQLiteOpenHelper {
     public boolean deleteTagsByNombre(String nombre){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        long id_tag =  db.delete(TABLE_TAG, COL_NOMBRE+" = ?", new String[]{nombre});
+        Cursor tag = getTagByNombre(nombre);
+        int id_tag = 0;
+        while (tag.moveToNext()){
+            id_tag = tag.getInt(0);
+        }
+
+        db.delete(TABLE_TAG, COL_ID+" = ?", new String[]{Integer.toString(id_tag)});
         db.delete(TABLE_TAG_GASTO, COL_ID_TAG+" = ?", new String[]{Long.toString(id_tag)});
         return id_tag != 0;
     }
@@ -394,16 +400,7 @@ public class DataBase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_CANTIDAD, cantidad);
 
-
         db.update(TABLE_MONEDA, contentValues, "ID = ?", new String[]{Integer.toString(id_moneda)});
-    }
-
-    public void updateDineroUser(String nombre_moneda, float cantidad){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_CANTIDAD, cantidad);
-
-        db.update(TABLE_MONEDA, contentValues, COL_NOMBRE+" = ?", new String[]{nombre_moneda});
     }
 /*
     public Cursor getAllUsers(){
@@ -450,10 +447,16 @@ public class DataBase extends SQLiteOpenHelper {
 
     public boolean updateTag(String tag_viejo, String tag_nuevo){
         SQLiteDatabase db = this.getWritableDatabase();
+        Cursor tag = getTagByNombre(tag_viejo);
+        int id_tag = 0;
+        while (tag.moveToNext()){
+            id_tag = tag.getInt(0);
+        }
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_NOMBRE, tag_nuevo);
 
-        long result = db.update(TABLE_TAG, contentValues, COL_NOMBRE+" = ?", new String[]{tag_viejo});
+        long result = db.update(TABLE_TAG, contentValues, COL_ID+" = ?", new String[]{Integer.toString(id_tag)});
 
         return result != -1;
     }
@@ -461,11 +464,17 @@ public class DataBase extends SQLiteOpenHelper {
 
     public boolean updateMoneda(String nombre_viejo, String nombre, String simbolo){
         SQLiteDatabase db = this.getWritableDatabase();
+        Cursor moneda = getMonedaByNombre(nombre_viejo);
+        int id_moneda = 0;
+        while (moneda.moveToNext()){
+            id_moneda = moneda.getInt(0);
+        }
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_NOMBRE, nombre);
         contentValues.put(COL_SIMBOLO, simbolo);
 
-        long result = db.update(TABLE_MONEDA, contentValues, COL_NOMBRE+" = ?", new String[]{nombre_viejo});
+        long result = db.update(TABLE_MONEDA, contentValues, COL_ID+" = ?", new String[]{Integer.toString(id_moneda)});
 
         return result != -1;
     }
@@ -492,7 +501,12 @@ public class DataBase extends SQLiteOpenHelper {
 
     public Cursor getTagByNombre(String nombre){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_TAG + " WHERE " + COL_NOMBRE + " = '" + nombre + "'";
+
+        String query = "SELECT t.* FROM "+TABLE_TAG+" AS t INNER JOIN "+ TABLE_TAG_USUARIO +" AS tu "
+                +"ON t."+ COL_NOMBRE+" = '"+nombre+"'"
+                +" AND t."+COL_ID+" = tu."+COL_ID_TAG
+                +" AND tu."+COL_ID_USUARIO+" = '"+UsuarioSingleton.getInstance().getID()+"'";
+
         return db.rawQuery(query, null);
     }
 
