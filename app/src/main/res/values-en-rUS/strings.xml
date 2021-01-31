@@ -28,7 +28,6 @@
     <string name="sin_info_sobre_tags">You have no information about Tags these days</string>
     <string name="sin_registros">You have not registered anything between those dates</string>
     <string name="sin_tags">You don\'t have any tags yet, create one</string>
-    <string name="informacion_sobre_tags">Information about Tags</string>
     <string name="crear_nuevo_tag">Create new tag</string>
     <string name="tag_vacio">You cannot create an empty tag</string>
     <string name="gastos">Expenses</string>
@@ -99,4 +98,6 @@
     <string name="cantidad_inicial">Initial amount</string>
     <string name="ayuda_principal_2">Your money will update automatically after adding records.</string>
     <string name="error_tag_existente">Error: This tag already exists</string>
+    <string name="stats_avanzados">Advanced stats</string>
+    <string name="mostrar_publicidad">Watch an ad and access advanced stats</string>
 </resources>

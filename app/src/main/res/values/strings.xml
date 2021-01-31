@@ -46,7 +46,6 @@
     <string name="sin_registros">No has registrado nada entre éstas fechas</string>
     <string name="sin_tags">Aún no tienes etiquetas, crea una</string>
     <string name="sin_tags_seleccionados">No has seleccionado ninguna etiqueta</string>
-    <string name="informacion_sobre_tags">Información sobre Etiquetas</string>
     <string name="crear_nuevo_tag">Crear nueva etiqueta</string>
     <string name="editar_tag">Editar etiqueta</string>
     <string name="editar_moneda">Editar moneda</string>
@@ -57,6 +56,7 @@
     <string name="gastos">Gastos</string>
     <string name="ingresos">Ingresos</string>
     <string name="avanzado">Avanzado</string>
+    <string name="stats_avanzados">Estadísticas avanzadas</string>
     <string name="total">Total</string>
     <string name="por_dia">Por día</string>
 
@@ -103,6 +103,7 @@
     <string name="estas_seguro">Estás seguro? Los datos borrados no pueden recuperarse</string>
     <string name="estas_seguro_monedas">Estás seguro? Se borraran también todos los registros asociados a ésta moneda</string>
     <string name="estas_seguro_tags">Quieres borrar las etiquetas seleccionadas? Los datos borrados no pueden recuperarse</string>
+    <string name="mostrar_publicidad">Mira un anuncio y accede a estadísticas avanzadas !</string>
 
 
     <!-- ERRORES -->

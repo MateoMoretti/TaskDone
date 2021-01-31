@@ -1,18 +1,23 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -29,7 +34,9 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 public class StatsFragment extends Fragment {
@@ -91,6 +98,8 @@ public class StatsFragment extends Fragment {
         binding.textDesde.setOnClickListener(v -> showDatePickerDialog(true, binding.textDesde));
         binding.textHasta.setOnClickListener(v -> showDatePickerDialog(false, binding.textHasta));
 
+        binding.avanzado.setOnClickListener(v -> popupAvanzado(new ArrayList<>(Collections.singletonList(getResources().getString(R.string.mostrar_publicidad)))));
+
         return binding.getRoot();
     }
 
@@ -132,7 +141,7 @@ public class StatsFragment extends Fragment {
 
         while (total_gastos.moveToNext()){
             if(!hay_gastos) {
-                @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_texto_simple, null);
                 binding.layoutTipoGastos.addView(view_tipo);
                 @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_stats, null);
                 ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
@@ -146,7 +155,7 @@ public class StatsFragment extends Fragment {
         total_gastos.moveToFirst();
 
         if(!hay_gastos){
-            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_linea_simple, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_texto_simple, null);
             ((TextView)view.findViewById(R.id.texto)).setText(getResources().getString(R.string.sin_gastos));
             ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutTituloGasto.addView(view);
@@ -155,7 +164,7 @@ public class StatsFragment extends Fragment {
         while (total_ingresos.moveToNext()){
             if(!hay_ingresos) {
                 hay_ingresos = true;
-                @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_texto_simple, null);
                 binding.layoutTipoIngresos.addView(view_tipo);
                 View view = inflater.inflate(R.layout.item_stats, null);
                 ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
@@ -168,7 +177,7 @@ public class StatsFragment extends Fragment {
         total_ingresos.moveToFirst();
 
         if(!hay_ingresos){
-            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_linea_simple, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_texto_simple, null);
             ((TextView)view.findViewById(R.id.texto)).setText(getResources().getString(R.string.sin_ingresos));
             ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
             binding.layoutTituloIngresos.addView(view);
@@ -184,21 +193,15 @@ public class StatsFragment extends Fragment {
         boolean hay_ingreso_tag = false;
 
         //No hay informacion de los tags
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_linea_simple, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.item_texto_simple, null);
         ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
         ((TextView) view.findViewById(R.id.texto)).setText(getResources().getString(R.string.sin_info_sobre_tags));
         view.setPadding(0,0,0,10);
-        binding.layoutTituloAvanzado.addView(view);
+        binding.layoutTituloTags.addView(view);
 
         while (total_by_tags.moveToNext()) {
             if (!hay_tags) {
-                binding.layoutTituloAvanzado.removeViewAt(1);
-                //Titulo que diga que hay informacion de los tags
-                view = inflater.inflate(R.layout.item_linea_simple, null);
-                ((TextView) view.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView) view.findViewById(R.id.texto)).setText(getResources().getString(R.string.informacion_sobre_tags));
-                view.setPadding(0, 0, 0, 15);
-                binding.layoutTituloAvanzado.addView(view);
+                binding.layoutTituloTags.removeViewAt(1);
                 hay_tags = true;
             }
             float total = total_by_tags.getFloat(1);
@@ -209,43 +212,43 @@ public class StatsFragment extends Fragment {
 
             if (ingreso.equals("0")) {
                 if (!hay_gasto_tag) {
-                    @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                    @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_texto_simple, null);
                     ((TextView) view_tipo.findViewById(R.id.texto)).setText(getResources().getString(R.string.gastos));
                     ((TextView) view_tipo.findViewById(R.id.texto)).setTextColor(getResources().getColor(R.color.rojo_egreso));
                     ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
-                    binding.layoutTipoAvanzado.addView(view_tipo);
+                    binding.layoutTipoTags.addView(view_tipo);
 
                     view = inflater.inflate(R.layout.item_stats, null);
                     ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                     ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
-                    binding.layoutAvanzado.addView(view);
+                    binding.layoutTags.addView(view);
                     hay_gasto_tag = true;
                 }
             } else {
                 if (!hay_ingreso_tag) {
-                    @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+                    @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_texto_simple, null);
                     ((TextView) view_tipo.findViewById(R.id.texto)).setText(getResources().getString(R.string.ingresos));
                     ((TextView) view_tipo.findViewById(R.id.texto)).setTextColor(getResources().getColor(R.color.verde_ingreso));
                     ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
                     view_tipo.setPadding(0, 20, 0, 0);
-                    binding.layoutTipoAvanzado.addView(view_tipo);
+                    binding.layoutTipoTags.addView(view_tipo);
 
                     view = inflater.inflate(R.layout.item_stats, null);
                     ((TextView) view.findViewById(R.id.total)).setTypeface(Typeface.DEFAULT_BOLD);
                     ((TextView) view.findViewById(R.id.promedio)).setTypeface(Typeface.DEFAULT_BOLD);
                     view.setPadding(0, 20, 0, 0);
-                    binding.layoutAvanzado.addView(view);
+                    binding.layoutTags.addView(view);
                     hay_ingreso_tag = true;
                 }
             }
-            @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+            @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_texto_simple, null);
             ((TextView) view_tipo.findViewById(R.id.texto)).setText(nombre_tag + ": ");
             ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
-            binding.layoutTipoAvanzado.addView(view_tipo);
+            binding.layoutTipoTags.addView(view_tipo);
             view = inflater.inflate(R.layout.item_stats, null);
             ((TextView) view.findViewById(R.id.total)).setText(simbolo + " " + Utils.formatoCantidad(total));
             ((TextView) view.findViewById(R.id.promedio)).setText(simbolo + " " + Utils.formatoCantidad(total / cantidad_dias));
-            binding.layoutAvanzado.addView(view);
+            binding.layoutTags.addView(view);
         }
     }
 
@@ -255,7 +258,7 @@ public class StatsFragment extends Fragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_linea_simple, null);
+        @SuppressLint("InflateParams") View view_tipo = inflater.inflate(R.layout.item_texto_simple, null);
         ((TextView)view_tipo.findViewById(R.id.texto)).setText(moneda + ": ");
         ((TextView) view_tipo.findViewById(R.id.texto)).setTypeface(Typeface.DEFAULT_BOLD);
         layout_tipo.addView(view_tipo);
@@ -309,8 +312,8 @@ public class StatsFragment extends Fragment {
         while(binding.layoutTituloIngresos.getChildCount() != 1){
             binding.layoutTituloIngresos.removeViewAt(1);
         }
-        while(binding.layoutTituloAvanzado.getChildCount() != 1){
-            binding.layoutTituloAvanzado.removeViewAt(1);
+        while(binding.layoutTituloTags.getChildCount() != 1){
+            binding.layoutTituloTags.removeViewAt(1);
         }
 
         while(binding.layoutGastos.getChildCount() != 0){
@@ -322,9 +325,9 @@ public class StatsFragment extends Fragment {
             binding.layoutTipoIngresos.removeViewAt(0);
         }
 
-        while(binding.layoutAvanzado.getChildCount() != 0){
-            binding.layoutAvanzado.removeViewAt(0);
-            binding.layoutTipoAvanzado.removeViewAt(0);
+        while(binding.layoutTags.getChildCount() != 0){
+            binding.layoutTags.removeViewAt(0);
+            binding.layoutTipoTags.removeViewAt(0);
         }
     }
 
@@ -363,6 +366,57 @@ public class StatsFragment extends Fragment {
 
     private String twoDigits(int n) {
         return (n <= 9) ? ("0" + n) : String.valueOf(n);
+    }
+
+
+
+    //Mostrar solo la primera vez, luego acceder de una
+
+    @SuppressLint("RtlHardcoded")
+    public void popupAvanzado(ArrayList<String> strings){
+        if(Preferences.getPreferenceString(requireContext(), "acepto_publicidad").equals("1")){
+            aceptarPublicidadEIrAvanzados();
+        }
+        else {
+            LayoutInflater inflater = requireActivity().getLayoutInflater();
+            @SuppressLint("InflateParams") View vista = inflater.inflate(R.layout.popup_informacion, null);
+
+
+            TextView texto_1 = vista.findViewById(R.id.texto_1);
+            TextView texto_2 = vista.findViewById(R.id.texto_2);
+            TextView texto_3 = vista.findViewById(R.id.texto_3);
+            TextView texto_4 = vista.findViewById(R.id.texto_4);
+            TextView texto_5 = vista.findViewById(R.id.texto_5);
+
+            ArrayList<TextView> textos = new ArrayList<>(Arrays.asList(texto_1, texto_2, texto_3, texto_4, texto_5));
+            for (int x = 0; x != strings.size(); x++) {
+                textos.get(x).setText(strings.get(x));
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle(requireContext().getResources().getString(R.string.informacion));
+            builder.setView(vista)
+                    .setPositiveButton(requireContext().getResources().getString(R.string.aceptar), (dialog, which) ->
+                            aceptarPublicidadEIrAvanzados()
+                    );
+            builder.setCancelable(true);
+            builder.setNegativeButton(getResources().getString(R.string.cancelar), null);
+
+            Dialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setGravity(Gravity.CENTER | Gravity.RIGHT);
+            }
+
+            dialog.show();
+            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+    }
+
+    private void aceptarPublicidadEIrAvanzados(){
+        Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad");
+        //navController.navigate(R.string);
     }
 
 

@@ -226,13 +226,15 @@ public class CrearMonedaFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.moneda_nombre_vacio, Toast.LENGTH_SHORT).show();
         }
         else {
-            Cursor data = database.getMonedaByNombre(nombre);
-            boolean existe = false;
-            while (data.moveToNext()) {
-                existe = true;
-            }
-            if (existe) {
-                Toast.makeText(requireContext(), getResources().getString(R.string.error_moneda_existente), Toast.LENGTH_SHORT).show();
+            if(!nombre_viejo.equals(nombre)) {
+                Cursor data = database.getMonedaByNombre(nombre);
+                boolean existe = false;
+                while (data.moveToNext()) {
+                    existe = true;
+                }
+                if (existe) {
+                    Toast.makeText(requireContext(), getResources().getString(R.string.error_moneda_existente), Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 boolean insertData = database.updateMoneda(nombre_viejo, nombre, simbolo);

@@ -331,7 +331,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
-                    android:id="@+id/layout_titulo_avanzado"
+                    android:id="@+id/layout_titulo_tags"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -340,26 +340,26 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/avanzado"
+                        android:id="@+id/tags"
                         style="@style/Titulos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/avanzado"
+                        android:text="@string/tags"
                         android:textColor="@color/very_light_green"
                         android:textSize="28sp" />
                 </LinearLayout>
 
                 <HorizontalScrollView
-                    android:id="@+id/scroll_tipo_avanzado"
+                    android:id="@+id/scroll_tipo_tags"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintEnd_toStartOf="@+id/un_tercio3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_titulo_avanzado">
+                    app:layout_constraintTop_toBottomOf="@+id/layout_titulo_tags">
 
                     <LinearLayout
-                        android:id="@+id/layout_tipo_avanzado"
+                        android:id="@+id/layout_tipo_tags"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="start"
@@ -371,11 +371,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/scroll_tipo_avanzado"
-                    app:layout_constraintTop_toTopOf="@id/scroll_tipo_avanzado">
+                    app:layout_constraintStart_toEndOf="@id/scroll_tipo_tags"
+                    app:layout_constraintTop_toTopOf="@id/scroll_tipo_tags">
 
                     <LinearLayout
-                        android:id="@+id/layout_avanzado"
+                        android:id="@+id/layout_tags"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -384,6 +384,17 @@
                     </LinearLayout>
                 </HorizontalScrollView>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/avanzado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/fondo_negro_redondeado"
+                android:gravity="center"
+                android:text="@string/avanzado"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </LinearLayout>
     </ScrollView>
