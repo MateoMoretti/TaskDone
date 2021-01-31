@@ -1,6 +1,8 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,10 +20,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.taskdone.Acceso.ActivityLogin;
 import com.example.taskdone.DataBase;
 import com.example.taskdone.Preferences;
 import com.example.taskdone.UsuarioSingleton;
@@ -165,6 +169,8 @@ public class PrincipalFragment extends Fragment {
         binding.checkIngreso.setOnCheckedChangeListener((compoundButton, b) -> guardarIngresoPendiente(b));
 
         cargarGastoPendiente();
+
+        binding.logout.setOnClickListener(v -> popupCerrarSesion());
 
         binding.ayuda.setOnClickListener(v -> Utils.popupAyuda(requireContext(), requireActivity(), new ArrayList<>(Arrays.asList(getResources().getString(R.string.ayuda_principal_1), getResources().getString(R.string.ayuda_principal_2)))));
 
@@ -319,6 +325,28 @@ public class PrincipalFragment extends Fragment {
 
         binding.scrollview.fullScroll(ScrollView.FOCUS_UP);
 
+    }
+
+
+    private void popupCerrarSesion() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(getResources().getString(R.string.salir));
+        builder.setMessage(getResources().getString(R.string.quieres_cerrar_sesion));
+        DialogInterface.OnClickListener c = (dialogInterface, i) -> {
+            Preferences.deleteFiltros(requireContext());
+            Preferences.deleteUser(requireContext());
+            Preferences.deletePreferencesGastoPendiente(requireContext());
+            Preferences.deletePreferencesEdicionGasto(requireContext());
+            Intent intent = new Intent(requireContext(), ActivityLogin.class);
+            startActivity(intent);
+            requireActivity().finish();
+        };
+        builder.setPositiveButton(getResources().getString(R.string.si), c);
+        builder.setNegativeButton(getResources().getString(R.string.no), null);
+        builder.setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 

@@ -28,6 +28,16 @@
                 android:layout_gravity="center"
                 android:layout_weight="2">
 
+                <ImageView
+                    android:id="@+id/logout"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/logout"
+                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
+                    app:layout_constraintEnd_toStartOf="@+id/titulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/titulo" />
+
                 <TextView
                     android:id="@+id/titulo"
                     style="@style/Titulos"
