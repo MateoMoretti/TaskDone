@@ -181,9 +181,10 @@
 
                 <TextView
                     android:id="@+id/txt_cantidad"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/cantidad"
+                    android:text="@string/cantidad_inicial"
+                    android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_cantidad"

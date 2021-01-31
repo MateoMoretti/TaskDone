@@ -48,7 +48,7 @@
                 app:layout_constraintTop_toTopOf="@+id/titulo"
                 tools:ignore="PrivateResource" />
 
-            <TextView
+                <TextView
                 android:id="@+id/titulo"
                 style="@style/Titulos"
                 android:layout_width="wrap_content"
@@ -60,6 +60,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ayuda"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:drawable/ic_dialog_info"
+                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/titulo"
+                    app:layout_constraintTop_toTopOf="@+id/titulo" />
 
                 <TextView
                     android:id="@+id/textView5"

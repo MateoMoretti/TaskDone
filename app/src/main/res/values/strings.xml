@@ -65,6 +65,7 @@
     <string name="moneda">Moneda</string>
     <string name="simbolo">Simbolo</string>
     <string name="cantidad">Cantidad</string>
+    <string name="cantidad_inicial">Cantidad inicial</string>
     <string name="example_moneda">Pesos</string>
     <string name="example_simbolo">$</string>
 
@@ -114,6 +115,18 @@
     <string name="error_usuario_vacio">Error: Debes ingresar un nombre de usuario</string>
     <string name="error_usuario_existente">Error: Éste usuario ya existe</string>
     <string name="error_moneda_existente">Error: Ésta moneda ya existe</string>
+    <string name="error_tag_existente">Error: Ésta etiqueta ya existe</string>
     <string name="error_caracter_invalido">Error: Caracter inválido</string>
+
+
+    <!-- AYUDA -->
+
+    <string name="informacion">Información</string>
+    <string name="ayuda_crear_cuenta_1">Como los datos son guardados exclusivamente en tu celular, no podras recuperar contraseña si la olvidas.</string>
+    <string name="ayuda_crear_cuenta_2">Puedes crear cuenta sin contraseña (recomendado).</string>
+    <string name="ayuda_principal_1">En ésta sección puedes ver tu dinero actual y agregar registros sobre gastos o ingresos.</string>
+    <string name="ayuda_principal_2">Tu dinero se actualizará automáticamente luego de agregar registros.</string>
+    <string name="ayuda_tags_1">En ésta sección puedes asignar etiquetas a un registro.</string>
+    <string name="ayuda_tags_2">Ésto permitirá clasificar tus gastos e ingresos en la sección \'Estadisticas\'.</string>
 
 </resources>

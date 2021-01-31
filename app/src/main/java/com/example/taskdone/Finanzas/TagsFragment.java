@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -77,6 +78,10 @@ public class TagsFragment extends Fragment {
         binding.buttonCrearTag.setOnClickListener(v -> popupCrearTag());
 
         binding.buttonAceptar.setOnClickListener(v -> volverAPrincipal(true));
+
+
+        binding.ayuda.setOnClickListener(v -> Utils.popupAyuda(requireContext(), requireActivity(), new ArrayList<>(Arrays
+                .asList(getResources().getString(R.string.ayuda_tags_1), getResources().getString(R.string.ayuda_tags_2)))));
 
         return binding.getRoot();
     }
@@ -172,13 +177,13 @@ public class TagsFragment extends Fragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         @SuppressLint("InflateParams") View vista = inflater.inflate(R.layout.popup_crear_tag, null);
 
-        EditText crear_tag = vista.findViewById(R.id.edit_crear_tag);
-        crear_tag.setText(tag_viejo);
+        EditText editar_tag = vista.findViewById(R.id.edit_crear_tag);
+        editar_tag.setText(tag_viejo);
 
         builder.setTitle(getResources().getString(R.string.editar_tag));
         builder.setView(vista)
                 .setPositiveButton(getResources().getString(R.string.aceptar), (dialog, which) ->
-                        editarTag(tag_viejo, crear_tag.getText().toString())
+                        editarTag(tag_viejo, editar_tag.getText().toString())
                 );
         builder.setNegativeButton(getResources().getString(R.string.cancelar), null);
         builder.setCancelable(true);
@@ -199,14 +204,24 @@ public class TagsFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show();
         }
         else {
-            boolean insertData = database.updateTag(tag_viejo, tag_nuevo);
-
-            if (insertData) {
-                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            Cursor tag_existente = database.getTagByNombre(tag_nuevo);
+            boolean tag_existe = false;
+            while (tag_existente.moveToNext()){
+                tag_existe = true;
             }
-            cargarTags();
+            if(tag_existe){
+                Toast.makeText(requireContext(), R.string.error_tag_existente, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                boolean insertData = database.updateTag(tag_viejo, tag_nuevo);
+
+                if (insertData) {
+                    Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+                }
+                cargarTags();
+            }
         }
     }
 
@@ -242,14 +257,24 @@ public class TagsFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show();
         }
         else {
-            boolean insertData = database.addTag(tag);
-
-            if (insertData) {
-                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            Cursor tag_existente = database.getTagByNombre(tag);
+            boolean tag_existe = false;
+            while (tag_existente.moveToNext()){
+                tag_existe = true;
             }
-            cargarTags();
+            if(tag_existe){
+                Toast.makeText(requireContext(), R.string.error_tag_existente, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                boolean insertData = database.addTag(tag);
+
+                if (insertData) {
+                    Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+                }
+                cargarTags();
+            }
         }
     }
 }

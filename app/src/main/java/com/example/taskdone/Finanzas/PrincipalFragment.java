@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 
 
@@ -165,6 +166,7 @@ public class PrincipalFragment extends Fragment {
 
         cargarGastoPendiente();
 
+        binding.ayuda.setOnClickListener(v -> Utils.popupAyuda(requireContext(), requireActivity(), new ArrayList<>(Arrays.asList(getResources().getString(R.string.ayuda_principal_1), getResources().getString(R.string.ayuda_principal_2)))));
 
         return binding.getRoot();
     }

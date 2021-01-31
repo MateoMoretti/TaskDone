@@ -1,10 +1,19 @@
 package com.example.taskdone;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.taskdone.Acceso.ActivityLogin;
 
@@ -14,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -155,6 +165,42 @@ public class Utils {
     }
 
 
+    @SuppressLint("RtlHardcoded")
+    public static void popupAyuda(Context c, Activity activity, ArrayList<String> strings){
+        LayoutInflater inflater = activity.getLayoutInflater();
+        @SuppressLint("InflateParams") View vista = inflater.inflate(R.layout.popup_informacion, null);
+
+
+        TextView texto_1 = vista.findViewById(R.id.texto_1);
+        TextView texto_2 = vista.findViewById(R.id.texto_2);
+        TextView texto_3 = vista.findViewById(R.id.texto_3);
+        TextView texto_4 = vista.findViewById(R.id.texto_4);
+        TextView texto_5 = vista.findViewById(R.id.texto_5);
+
+        ArrayList<TextView> textos = new ArrayList<>(Arrays.asList(texto_1, texto_2, texto_3, texto_4, texto_5));
+        for(int x =0; x!=strings.size();x++){
+            textos.get(x).setText(strings.get(x));
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(c.getResources().getString(R.string.informacion));
+        builder.setView(vista)
+                .setPositiveButton(c.getResources().getString(R.string.aceptar), (dialog, which) ->
+                        dialog.dismiss()
+                );
+        builder.setCancelable(true);
+
+
+        Dialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setGravity(Gravity.CENTER | Gravity.RIGHT);
+        }
+
+        dialog.show();
+        dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
 
 
 }

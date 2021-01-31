@@ -50,7 +50,7 @@
     <string name="cantidad.">Amount:</string>
     <string name="motivo.">Reason:</string>
     <string name="tags.">Tags:</string>
-    <string name="tag...">Tag...</string>
+    <string name="tag...">Tag…</string>
     <string name="sin_seleccionados">0 selected</string>
     <string name="seleccionados">selected</string>
     <string name="es_ingreso">Is income</string>
@@ -71,7 +71,7 @@
     <string name="bienvenido">Welcome !</string>
     <string name="espanol">Spanish</string>
     <string name="ingles">English</string>
-    <string name="elige_idioma">Choose language...</string>
+    <string name="elige_idioma">Choose language…</string>
     <string name="tu_dinero">Your money</string>
     <string name="editar">Edit</string>
     <string name="guardar">Save</string>
@@ -85,9 +85,18 @@
     <string name="editar_tag">Edit tag</string>
     <string name="tus_monedas">Your currencies</string>
     <string name="moneda_nombre_vacio">"You cannot create a currency with an empty name "</string>
-    <string name="nombre...">Name...</string>
-    <string name="simbolo...">Symbol...</string>
+    <string name="nombre...">Name…</string>
+    <string name="simbolo...">Symbol…</string>
     <string name="editar_moneda">Edit currency</string>
     <string name="estas_seguro_monedas">Are you sure? All the records associated with this currency will also be deleted.</string>
     <string name="error_caracter_invalido">Error: Invalid character</string>
+    <string name="ayuda_principal_1">In this section you can see your current money and add records about expenses or income.</string>
+    <string name="ayuda_crear_cuenta_2">You can create account without password (recommended).</string>
+    <string name="ayuda_crear_cuenta_1">As the data is stored exclusively on your cell phone, you will not be able to recover your password if you forget it.</string>
+    <string name="ayuda_tags_1">In this section you can assign tags to a record.</string>
+    <string name="ayuda_tags_2">This will allow you to classify your expenses and income in the \'Stats\' section.</string>
+    <string name="informacion">Information</string>
+    <string name="cantidad_inicial">Initial amount</string>
+    <string name="ayuda_principal_2">Your money will update automatically after adding records.</string>
+    <string name="error_tag_existente">Error: This tag already exists</string>
 </resources>

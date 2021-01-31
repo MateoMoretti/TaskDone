@@ -2,6 +2,7 @@ package com.example.taskdone.Finanzas;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.taskdone.Acceso.ActivityLogin;
 import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.Utils;
@@ -128,6 +130,8 @@ public class ActivityFinanzas extends AppCompatActivity {
             Preferences.deleteUser(getApplicationContext());
             Preferences.deletePreferencesGastoPendiente(getApplicationContext());
             Preferences.deletePreferencesEdicionGasto(getApplicationContext());
+            Intent intent = new Intent(getApplicationContext(), ActivityLogin.class);
+            startActivity(intent);
             finish();
         };
         builder.setPositiveButton(getResources().getString(R.string.si), c);

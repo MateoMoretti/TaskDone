@@ -32,6 +32,7 @@ import com.example.taskdone.UsuarioSingleton;
 import com.example.taskdone.databinding.FragmentCrearMonedaBinding;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class CrearMonedaFragment extends Fragment {
@@ -89,7 +90,7 @@ public class CrearMonedaFragment extends Fragment {
 
     private void verificarCantidad(EditText e){
             if (!e.getText().toString().equals("") && !e.getText().toString().equals("0")) {
-                if (e.getText().toString().substring(0, 1).equals("0")) {
+                if (e.getText().toString().startsWith("0")) {
                     e.setText(e.getText().toString().substring(1));
                     e.setSelection(e.length());
                 }
@@ -112,7 +113,8 @@ public class CrearMonedaFragment extends Fragment {
             }
             if (existe) {
                 Toast.makeText(requireContext(), getResources().getString(R.string.error_moneda_existente), Toast.LENGTH_SHORT).show();
-            } else {
+            }
+            else {
                 int cantidad_persistir = 0;
                 if (!cantidad_elegida.equals("")) {
                     cantidad_persistir = Integer.parseInt(cantidad_elegida);
@@ -129,6 +131,9 @@ public class CrearMonedaFragment extends Fragment {
                 }
                 else {
                     monedas.clear();
+                    binding.editMoneda.setText("");
+                    binding.editSimbolo.setText("");
+                    binding.editCantidad.setText("0");
                     cargarMonedas();
                 }
             }
@@ -212,7 +217,7 @@ public class CrearMonedaFragment extends Fragment {
         borrar.setOnClickListener(v -> popupBorrarMoneda(nombre, dialog));
 
         dialog.show();
-        dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        Objects.requireNonNull(dialog.getWindow()).clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
@@ -221,15 +226,24 @@ public class CrearMonedaFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.moneda_nombre_vacio, Toast.LENGTH_SHORT).show();
         }
         else {
-            boolean insertData = database.updateMoneda(nombre_viejo, nombre, simbolo);
-
-            if (insertData) {
-                Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+            Cursor data = database.getMonedaByNombre(nombre);
+            boolean existe = false;
+            while (data.moveToNext()) {
+                existe = true;
             }
-            monedas.clear();
-            cargarMonedas();
+            if (existe) {
+                Toast.makeText(requireContext(), getResources().getString(R.string.error_moneda_existente), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                boolean insertData = database.updateMoneda(nombre_viejo, nombre, simbolo);
+
+                if (insertData) {
+                    Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT).show();
+                }
+                cleanYCargar();
+            }
         }
     }
 
@@ -255,12 +269,19 @@ public class CrearMonedaFragment extends Fragment {
         if(result){
             dialog_viejo.dismiss();
             Toast.makeText(requireContext(), getResources().getString(R.string.eliminado_exito), Toast.LENGTH_SHORT).show();
-            monedas.clear();
-            cargarMonedas();
+            cleanYCargar();
         }
         else{
             Toast.makeText(requireContext(), getResources().getString(R.string.error_eliminado), Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void cleanYCargar(){
+        monedas.clear();
+        simbolos.clear();
+        cantidades.clear();
+        cargarMonedas();
+    }
+
 
 }
