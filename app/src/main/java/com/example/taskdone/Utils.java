@@ -15,8 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.taskdone.Acceso.ActivityLogin;
-
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -37,38 +35,7 @@ public class Utils {
         Utils.context = context;
     }
 
-    public static String getMes(int mes){
-        switch (mes){
-            case 1:
-                return "Enero";
-            case 2:
-                return "Febrero";
-            case 3:
-                return "Marzo";
-            case 4:
-                return "Abril";
-            case 5:
-                return "Mayo";
-            case 6:
-                return "Junio";
-            case 7:
-                return "Julio";
-            case 8:
-                return "Agosto";
-            case 9:
-                return "Septiembre";
-            case 10:
-                return "Octubre";
-            case 11:
-                return "Noviembre";
-            case 12:
-                return "Diciembre";
-        }
-        return "";
-    }
-
     public static String getDia(String fecha){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         String idioma = Preferences.getPreferenceString(context, "idioma");
         DateFormat df;
         if(idioma.equals("")){
@@ -99,7 +66,7 @@ public class Utils {
 
     public static Boolean fechaMayorQueHoy(String f) throws ParseException {
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date fecha = sdf.parse(f);
         assert fecha != null;
         return fecha.after(Calendar.getInstance().getTime());
@@ -125,7 +92,7 @@ public class Utils {
     }
 
     public static String dateToString(Date d){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         return sdf.format(d);
 
     }

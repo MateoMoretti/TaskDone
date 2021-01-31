@@ -1,6 +1,7 @@
 package com.example.taskdone.Finanzas;
 
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -42,13 +44,12 @@ public class ActivityFinanzas extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         MenuItem pesos = navView.getMenu().findItem(R.id.nvg_principal);
         MenuItem stats = navView.getMenu().findItem(R.id.nvg_stats);
         MenuItem historial = navView.getMenu().findItem(R.id.nvg_historial);
-        Drawable dr_signo_pesos = getDrawable(R.drawable.signo_pesos);
-        Drawable dr_stats = getDrawable(R.drawable.stats);
-        Drawable dr_historial = getDrawable(R.drawable.historial);
+        Drawable dr_signo_pesos = ContextCompat.getDrawable(getApplicationContext(), R.drawable.signo_pesos);
+        Drawable dr_stats = ContextCompat.getDrawable(getApplicationContext(), R.drawable.stats);
+        Drawable dr_historial = ContextCompat.getDrawable(getApplicationContext(), R.drawable.historial);
         dr_signo_pesos.mutate().setColorFilter(getColor(R.color.verde), PorterDuff.Mode.SRC_IN);
         dr_stats.mutate().setColorFilter(getColor(R.color.naranja), PorterDuff.Mode.SRC_IN);
         dr_historial.mutate().setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_IN);
@@ -65,9 +66,10 @@ public class ActivityFinanzas extends AppCompatActivity {
         Preferences.deletePreferenceString(getApplicationContext(), "id_fragment_anterior");
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {

@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskdone.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,12 +76,7 @@ public class ListaTagsAdapter extends RecyclerView.Adapter<ListaTagsAdapter.View
         }
 
         private void checkear(CheckBox tag){
-            if(tag.isChecked()){
-                tag.setChecked(false);
-            }
-            else{
-                tag.setChecked(true);
-            }
+            tag.setChecked(!tag.isChecked());
             TagToList(tag);
         }
     }
@@ -98,10 +91,8 @@ public class ListaTagsAdapter extends RecyclerView.Adapter<ListaTagsAdapter.View
     }
 
 
-    public ArrayList<String> getTagsElegidos() {
-        return tags_elegidos;
-    }
-
-
+    //public ArrayList<String> getTagsElegidos() {
+    //    return tags_elegidos;
+    //}
 
 }

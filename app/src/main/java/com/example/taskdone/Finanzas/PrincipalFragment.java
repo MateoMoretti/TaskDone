@@ -38,7 +38,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Objects;
 
 
@@ -254,7 +253,7 @@ public class PrincipalFragment extends Fragment {
 
     private void verificarCantidad(){
             if (!binding.editCantidad.getText().toString().equals("") && !binding.editCantidad.getText().toString().equals("0")) {
-                if (binding.editCantidad.getText().toString().substring(0, 1).equals("0")) {
+                if (binding.editCantidad.getText().toString().startsWith("0")) {
                     binding.editCantidad.setText(binding.editCantidad.getText().toString().substring(1));
                     binding.editCantidad.setSelection(binding.editCantidad.length());
                 }

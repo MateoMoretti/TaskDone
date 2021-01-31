@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -33,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 public class StatsFragment extends Fragment {
 
@@ -87,12 +84,12 @@ public class StatsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        binding.tituloDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
-        binding.tituloHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
-        binding.calendarDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
-        binding.calendarHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
-        binding.textDesde.setOnClickListener(v -> showDatePickerDialog(true, requireActivity(), binding.textDesde));
-        binding.textHasta.setOnClickListener(v -> showDatePickerDialog(false, requireActivity(), binding.textHasta));
+        binding.tituloDesde.setOnClickListener(v -> showDatePickerDialog(true, binding.textDesde));
+        binding.tituloHasta.setOnClickListener(v -> showDatePickerDialog(false, binding.textHasta));
+        binding.calendarDesde.setOnClickListener(v -> showDatePickerDialog(true, binding.textDesde));
+        binding.calendarHasta.setOnClickListener(v -> showDatePickerDialog(false, binding.textHasta));
+        binding.textDesde.setOnClickListener(v -> showDatePickerDialog(true, binding.textDesde));
+        binding.textHasta.setOnClickListener(v -> showDatePickerDialog(false, binding.textHasta));
 
         return binding.getRoot();
     }
@@ -274,7 +271,7 @@ public class StatsFragment extends Fragment {
         String text_desde = getResources().getString(R.string.comienzo_de_mes);
         String text_hasta = getResources().getString(R.string.hoy);
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date desde_date = sdf.parse(Utils.calendarToString(Utils.getPrimerDiaDelMes()));
         Date hasta_date = Calendar.getInstance().getTime();
 
@@ -334,7 +331,7 @@ public class StatsFragment extends Fragment {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showDatePickerDialog(Boolean es_desde, FragmentActivity activity, TextView fecha_a_actualizar) {
+    private void showDatePickerDialog(Boolean es_desde, TextView fecha_a_actualizar) {
         DatePickerFragment newFragment = DatePickerFragment.newInstance((datePicker, year, month, day) -> {
             final String selectedDate = year + "/" + twoDigits(month + 1) + "/" + twoDigits(day);
 
@@ -360,7 +357,7 @@ public class StatsFragment extends Fragment {
             }
 
         });
-        newFragment.show(Objects.requireNonNull(activity).getSupportFragmentManager(), "datePicker");
+        newFragment.show(requireActivity().getSupportFragmentManager(), "datePicker");
     }
 
 
