@@ -15,6 +15,7 @@
     <color name="verde_ingreso">#12A601</color>
     <color name="verde_ingreso_fondo">#DDFFD9</color>
     <color name="rojo_egreso">#A60101</color>
+    <color name="rojo_fuerte">#FF3B3B</color>
     <color name="rojo_egreso_fondo">#FFDADA</color>
     <color name="naranja">#FF8922</color>
     <color name="white">#FFFFFF</color>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo"
+    tools:context=".Finanzas.StatsAvanzadosFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/titulo"
+                    style="@style/Titulos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/avanzado"
+                    android:textColor="#FFFFFF"
+                    android:textSize="36sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/titulo_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="@string/year"
+                    android:textColor="@color/very_light_green"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/spinner_year"
+                    app:layout_constraintStart_toStartOf="@+id/spinner_year"
+                    app:layout_constraintTop_toBottomOf="@+id/titulo" />
+
+                <Spinner
+                    android:id="@+id/spinner_year"
+                    android:layout_width="125dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintEnd_toStartOf="@id/spinner_moneda"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titulo_year" />
+
+                <TextView
+                    android:id="@+id/titulo_moneda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="@string/moneda"
+                    android:textColor="@color/very_light_green"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/spinner_moneda"
+                    app:layout_constraintStart_toStartOf="@+id/spinner_moneda"
+                    app:layout_constraintTop_toBottomOf="@+id/titulo" />
+
+                <Spinner
+                    android:id="@+id/spinner_moneda"
+                    android:layout_width="125dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_year"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_year"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_year" />
+
+                <TextView
+                    android:id="@+id/titulo_gastos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/gastos"
+                    android:textColor="@color/rojo_fuerte"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@+id/chart_gastos_mensuales"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_year" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart_gastos_mensuales"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titulo_gastos" />
+
+                <TextView
+                    android:id="@+id/titulo_ingresos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/ingresos"
+                    android:textColor="@color/verde_claro"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@+id/chart_gastos_mensuales"
+                    app:layout_constraintTop_toBottomOf="@+id/chart_gastos_mensuales" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart_ingresos_mensuales"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titulo_ingresos" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags."
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tags_seleccionados"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tags_seleccionados" />
+
+                <TextView
+                    android:id="@+id/tags_seleccionados"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="200dp"
+                    android:layout_marginEnd="200dp"
+                    android:background="@drawable/fondo_blanco_redondeado"
+                    android:gravity="center"
+                    android:maxWidth="0dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/almost_black"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

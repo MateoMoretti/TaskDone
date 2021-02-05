@@ -75,7 +75,7 @@ public class StatsFragment extends Fragment {
         String selected_date_hasta = Preferences.getPreferenceString(requireContext(), "stats_hasta");
 
         if(selected_date_desde.equals("")) {
-            selected_date_desde = getResources().getString(R.string.comienzo_de_mes);
+            selected_date_desde = getResources().getString(R.string.hace_un_mes);
         }
         else if(Utils.isHoy(selected_date_desde)){
             selected_date_desde = getResources().getString(R.string.hoy);
@@ -271,11 +271,13 @@ public class StatsFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void filtrar(String desde, String hasta) throws ParseException {
 
-        String text_desde = getResources().getString(R.string.comienzo_de_mes);
+        String text_desde = getResources().getString(R.string.hace_un_mes);
         String text_hasta = getResources().getString(R.string.hoy);
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        Date desde_date = sdf.parse(Utils.calendarToString(Utils.getPrimerDiaDelMes()));
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, -30);
+        Date desde_date = c.getTime();
         Date hasta_date = Calendar.getInstance().getTime();
 
         if (!desde.equals(text_desde)) {
@@ -303,7 +305,7 @@ public class StatsFragment extends Fragment {
         gastos.clear();
         ingresos.clear();
 
-        binding.textDesde.setText(getResources().getString(R.string.comienzo_de_mes));
+        binding.textDesde.setText(getResources().getString(R.string.hace_un_mes));
         binding.textHasta.setText(getResources().getString(R.string.hoy));
 
         while(binding.layoutTituloGasto.getChildCount() != 1){
@@ -416,7 +418,11 @@ public class StatsFragment extends Fragment {
 
     private void aceptarPublicidadEIrAvanzados(){
         Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad");
-        //navController.navigate(R.string);
+
+        //Mostrar publicidad
+
+
+        navController.navigate(R.id.statsAvanzadosFragment);
     }
 
 

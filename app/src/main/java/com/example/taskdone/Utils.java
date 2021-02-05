@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,6 +76,12 @@ public class Utils {
     public static Calendar getPrimerDiaDelMes() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
+        return c;
+    }
+
+    public static Calendar getPrimerDiaDelYear() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_YEAR, 1);
         return c;
     }
 
@@ -167,6 +174,17 @@ public class Utils {
         dialog.show();
         dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+
+    public static String getMesPorNumero(int num) {
+        String month = "wrong";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (num >= 0 && num <= 11 ) {
+            month = months[num];
+        }
+        return month;
     }
 
 

@@ -119,6 +119,9 @@ public class CrearMonedaFragment extends Fragment {
                 if (!cantidad_elegida.equals("")) {
                     cantidad_persistir = Integer.parseInt(cantidad_elegida);
                 }
+                if(simbolo_persistir.equals("")){
+                    simbolo_persistir = getResources().getString(R.string.example_simbolo);
+                }
                 boolean insertData = database.addMonedaCantidad(nombre_moneda_persistir, cantidad_persistir, simbolo_persistir);
 
                 if (insertData) {
@@ -130,11 +133,10 @@ public class CrearMonedaFragment extends Fragment {
                     navController.navigate(R.id.principalFragment);
                 }
                 else {
-                    monedas.clear();
                     binding.editMoneda.setText("");
                     binding.editSimbolo.setText("");
                     binding.editCantidad.setText("0");
-                    cargarMonedas();
+                    cleanYCargar();
                 }
             }
         }

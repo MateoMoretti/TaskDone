@@ -74,7 +74,11 @@
     <string name="desde">Desde</string>
     <string name="hasta">Hasta</string>
     <string name="comienzo_de_mes">Comienzo de mes</string>
+    <string name="comienzo_de_year">Comienzo de año</string>
+    <string name="hace_un_mes">Hace 30 días</string>
     <string name="hoy">Hoy</string>
+    <string name="year.">Año:</string>
+    <string name="year">Año</string>
 
 
     <!-- AGREGAR GASTO -->
@@ -104,6 +108,7 @@
     <string name="estas_seguro_monedas">Estás seguro? Se borraran también todos los registros asociados a ésta moneda</string>
     <string name="estas_seguro_tags">Quieres borrar las etiquetas seleccionadas? Los datos borrados no pueden recuperarse</string>
     <string name="mostrar_publicidad">Mira un anuncio y accede a estadísticas avanzadas !</string>
+    <string name="seleciona">Selecciona…</string>
 
 
     <!-- ERRORES -->

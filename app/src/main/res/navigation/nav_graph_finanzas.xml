@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_statsFragment_self"
             app:destination="@id/statsFragment" />
+        <action
+            android:id="@+id/action_statsFragment_to_statsAvanzadosFragment2"
+            app:destination="@id/statsAvanzadosFragment" />
     </fragment>
     <fragment
         android:id="@+id/tagsFragment"
@@ -72,5 +75,14 @@
         <action
             android:id="@+id/action_crearMonedaFragment_to_principalFragment"
             app:destination="@id/principalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statsAvanzadosFragment"
+        android:name="com.example.taskdone.Finanzas.StatsAvanzadosFragment"
+        android:label="fragment_stats_avanzados"
+        tools:layout="@layout/fragment_stats_avanzados" >
+        <action
+            android:id="@+id/action_statsAvanzadosFragment_to_statsFragment2"
+            app:destination="@id/statsFragment" />
     </fragment>
 </navigation>

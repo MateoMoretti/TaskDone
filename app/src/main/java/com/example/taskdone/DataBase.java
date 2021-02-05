@@ -339,6 +339,31 @@ public class DataBase extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
+    public Cursor getTotalGastosMensualesPorAñoMoneda(String year, String ingreso, String nombre_moneda){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT SUM(g."+COL_TOTAL_GASTO+"), g."+ COL_FECHA
+                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+TABLE_USUARIO+" AS u"
+                +" ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"' AND g."+COL_INGRESO+" = '"+ingreso+"'"
+                +" AND substr(g."+ COL_FECHA+", 0, 5) = '" + year+"'"
+                +" INNER JOIN "+ TABLE_MONEDA +" AS mc"
+                +" ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND mc."+COL_NOMBRE+"= '"+nombre_moneda+"'"
+                +" GROUP BY substr(g."+ COL_FECHA+", 6, 2)";
+        return db.rawQuery(query, null);
+    }
+
+    public Cursor getTotalGastosPor(String year, String ingreso){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT SUM(g."+COL_TOTAL_GASTO+"), g."+ COL_FECHA
+                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+TABLE_USUARIO+" AS u "
+                +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"' AND g."+COL_INGRESO+" = '"+ingreso+"'"
+                +" AND substr(g."+ COL_FECHA+", 0, 5) = '" + year+"'"
+                +" GROUP BY substr(g."+ COL_FECHA+", 6, 2)";
+        //+" ORDER BY g."+COL_FECHA+" DESC"
+        return db.rawQuery(query, null);
+    }
+
     //Devuelve cantidadGastos, total, nombreMoneda
     public Cursor getTotalGastosBetweenFechasGroupByMonedas(String desde, String hasta, String ingreso){
         SQLiteDatabase db = this.getWritableDatabase();

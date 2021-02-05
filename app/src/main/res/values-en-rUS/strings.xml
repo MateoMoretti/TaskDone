@@ -100,4 +100,9 @@
     <string name="error_tag_existente">Error: This tag already exists</string>
     <string name="stats_avanzados">Advanced stats</string>
     <string name="mostrar_publicidad">Watch an ad and access advanced stats</string>
+    <string name="seleciona">Select…</string>
+    <string name="year.">Year:</string>
+    <string name="year">Year</string>
+    <string name="comienzo_de_year">Start of the year</string>
+    <string name="hace_un_mes">30 days ago</string>
 </resources>
