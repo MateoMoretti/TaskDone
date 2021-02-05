@@ -59,6 +59,8 @@
     <string name="stats_avanzados">Estadísticas avanzadas</string>
     <string name="total">Total</string>
     <string name="por_dia">Por día</string>
+    <string name="gastos_por_mes">Gastos por mes</string>
+    <string name="ingresos_por_mes">Ingresos por mes</string>
 
     <!-- MONEDAS -->
 
@@ -131,7 +133,7 @@
     <string name="ayuda_crear_cuenta_1">Como los datos son guardados exclusivamente en tu celular, no podras recuperar contraseña si la olvidas.</string>
     <string name="ayuda_crear_cuenta_2">Puedes crear cuenta sin contraseña (recomendado).</string>
     <string name="ayuda_principal_1">En ésta sección puedes ver tu dinero actual y agregar registros sobre gastos o ingresos.</string>
-    <string name="ayuda_principal_2">Tu dinero se actualizará automáticamente luego de agregar registros.</string>
+    <string name="ayuda_principal_2">Tu dinero se actualizará automáticamente luego de agregar o editar registros.</string>
     <string name="ayuda_tags_1">En ésta sección puedes asignar etiquetas a un registro.</string>
     <string name="ayuda_tags_2">Ésto permitirá clasificar tus gastos e ingresos en la sección \'Estadisticas\'.</string>
 

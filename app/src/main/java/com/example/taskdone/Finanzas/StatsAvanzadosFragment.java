@@ -163,6 +163,8 @@ public class StatsAvanzadosFragment extends Fragment {
 
         binding.tagsSeleccionados.setOnClickListener(v -> abrirSpinnerTags());
 
+        binding.volver.setOnClickListener(v-> navController.navigate(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior"))));
+
         return binding.getRoot();
     }
 
@@ -197,8 +199,10 @@ public class StatsAvanzadosFragment extends Fragment {
             gastos_mensuales_grafico.add(new BarEntry(x, gasto_mensual));
         }
 
-
-        BarDataSet barDataSet = new BarDataSet(gastos_mensuales_grafico, "Gastos por mes");
+        BarDataSet barDataSet = new BarDataSet(gastos_mensuales_grafico, getResources().getString(R.string.gastos_por_mes));
+        if(ingreso.equals("1")){
+            barDataSet = new BarDataSet(gastos_mensuales_grafico, getResources().getString(R.string.ingresos_por_mes));
+        }
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(16f);

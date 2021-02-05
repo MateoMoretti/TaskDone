@@ -24,6 +24,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/volver"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/abc_vector_test"
+                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
+                    app:layout_constraintEnd_toStartOf="@+id/titulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/titulo"
+                    tools:ignore="PrivateResource" />
+
                 <TextView
                     android:id="@+id/titulo"
                     style="@style/Titulos"

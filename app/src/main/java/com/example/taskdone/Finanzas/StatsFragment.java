@@ -418,6 +418,7 @@ public class StatsFragment extends Fragment {
 
     private void aceptarPublicidadEIrAvanzados(){
         Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad");
+        Preferences.savePreferenceString(requireContext(), ""+R.id.statsFragment, "id_fragment_anterior");
 
         //Mostrar publicidad
 

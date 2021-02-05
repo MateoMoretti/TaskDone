@@ -96,7 +96,7 @@
     <string name="ayuda_tags_2">This will allow you to classify your expenses and income in the \'Stats\' section.</string>
     <string name="informacion">Information</string>
     <string name="cantidad_inicial">Initial amount</string>
-    <string name="ayuda_principal_2">Your money will update automatically after adding records.</string>
+    <string name="ayuda_principal_2">Your money will update automatically after adding or editing records.</string>
     <string name="error_tag_existente">Error: This tag already exists</string>
     <string name="stats_avanzados">Advanced stats</string>
     <string name="mostrar_publicidad">Watch an ad and access advanced stats</string>
@@ -105,4 +105,6 @@
     <string name="year">Year</string>
     <string name="comienzo_de_year">Start of the year</string>
     <string name="hace_un_mes">30 days ago</string>
+    <string name="gastos_por_mes">Expenses per month</string>
+    <string name="ingresos_por_mes">Income per month</string>
 </resources>
