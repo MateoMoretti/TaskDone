@@ -316,7 +316,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/fondo_blanco_redondeado"
-                android:backgroundTint="#E3FFFC"
+                android:backgroundTint="#FFF3D5"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="10dp">
@@ -346,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/tags"
-                        android:textColor="@color/very_light_green"
+                        android:textColor="@color/naranja"
                         android:textSize="28sp" />
                 </LinearLayout>
 

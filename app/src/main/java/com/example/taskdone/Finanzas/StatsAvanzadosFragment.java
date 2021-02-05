@@ -186,7 +186,8 @@ public class StatsAvanzadosFragment extends Fragment {
         ArrayList<String> meses = new ArrayList<>();
         ArrayList<BarEntry> gastos_mensuales_grafico = new ArrayList<>();
         for (int x = 0; x != 12; x++) {
-            meses.add(Utils.getMesPorNumero(x));
+            String mes = Utils.getMesPorNumero(x).substring(0,3);
+            meses.add(mes.substring(0, 1).toUpperCase() + mes.substring(1));
             int gasto_mensual = 0;
             for (HashMap<Integer, Integer> h : fecha_total_gasto) {
                 if (h.containsKey(x + 1)) {
