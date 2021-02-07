@@ -339,7 +339,7 @@ public class DataBase extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getTotalGastosMensualesPorAñoMoneda(String year, String ingreso, String nombre_moneda){
+    public Cursor getTotalGastosMensualesPorYearMoneda(String year, String ingreso, String nombre_moneda){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "SELECT SUM(g."+COL_TOTAL_GASTO+"), g."+ COL_FECHA
@@ -352,15 +352,33 @@ public class DataBase extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getTotalGastosPor(String year, String ingreso){
+    public Cursor getTotalGastosPorYearMesMoneda(String year, String mes, String nombre_moneda, String ingreso){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "SELECT SUM(g."+COL_TOTAL_GASTO+"), g."+ COL_FECHA
-                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+TABLE_USUARIO+" AS u "
-                +"ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"' AND g."+COL_INGRESO+" = '"+ingreso+"'"
-                +" AND substr(g."+ COL_FECHA+", 0, 5) = '" + year+"'"
-                +" GROUP BY substr(g."+ COL_FECHA+", 6, 2)";
-        //+" ORDER BY g."+COL_FECHA+" DESC"
+                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+TABLE_USUARIO+" AS u"
+                +" ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"' AND g."+COL_INGRESO+" = '"+ingreso+"'"
+                +" AND substr(g."+ COL_FECHA+", 0, 5) = '" + year+"' AND substr(g."+ COL_FECHA+", 7, 1) = '" + mes+"'"
+                +" INNER JOIN "+ TABLE_MONEDA +" AS mc"
+                +" ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND mc."+COL_NOMBRE+"= '"+nombre_moneda+"'";
+        return db.rawQuery(query, null);
+    }
+
+
+    public Cursor getTotalGastosPorYearMesMonedaGroupByTags(String year, String mes, String nombre_moneda, String ingreso){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT SUM(g."+COL_TOTAL_GASTO+"), t."+ COL_NOMBRE
+                +" FROM "+TABLE_GASTO+" AS g INNER JOIN "+TABLE_USUARIO+" AS u"
+                +" ON u."+COL_ID+" = g."+COL_ID_USUARIO+" AND u."+COL_ID+" = '"+UsuarioSingleton.getInstance().getID()+"' AND g."+COL_INGRESO+" = '"+ingreso+"'"
+                +" AND substr(g."+ COL_FECHA+", 0, 5) = '" + year+"' AND substr(g."+ COL_FECHA+", 7, 1) = '" + mes+"'"
+                +" INNER JOIN "+ TABLE_MONEDA +" AS mc"
+                +" ON g."+ COL_ID_MONEDA +" = mc."+COL_ID+" AND mc."+COL_NOMBRE+"= '"+nombre_moneda+"'"
+                +" INNER JOIN "+ TABLE_TAG_GASTO +" AS tg "
+                +"ON g."+ COL_ID +" = tg."+COL_ID_GASTO
+                +" INNER JOIN "+TABLE_TAG+" AS t "
+                +"ON t."+COL_ID+" = tg."+COL_ID_TAG
+                +" GROUP BY T."+COL_ID;
         return db.rawQuery(query, null);
     }
 

@@ -44,6 +44,7 @@
     <string name="sin_ingresos">No has tenido un ingreso en estos días</string>
     <string name="sin_info_sobre_tags">No tienes información sobre Etiquetas en estos días</string>
     <string name="sin_registros">No has registrado nada entre éstas fechas</string>
+    <string name="sin_tag">Sin etiqueta</string>
     <string name="sin_tags">Aún no tienes etiquetas, crea una</string>
     <string name="sin_tags_seleccionados">No has seleccionado ninguna etiqueta</string>
     <string name="crear_nuevo_tag">Crear nueva etiqueta</string>
@@ -54,13 +55,15 @@
 
     <!-- GASTOS -->
     <string name="gastos">Gastos</string>
+    <string name="gastos_por_tags">Gastos por etiquetas</string>
+    <string name="gastos_por_mes">Gastos por mes</string>
     <string name="ingresos">Ingresos</string>
+    <string name="ingresos_por_tags">Ingresos por etiquetas</string>
+    <string name="ingresos_por_mes">Ingresos por mes</string>
     <string name="avanzado">Avanzado</string>
     <string name="stats_avanzados">Estadísticas avanzadas</string>
     <string name="total">Total</string>
     <string name="por_dia">Por día</string>
-    <string name="gastos_por_mes">Gastos por mes</string>
-    <string name="ingresos_por_mes">Ingresos por mes</string>
 
     <!-- MONEDAS -->
 
@@ -81,6 +84,7 @@
     <string name="hoy">Hoy</string>
     <string name="year.">Año:</string>
     <string name="year">Año</string>
+    <string name="mes">Mes</string>
 
 
     <!-- AGREGAR GASTO -->

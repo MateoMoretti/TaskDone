@@ -107,4 +107,8 @@
     <string name="hace_un_mes">30 days ago</string>
     <string name="gastos_por_mes">Expenses per month</string>
     <string name="ingresos_por_mes">Income per month</string>
+    <string name="mes">Month</string>
+    <string name="gastos_por_tags">Expenses per tags</string>
+    <string name="ingresos_por_tags">Income per tags</string>
+    <string name="sin_tag">Without tag</string>
 </resources>

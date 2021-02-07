@@ -35,6 +35,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -65,7 +68,11 @@ public class StatsAvanzadosFragment extends Fragment {
     ArrayList<String> simbolos = new ArrayList<>();
 
     int moneda_seleccionada = 0;
-    String year_seleccionado = "0";
+    String year_seleccionado = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
+    String mes_seleccionado = Integer.toString(Calendar.getInstance().get(Calendar.MONTH)+1);
+
+    //Se utiliza para que los spinners no ejecuten OnClickListener al iniciar el fragment
+    int check_for_spinners = 0;
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -87,11 +94,11 @@ public class StatsAvanzadosFragment extends Fragment {
             simbolos.add(data.getString(3));
         }
 
-        year_seleccionado = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-
         if(!monedas.isEmpty()){
             graficoBarrasGastosMensuales(year_seleccionado, "0", binding.chartGastosMensuales, monedas.get(0));
             graficoBarrasGastosMensuales(year_seleccionado, "1", binding.chartIngresosMensuales, monedas.get(0));
+            graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "0", binding.piechartGastosTag,  monedas.get(0));
+            graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "1", binding.piechartIngresosTag,  monedas.get(0));
         }
 
         ArrayAdapter<String> adapterSpinnerMonedas = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, monedas){
@@ -112,10 +119,14 @@ public class StatsAvanzadosFragment extends Fragment {
         binding.spinnerMoneda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                moneda_seleccionada = i;
-                if(!monedas.isEmpty()){
-                    graficoBarrasGastosMensuales(year_seleccionado, "0", binding.chartGastosMensuales, monedas.get(moneda_seleccionada));
-                    graficoBarrasGastosMensuales(year_seleccionado, "1", binding.chartIngresosMensuales, monedas.get(moneda_seleccionada));
+                if(check_for_spinners > 0) {
+                    moneda_seleccionada = i;
+                    if (!monedas.isEmpty()) {
+                        graficoBarrasGastosMensuales(year_seleccionado, "0", binding.chartGastosMensuales, monedas.get(moneda_seleccionada));
+                        graficoBarrasGastosMensuales(year_seleccionado, "1", binding.chartIngresosMensuales, monedas.get(moneda_seleccionada));
+                        graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "0", binding.piechartGastosTag, monedas.get(moneda_seleccionada));
+                        graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "1", binding.piechartIngresosTag, monedas.get(moneda_seleccionada));
+                    }
                 }
             }
 
@@ -148,10 +159,14 @@ public class StatsAvanzadosFragment extends Fragment {
         binding.spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                year_seleccionado = binding.spinnerYear.getSelectedItem().toString();
-                if(!monedas.isEmpty()){
-                    graficoBarrasGastosMensuales(year_seleccionado, "0", binding.chartGastosMensuales, monedas.get(moneda_seleccionada));
-                    graficoBarrasGastosMensuales(year_seleccionado, "1", binding.chartIngresosMensuales, monedas.get(moneda_seleccionada));
+                if(check_for_spinners > 0) {
+                    year_seleccionado = binding.spinnerYear.getSelectedItem().toString();
+                    if (!monedas.isEmpty()) {
+                        graficoBarrasGastosMensuales(year_seleccionado, "0", binding.chartGastosMensuales, monedas.get(moneda_seleccionada));
+                        graficoBarrasGastosMensuales(year_seleccionado, "1", binding.chartIngresosMensuales, monedas.get(moneda_seleccionada));
+                        graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "0", binding.piechartGastosTag, monedas.get(moneda_seleccionada));
+                        graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "1", binding.piechartIngresosTag, monedas.get(moneda_seleccionada));
+                    }
                 }
             }
 
@@ -159,9 +174,50 @@ public class StatsAvanzadosFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        binding.spinnerYear.setSelection(Calendar.getInstance().get(Calendar.YEAR)-2021);
 
 
-        binding.tagsSeleccionados.setOnClickListener(v -> abrirSpinnerTags());
+
+
+
+        ArrayList<String> meses = new ArrayList<>();
+        for(int x=0; x!=12;x++){
+            meses.add(Utils.getMesPorNumero(x));
+        }
+        ArrayAdapter<String> adapterSpinnerMeses = new ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, meses){
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTextSize(20);
+                v.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                return v;
+            }
+        };
+        adapterSpinnerMeses.setDropDownViewResource(R.layout.spinner_dropdown);
+        binding.spinnerMes.setAdapter(adapterSpinnerMeses);
+        binding.spinnerMes.setBackground(getResources().getDrawable(R.drawable.fondo_blanco_redondeado));
+        binding.spinnerMes.setGravity(Gravity.CENTER);
+        binding.spinnerMes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(check_for_spinners > 0){
+                    mes_seleccionado = Integer.toString(i + 1);
+                    if (!monedas.isEmpty()) {
+                        graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "0", binding.piechartGastosTag, monedas.get(moneda_seleccionada));
+                        graficoTortaGastosPorTags(year_seleccionado, mes_seleccionado, "1", binding.piechartIngresosTag, monedas.get(moneda_seleccionada));
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        binding.spinnerMes.setSelection(Integer.parseInt(mes_seleccionado)-1);
+
+        check_for_spinners = 1;
 
         binding.volver.setOnClickListener(v-> navController.navigate(Integer.parseInt(Preferences.getPreferenceString(requireContext(), "id_fragment_anterior"))));
 
@@ -172,15 +228,15 @@ public class StatsAvanzadosFragment extends Fragment {
     @SuppressLint({"SetTextI18n", "InflateParams"})
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void graficoBarrasGastosMensuales(String year, String ingreso, BarChart chart, String nombre_moneda) {
-        Cursor gastos_por_mes = database.getTotalGastosMensualesPorAñoMoneda(year,ingreso, nombre_moneda);
+        Cursor gastos_por_mes = database.getTotalGastosMensualesPorYearMoneda(year,ingreso, nombre_moneda);
 
-        ArrayList<HashMap<Integer, Integer>> fecha_total_gasto = new ArrayList<>();
+        ArrayList<HashMap<Integer, Float>> fecha_total_gasto = new ArrayList<>();
         while (gastos_por_mes.moveToNext()) {
             String fecha = gastos_por_mes.getString(1);
             int mes = Integer.parseInt(fecha.substring(5, 7));
 
-            HashMap<Integer, Integer> h = new HashMap<>();
-            h.put(mes, gastos_por_mes.getInt(0));
+            HashMap<Integer, Float> h = new HashMap<>();
+            h.put(mes, gastos_por_mes.getFloat(0));
             fecha_total_gasto.add(h);
         }
 
@@ -190,8 +246,9 @@ public class StatsAvanzadosFragment extends Fragment {
         for (int x = 0; x != 12; x++) {
             String mes = Utils.getMesPorNumero(x).substring(0,3);
             meses.add(mes.substring(0, 1).toUpperCase() + mes.substring(1));
-            int gasto_mensual = 0;
-            for (HashMap<Integer, Integer> h : fecha_total_gasto) {
+            float gasto_mensual = 0;
+            for (HashMap<Integer, Float> h : fecha_total_gasto) {
+                //Ignorar warning, pues si lo contiene nunca dará error
                 if (h.containsKey(x + 1)) {
                     gasto_mensual = h.get(x + 1);
                 }
@@ -213,6 +270,7 @@ public class StatsAvanzadosFragment extends Fragment {
         chart.setData(barData);
         chart.getDescription().setText("");
         chart.animateY(2000);
+        chart.setNoDataTextColor(Color.BLACK);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(meses));
@@ -222,8 +280,54 @@ public class StatsAvanzadosFragment extends Fragment {
     }
 
 
-    public void GraficoTortaGastosPorTags(String mes, String ingreso, PieChart chart){
-        //Cursor total_gastos_mes = database.getTotalGastosGroupByTagIngresoMoneda();
+    public void graficoTortaGastosPorTags(String year, String mes, String ingreso, PieChart chart, String nombre_moneda){
+        Cursor total_gastos_mes = database.getTotalGastosPorYearMesMoneda(year, mes, nombre_moneda, ingreso);
+        float total_mes = 0;
+        while(total_gastos_mes.moveToNext()){
+            total_mes = total_gastos_mes.getFloat(0);
+            String a =  total_gastos_mes.getString(1);
+            String w ="a";
+        }
+
+        Cursor total_gastos_mes_por_tag = database.getTotalGastosPorYearMesMonedaGroupByTags(year, mes, nombre_moneda, ingreso);
+
+
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        while (total_gastos_mes_por_tag.moveToNext()){
+            entries.add(new PieEntry(total_gastos_mes_por_tag.getFloat(0), total_gastos_mes_por_tag.getString(1)));
+            total_mes -= total_gastos_mes_por_tag.getFloat(0);
+        }
+        if(total_mes!=0) {
+            entries.add(new PieEntry(total_mes, getResources().getString(R.string.sin_tag)));
+        }
+
+
+        if(!entries.isEmpty()) {
+            PieDataSet pieDataSet = new PieDataSet(entries, getResources().getString(R.string.gastos_por_tags));
+            chart.setCenterText(getResources().getString(R.string.gastos_por_tags));
+            chart.setCenterTextColor(Color.RED);
+            pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+            if (ingreso.equals("1")) {
+                pieDataSet = new PieDataSet(entries, getResources().getString(R.string.ingresos_por_tags));
+                chart.setCenterText(getResources().getString(R.string.ingresos_por_tags));
+                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                chart.setCenterTextColor(Color.GREEN);
+            }
+            pieDataSet.setValueTextColor(Color.WHITE);
+            pieDataSet.setValueTextSize(16f);
+
+            PieData pieData = new PieData(pieDataSet);
+
+            chart.setEntryLabelColor(Color.WHITE);
+            chart.setHoleColor(Color.BLACK);
+            chart.setData(pieData);
+            chart.getDescription().setEnabled(false);
+            chart.animate();
+        }
+        else{
+            chart.setNoDataTextColor(Color.BLACK);
+            chart.clear();
+        }
     }
 
 
@@ -234,8 +338,7 @@ public class StatsAvanzadosFragment extends Fragment {
 
 
 
-
-
+/*
     private void cargarTags(Calendar desde, Calendar hasta){
         Cursor tags = database.getTagsByUserId(UsuarioSingleton.getInstance().getID());
         while(tags.moveToNext()){
@@ -249,14 +352,14 @@ public class StatsAvanzadosFragment extends Fragment {
             binding.tagsSeleccionados.setText(Utils.arrayListToString(tags_seleccionados));
         }
 
-        /*Cursor total_by_tags = database.getTotalGastosGroupByTagIngresoMoneda(Utils.calendarToString(desde), Utils.calendarToString(hasta));
+        *//*Cursor total_by_tags = database.getTotalGastosGroupByTagIngresoMoneda(Utils.calendarToString(desde), Utils.calendarToString(hasta));
         Cursor gastos = database.getGastosBySessionUser(Utils.calendarToString(desde), Utils.calendarToString(hasta));
         while (gastos.moveToNext()) {
             Cursor tag = database.getTagsByGastoId(gastos.getInt(0));
             while (tag.moveToNext()){
                 tags_array.add(tag.getString(1));
             }
-        }*/
+        }*//*
         tags_checkeados = new boolean[tags_creados_por_usuario.size()];
     }
 
@@ -300,7 +403,7 @@ public class StatsAvanzadosFragment extends Fragment {
 
         AlertDialog dialog = mBuilder.create();
         dialog.show();
-    }
+    }*/
 
 
 
