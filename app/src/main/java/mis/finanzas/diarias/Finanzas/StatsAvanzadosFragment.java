@@ -48,13 +48,6 @@ public class StatsAvanzadosFragment extends Fragment {
     NavController navController;
     DataBase database;
 
-    boolean[] tags_checkeados;
-    ArrayList<String> tags_creados_por_usuario = new ArrayList<>();
-    ArrayList<String> tags_seleccionados  = new ArrayList<>();
-
-    ArrayList<Integer> tags_seleccionados_index = new ArrayList<>();
-
-
     ArrayList<String> monedas = new ArrayList<>();
     ArrayList<Float> cantidades = new ArrayList<>();
     ArrayList<String> simbolos = new ArrayList<>();
@@ -279,8 +272,6 @@ public class StatsAvanzadosFragment extends Fragment {
         float total_mes = 0;
         while(total_gastos_mes.moveToNext()){
             total_mes = total_gastos_mes.getFloat(0);
-            String a =  total_gastos_mes.getString(1);
-            String w ="a";
         }
 
         Cursor total_gastos_mes_por_tag = database.getTotalGastosPorYearMesMonedaGroupByTags(year, mes, nombre_moneda, ingreso);

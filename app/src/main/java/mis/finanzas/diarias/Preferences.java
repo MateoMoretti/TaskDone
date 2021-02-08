@@ -7,7 +7,7 @@ public class Preferences {
 
     private static final String STRING_PREFERENCES = "Finanzas";
 
-    public static void savePreferenceBoolean(Context c, boolean b, String key) {
+    /*public static void savePreferenceBoolean(Context c, boolean b, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         preferences.edit().putBoolean(key, b).apply();
     }
@@ -15,7 +15,7 @@ public class Preferences {
     public static boolean getPreferenceBoolean(Context c, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getBoolean(key, false);//Si es que nunca se ha guardado nada en esta key pues retornara false
-    }
+    }*/
 
     public static void savePreferenceString(Context c, String b, String key) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
@@ -32,10 +32,10 @@ public class Preferences {
         preferences.edit().remove(key).apply();
     }
 
-    public static void deleteAllPreferenceString(Context c) {
+    /*public static void deleteAllPreferenceString(Context c) {
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, Context.MODE_PRIVATE);
         preferences.edit().clear().apply();
-    }
+    }*/
 
     public static void deleteFiltros(Context c) {
         Preferences.deletePreferenceString(c, "stats_desde");

@@ -30,11 +30,6 @@ import mis.finanzas.diarias.Preferences;
 import com.example.taskdone.R;
 import mis.finanzas.diarias.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;

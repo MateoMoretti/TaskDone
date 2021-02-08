@@ -88,7 +88,7 @@ public class Utils {
         return fecha.after(Calendar.getInstance().getTime());
     }
 
-    public static Calendar getPrimerDiaDelMes() {
+    /*public static Calendar getPrimerDiaDelMes() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         return c;
@@ -104,7 +104,7 @@ public class Utils {
         return getPrimerDiaDelMes().get(Calendar.YEAR) == Integer.parseInt(fecha.substring(0,4))
                 && getPrimerDiaDelMes().get(Calendar.MONTH)+1 == Integer.parseInt(fecha.substring(5,7))
                 && getPrimerDiaDelMes().get(Calendar.DAY_OF_MONTH) == Integer.parseInt(fecha.substring(8,10));
-    }
+    }*/
 
 
     public static boolean isHoy(String fecha){
