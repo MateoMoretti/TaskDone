@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
-    tools:context=".Acceso.LoginFragment">
+    tools:context="mis.finanzas.diarias.Acceso.LoginFragment">
 
     <ScrollView
         android:layout_width="match_parent"

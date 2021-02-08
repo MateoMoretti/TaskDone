@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.taskdone.Acceso.LoginFragment"
+        android:name="mis.finanzas.diarias.Acceso.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/crearCuentaFragment"
-        android:name="com.example.taskdone.Acceso.CrearCuentaFragment"
+        android:name="mis.finanzas.diarias.Acceso.CrearCuentaFragment"
         android:label="fragment_crear_cuenta"
         tools:layout="@layout/fragment_crear_cuenta" >
         <action

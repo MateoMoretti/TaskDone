@@ -15,7 +15,7 @@
             android:value="ca-app-pub-8001300265320389~8098987263"/>
 
         <activity
-            android:name=".Acceso.ActivityLogin"
+            android:name="mis.finanzas.diarias.Acceso.ActivityLogin"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Finanzas"
             android:windowSoftInputMode="adjustPan" >
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Finanzas.ActivityFinanzas"
+            android:name="mis.finanzas.diarias.Finanzas.ActivityFinanzas"
             android:label="Finanzas"
             android:theme="@style/AppTheme.Finanzas"
             android:windowSoftInputMode="adjustPan" >
