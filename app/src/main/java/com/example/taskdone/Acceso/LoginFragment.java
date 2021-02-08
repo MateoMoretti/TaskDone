@@ -63,7 +63,7 @@ public class LoginFragment extends Fragment {
         builder.setSingleChoiceItems(idiomas, -1, (dialogInterface, i) -> {
             switch (i){
                 case 0:
-                    setIdioma("");
+                    setIdioma("es");
                     requireActivity().recreate();
                     break;
                 case 1:

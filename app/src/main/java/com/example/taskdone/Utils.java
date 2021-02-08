@@ -38,13 +38,14 @@ public class Utils {
 
     public static String getDia(String fecha){
         String idioma = Preferences.getPreferenceString(context, "idioma");
+        Locale locale = new Locale(idioma);
         DateFormat df;
         if(idioma.equals("")){
             Locale.setDefault(Locale.getDefault());
             df = DateFormat.getDateInstance(DateFormat.FULL, context.getResources().getConfiguration().locale);
         }
         else {
-            df = DateFormat.getDateInstance(DateFormat.FULL, Locale.ENGLISH);
+            df = DateFormat.getDateInstance(DateFormat.FULL, locale);
         }
         Calendar c = Calendar.getInstance();
         c.set(Integer.parseInt(fecha.substring(0,4)), Integer.parseInt(fecha.substring(5,7))-1, Integer.parseInt(fecha.substring(8,10)));

@@ -82,11 +82,9 @@ public class ActivityLogin extends AppCompatActivity {
     void setIdioma(String idioma){
         Locale locale = new Locale(idioma);
         if(idioma.equals("")){
-            Locale.setDefault(Locale.getDefault());
+            locale = new Locale("es_419");
         }
-        else {
-            Locale.setDefault(locale);
-        }
+        Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.setLocale(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
