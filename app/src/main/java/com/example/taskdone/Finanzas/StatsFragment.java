@@ -1,6 +1,7 @@
 package com.example.taskdone.Finanzas;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -29,6 +30,11 @@ import com.example.taskdone.Preferences;
 import com.example.taskdone.R;
 import com.example.taskdone.Utils;
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -59,6 +65,8 @@ public class StatsFragment extends Fragment {
 
     Long cantidad_dias = 0L;
 
+    InterstitialAd mInterstitialAd;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -68,6 +76,8 @@ public class StatsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentFinanzasStatsBinding.inflate(inflater, container, false);
         navController = NavHostFragment.findNavController(this);
+
+        cargarAnuncio();
 
         database = new DataBase(requireContext());
 
@@ -420,11 +430,63 @@ public class StatsFragment extends Fragment {
         Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad");
         Preferences.savePreferenceString(requireContext(), ""+R.id.statsFragment, "id_fragment_anterior");
 
-        //Mostrar publicidad
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(requireActivity());
+        }
 
 
         navController.navigate(R.id.statsAvanzadosFragment);
     }
 
+
+
+    public void cargarAnuncio() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(requireContext(), "ca-app-pub-8001300265320389/7489624934", adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                // The mInterstitialAd reference will be null until
+                // an ad is loaded.
+                mInterstitialAd = interstitialAd;
+                mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
+
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent();
+                        mInterstitialAd=null;
+
+                        //// perform your code that you wants todo after ad dismissed or closed
+
+
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(com.google.android.gms.ads.AdError adError) {
+                        super.onAdFailedToShowFullScreenContent(adError);
+                        mInterstitialAd = null;
+
+                        /// perform your action here when ad will not load
+                    }
+
+                    @Override
+                    public void onAdShowedFullScreenContent() {
+                        super.onAdShowedFullScreenContent();
+                        mInterstitialAd = null;
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                // Handle the error
+                mInterstitialAd = null;
+
+
+            }
+
+        });
+    }
 
 }
