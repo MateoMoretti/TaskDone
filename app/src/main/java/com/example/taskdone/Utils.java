@@ -53,6 +53,18 @@ public class Utils {
         return dia.substring(0, 1).toUpperCase() + dia.substring(1);
     }
 
+    public static String getMesPorNumero(int num) {
+        String month = "wrong";
+        String idioma = Preferences.getPreferenceString(context, "idioma");
+        Locale locale = new Locale(idioma);
+        DateFormatSymbols dfs = new DateFormatSymbols(locale);
+        String[] months = dfs.getMonths();
+        if (num >= 0 && num <= 11 ) {
+            month = months[num];
+        }
+        return month;
+    }
+
     public static Calendar dateToCalendar(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -177,16 +189,6 @@ public class Utils {
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-
-    public static String getMesPorNumero(int num) {
-        String month = "wrong";
-        DateFormatSymbols dfs = new DateFormatSymbols();
-        String[] months = dfs.getMonths();
-        if (num >= 0 && num <= 11 ) {
-            month = months[num];
-        }
-        return month;
-    }
 
 
 }
