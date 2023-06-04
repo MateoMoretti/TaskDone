@@ -1,8 +1,11 @@
 package mis.finanzas.diarias.Acceso;
 
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,68 +23,77 @@ import com.example.taskdone.databinding.FragmentCrearCuentaBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class CrearCuentaFragment extends Fragment {
-
-    private FragmentCrearCuentaBinding binding;
-    NavController navController;
-    DataBase database;
+    private FragmentCrearCuentaBinding mBinding;
+    private NavController mNavController;
+    private DataBase mDatabase;
 
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentCrearCuentaBinding.inflate(inflater, container, false);
-        navController = NavHostFragment.findNavController(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mBinding = FragmentCrearCuentaBinding.inflate(inflater, container, false);
+        mNavController = NavHostFragment.findNavController(this);
+        mDatabase = new DataBase(requireContext());
 
-        database = new DataBase(requireContext());
+        mBinding.crearCuenta.setOnClickListener(v -> crearCuenta());
 
-        binding.crearCuenta.setOnClickListener(v -> crearCuenta());
+        mBinding.contrasena.setInputType(129);
+        mBinding.verPassword.setOnClickListener(v -> togglePasswordVisibility());
 
-        binding.contrasena.setInputType(129);
-        binding.verPassword.setOnClickListener(v -> alternarVisibilidadPassword());
+        mBinding.volver.setOnClickListener(v -> mNavController.navigate(R.id.action_crearCuentaFragment_to_loginFragment));
 
-        binding.volver.setOnClickListener(v -> navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment));
+        mBinding.ayuda.setOnClickListener(v -> showHelpDialog());
 
-        binding.ayuda.setOnClickListener(v -> Utils.popupAyuda(requireContext(), requireActivity(), new ArrayList<>(Arrays
-                .asList(getResources().getString(R.string.ayuda_crear_cuenta_1), getResources().getString(R.string.ayuda_crear_cuenta_2)))));
-
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
+    private void crearCuenta() {
+        Cursor data;
+        boolean userExists = false;
+        String username = mBinding.usuario.getText().toString();
+        String password = mBinding.contrasena.getText().toString();
 
-    void crearCuenta() {
-        Cursor data = database.getUserByUsername(binding.usuario.getText().toString());
-        boolean existe = false;
-        while (data.moveToNext()) {
-            existe = true;
+        try {
+            data = mDatabase.getUserByUsername(username);
+            userExists = data != null && data.moveToNext();
+        } catch (CursorIndexOutOfBoundsException e) {
+            Log.e("CrearCuentaFragment", Objects.requireNonNull(e.getMessage()));
         }
-        if (existe) {
-            Toast.makeText(requireContext(), getResources().getString(R.string.error_usuario_existente), Toast.LENGTH_SHORT).show();
+
+        if (userExists) {
+            Toast.makeText(requireContext(), R.string.error_usuario_existente, Toast.LENGTH_SHORT).show();
         } else {
-            if(binding.usuario.getText().toString().equals("")) {
-                Toast.makeText(requireContext(), getResources().getString(R.string.error_usuario_vacio), Toast.LENGTH_SHORT).show();
-            }
-            else {
-                boolean result = database.addUser(binding.usuario.getText().toString(), binding.contrasena.getText().toString());
+            if (TextUtils.isEmpty(username)) {
+                Toast.makeText(requireContext(), R.string.error_usuario_vacio, Toast.LENGTH_SHORT).show();
+            } else {
+                boolean result = mDatabase.addUser(username, password);
                 if (result) {
-                    Toast.makeText(requireContext(), getResources().getString(R.string.usuario_creado), Toast.LENGTH_SHORT).show();
-                    navController.navigate(R.id.action_crearCuentaFragment_to_loginFragment);
+                    Toast.makeText(requireContext(), R.string.usuario_creado, Toast.LENGTH_SHORT).show();
+                    mNavController.navigate(R.id.action_crearCuentaFragment_to_loginFragment);
                 } else {
-                    Toast.makeText(requireContext(), getResources().getString(R.string.error_crear_usuario), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), R.string.error_crear_usuario, Toast.LENGTH_SHORT).show();
                 }
             }
-
         }
     }
 
-    void alternarVisibilidadPassword(){
-        if(binding.contrasena.getInputType() == 129){
-            binding.contrasena.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+    private void togglePasswordVisibility() {
+        int inputType = mBinding.contrasena.getInputType();
+        if (inputType == 129) {
+            mBinding.contrasena.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        } else {
+            mBinding.contrasena.setInputType(129);
         }
-        else{
-            binding.contrasena.setInputType(129);
-        }
+    }
+
+    private void showHelpDialog() {
+        ArrayList<String> messageList = new ArrayList<>(Arrays.asList(
+                getResources().getString(R.string.ayuda_crear_cuenta_1),
+                getResources().getString(R.string.ayuda_crear_cuenta_2)
+        ));
+        Utils.popupAyuda(requireContext(), requireActivity(), messageList);
     }
 }

@@ -16,9 +16,9 @@
 
         <activity
             android:name="mis.finanzas.diarias.Acceso.ActivityLogin"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.Finanzas"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
