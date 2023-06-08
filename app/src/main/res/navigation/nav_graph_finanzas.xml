@@ -32,7 +32,9 @@
         tools:layout="@layout/fragment_finanzas_historial" >
         <action
             android:id="@+id/action_historialFragment_to_principalFragment"
-            app:destination="@id/principalFragment" />
+            app:destination="@id/principalFragment"
+            app:popUpTo="@id/principalFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_historialFragment_to_statsFragment"
             app:destination="@id/statsFragment" />
@@ -50,7 +52,9 @@
             app:destination="@id/historialFragment" />
         <action
             android:id="@+id/action_statsFragment_to_principalFragment"
-            app:destination="@id/principalFragment" />
+            app:destination="@id/principalFragment"
+            app:popUpTo="@id/principalFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_statsFragment_self"
             app:destination="@id/statsFragment" />
@@ -65,7 +69,9 @@
         tools:layout="@layout/fragment_tags" >
         <action
             android:id="@+id/action_tagsFragment_to_principalFragment"
-            app:destination="@id/principalFragment" />
+            app:destination="@id/principalFragment"
+            app:popUpTo="@id/principalFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/crearMonedaFragment"
@@ -74,7 +80,9 @@
         tools:layout="@layout/fragment_crear_moneda" >
         <action
             android:id="@+id/action_crearMonedaFragment_to_principalFragment"
-            app:destination="@id/principalFragment" />
+            app:destination="@id/principalFragment"
+            app:popUpTo="@id/principalFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/statsAvanzadosFragment"
@@ -83,6 +91,8 @@
         tools:layout="@layout/fragment_stats_avanzados" >
         <action
             android:id="@+id/action_statsAvanzadosFragment_to_statsFragment2"
-            app:destination="@id/statsFragment" />
+            app:destination="@id/statsFragment"
+            app:popUpTo="@id/statsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

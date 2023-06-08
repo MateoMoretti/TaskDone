@@ -1,10 +1,8 @@
 package mis.finanzas.diarias.fragments
 
-import androidx.navigation.NavController
 import androidx.annotation.RequiresApi
 import android.os.Build
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
 import com.example.taskdone.R
 import android.annotation.SuppressLint
 import android.widget.TextView
@@ -18,6 +16,7 @@ import android.widget.DatePicker
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding
 import mis.finanzas.diarias.*
 import mis.finanzas.diarias.viewmodels.UserViewModel
@@ -29,8 +28,6 @@ import java.util.*
 
 class StatsFragment : Fragment() {
     private var binding: FragmentFinanzasStatsBinding? = null
-    var navController: NavController? = null
-    var database: DataBase? = null
     private val userViewModel: UserViewModel by viewModels()
     var all_gastos = ArrayList<Record>()
     var monedas = ArrayList<String>()
@@ -47,8 +44,6 @@ class StatsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFinanzasStatsBinding.inflate(inflater, container, false)
-        navController = NavHostFragment.findNavController(this)
-        database = DataBase(userViewModel, requireContext())
         var selected_date_desde = Preferences.getPreferenceString(requireContext(), "stats_desde")
         var selected_date_hasta = Preferences.getPreferenceString(requireContext(), "stats_hasta")
         if (selected_date_desde == "") {
@@ -60,7 +55,7 @@ class StatsFragment : Fragment() {
             selected_date_hasta = resources.getString(R.string.hoy)
         }
         try {
-            filtrar(selected_date_desde, selected_date_hasta)
+            //filtrar(selected_date_desde, selected_date_hasta)
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -112,7 +107,7 @@ class StatsFragment : Fragment() {
         return binding!!.root
     }
 
-    @SuppressLint("SetTextI18n", "InflateParams")
+    /*@SuppressLint("SetTextI18n", "InflateParams")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun cargarStats(desde: Calendar, hasta: Calendar) {
         cleanLayouts()
@@ -129,7 +124,7 @@ class StatsFragment : Fragment() {
             val ingreso = data.getString(4)
             val nombre_moneda = data.getString(5)
             val simbolo_moneda = data.getString(6)
-            val g = Record(id, fecha, nombre_moneda, total_gasto, motivo, ingreso)
+            val g = Record(fecha, nombre_moneda, total_gasto, motivo, ingreso,id)
             all_gastos.add(g)
             if (!monedas.contains(g.idMon)) {
                 monedas.add(nombre_moneda)
@@ -293,7 +288,7 @@ class StatsFragment : Fragment() {
                 simbolo + " " + Utils.formatoCantidad(total / cantidad_dias)
             binding!!.layoutTags.addView(view)
         }
-    }
+    }*/
 
     @SuppressLint("SetTextI18n")
     private fun agregarGastoIngreso(
@@ -343,7 +338,7 @@ class StatsFragment : Fragment() {
             hasta_date = sdf.parse(hasta)
             text_hasta = hasta
         }
-        cargarStats(Utils.dateToCalendar(desde_date), Utils.dateToCalendar(hasta_date))
+        //cargarStats(Utils.dateToCalendar(desde_date), Utils.dateToCalendar(hasta_date))
         binding!!.textDesde.text = text_desde
         binding!!.textHasta.text = text_hasta
     }
@@ -457,6 +452,6 @@ class StatsFragment : Fragment() {
             "id_fragment_anterior"
         )
         Ads.getInstance().show(requireActivity())
-        navController!!.navigate(R.id.statsAvanzadosFragment)
+        findNavController().navigate(R.id.statsAvanzadosFragment)
     }
 }

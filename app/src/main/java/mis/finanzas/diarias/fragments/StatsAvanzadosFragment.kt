@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentStatsAvanzadosBinding
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -34,12 +35,11 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieData
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
+import mis.finanzas.diarias.activities.ActivityFinanzas
 import java.util.*
 
 class StatsAvanzadosFragment : Fragment() {
     private var binding: FragmentStatsAvanzadosBinding? = null
-    var navController: NavController? = null
-    var database: DataBase? = null
     private val userViewModel: UserViewModel by viewModels()
     var monedas = ArrayList<String>()
     var cantidades = ArrayList<Float>()
@@ -58,17 +58,16 @@ class StatsAvanzadosFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentStatsAvanzadosBinding.inflate(inflater, container, false)
-        navController = NavHostFragment.findNavController(this)
         Ads.getInstance().cargarAnuncio(requireContext())
-        database = DataBase(userViewModel, requireContext())
-        val data = database!!.getMonedasByUserId(userViewModel.getId())
+
+        /*val data = database!!.getMonedasByUserId(userViewModel.getId())
         while (data.moveToNext()) {
             monedas.add(data.getString(1))
             cantidades.add(data.getFloat(2))
             simbolos.add(data.getString(3))
-        }
+        }*/
         if (!monedas.isEmpty()) {
-            graficoBarrasGastosMensuales(
+            /*graficoBarrasGastosMensuales(
                 year_seleccionado,
                 "0",
                 binding!!.chartGastosMensuales,
@@ -79,8 +78,8 @@ class StatsAvanzadosFragment : Fragment() {
                 "1",
                 binding!!.chartIngresosMensuales,
                 monedas[0]
-            )
-            graficoTortaGastosPorTags(
+            )*/
+            /*graficoTortaGastosPorTags(
                 year_seleccionado,
                 mes_seleccionado,
                 "0",
@@ -93,7 +92,7 @@ class StatsAvanzadosFragment : Fragment() {
                 "1",
                 binding!!.piechartIngresosTag,
                 monedas[0]
-            )
+            )*/
         }
         val adapterSpinnerMonedas: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             requireActivity(),
@@ -124,7 +123,7 @@ class StatsAvanzadosFragment : Fragment() {
                     if (check_for_spinners > 0) {
                         moneda_seleccionada = i
                         if (!monedas.isEmpty()) {
-                            graficoBarrasGastosMensuales(
+                            /*graficoBarrasGastosMensuales(
                                 year_seleccionado,
                                 "0",
                                 binding!!.chartGastosMensuales,
@@ -135,8 +134,8 @@ class StatsAvanzadosFragment : Fragment() {
                                 "1",
                                 binding!!.chartIngresosMensuales,
                                 monedas[moneda_seleccionada]
-                            )
-                            graficoTortaGastosPorTags(
+                            )*/
+                            /*graficoTortaGastosPorTags(
                                 year_seleccionado,
                                 mes_seleccionado,
                                 "0",
@@ -149,7 +148,7 @@ class StatsAvanzadosFragment : Fragment() {
                                 "1",
                                 binding!!.piechartIngresosTag,
                                 monedas[moneda_seleccionada]
-                            )
+                            )*/
                         }
                     }
                 }
@@ -182,7 +181,7 @@ class StatsAvanzadosFragment : Fragment() {
                 if (check_for_spinners > 0) {
                     year_seleccionado = binding!!.spinnerYear.selectedItem.toString()
                     if (!monedas.isEmpty()) {
-                        graficoBarrasGastosMensuales(
+                        /*graficoBarrasGastosMensuales(
                             year_seleccionado,
                             "0",
                             binding!!.chartGastosMensuales,
@@ -193,8 +192,8 @@ class StatsAvanzadosFragment : Fragment() {
                             "1",
                             binding!!.chartIngresosMensuales,
                             monedas[moneda_seleccionada]
-                        )
-                        graficoTortaGastosPorTags(
+                        )*/
+                        /*graficoTortaGastosPorTags(
                             year_seleccionado,
                             mes_seleccionado,
                             "0",
@@ -207,7 +206,7 @@ class StatsAvanzadosFragment : Fragment() {
                             "1",
                             binding!!.piechartIngresosTag,
                             monedas[moneda_seleccionada]
-                        )
+                        )*/
                     }
                 }
             }
@@ -241,7 +240,7 @@ class StatsAvanzadosFragment : Fragment() {
                 if (check_for_spinners > 0) {
                     mes_seleccionado = Integer.toString(i + 1)
                     if (!monedas.isEmpty()) {
-                        graficoTortaGastosPorTags(
+                       /* graficoTortaGastosPorTags(
                             year_seleccionado,
                             mes_seleccionado,
                             "0",
@@ -254,7 +253,7 @@ class StatsAvanzadosFragment : Fragment() {
                             "1",
                             binding!!.piechartIngresosTag,
                             monedas[moneda_seleccionada]
-                        )
+                        )*/
                     }
                 }
             }
@@ -264,17 +263,12 @@ class StatsAvanzadosFragment : Fragment() {
         binding!!.spinnerMes.setSelection(mes_seleccionado.toInt() - 1)
         check_for_spinners = 1
         binding!!.volver.setOnClickListener { v: View? ->
-            navController!!.navigate(
-                Preferences.getPreferenceString(
-                    requireContext(),
-                    "id_fragment_anterior"
-                ).toInt()
-            )
+            (activity as ActivityFinanzas).onBackPressed()
         }
         return binding!!.root
     }
 
-    @SuppressLint("SetTextI18n", "InflateParams")
+    /*@SuppressLint("SetTextI18n", "InflateParams")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun graficoBarrasGastosMensuales(
         year: String,
@@ -326,9 +320,9 @@ class StatsAvanzadosFragment : Fragment() {
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
         xAxis.labelCount = meses.size
-    }
+    }*/
 
-    fun graficoTortaGastosPorTags(
+    /*fun graficoTortaGastosPorTags(
         year: String?,
         mes: String?,
         ingreso: String,
@@ -381,7 +375,9 @@ class StatsAvanzadosFragment : Fragment() {
             chart.setNoDataTextColor(Color.BLACK)
             chart.clear()
         }
-    } /*
+    }*/
+
+/*
     private void cargarTags(Calendar desde, Calendar hasta){
         Cursor tags = database.getTagsByUserId(UsuarioSingleton.getInstance().getID());
         while(tags.moveToNext()){

@@ -15,8 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.taskdone.R
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding
 import mis.finanzas.diarias.DataBase
@@ -33,7 +32,6 @@ import java.util.*
 
 class HistorialFragment : Fragment() {
     private var binding: FragmentFinanzasHistorialBinding? = null
-    private var navController: NavController? = null
     private var dataBase: DataBase? = null
     private val userViewModel: UserViewModel by viewModels()
     private val recordViewModel: RecordViewModel by viewModels { RecordViewmodelFactory(requireContext()) }
@@ -52,7 +50,6 @@ class HistorialFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false)
-        navController = NavHostFragment.findNavController(this)
         var selected_date_desde =
             Preferences.getPreferenceString(requireContext(), "historial_desde")
         var selected_date_hasta =
@@ -65,13 +62,13 @@ class HistorialFragment : Fragment() {
         if (selected_date_hasta == "" || Utils.isHoy(selected_date_hasta)) {
             selected_date_hasta = resources.getString(R.string.hoy)
         }
-        dataBase = DataBase(userViewModel, requireContext())
-        val data = dataBase!!.getMonedasByUserId(userViewModel.getId())
-        while (data.moveToNext()) {
+        //dataBase = DataBase(userViewModel, requireContext())
+        //val data = dataBase!!.getMonedasByUserId(userViewModel.getId())
+        /*while (data.moveToNext()) {
             monedas.add(data.getString(1))
             cantidades.add(data.getFloat(2))
             simbolos.add(data.getString(3))
-        }
+        }*/
         try {
             filtrar(selected_date_desde, selected_date_hasta)
         } catch (e: ParseException) {
@@ -417,7 +414,7 @@ class HistorialFragment : Fragment() {
             ).show()
             tags.clear()
             Preferences.deletePreferencesEdicionGasto(requireContext())
-            navController!!.navigate(R.id.historialFragment)
+            findNavController().navigate(R.id.historialFragment)
         } else {
             Toast.makeText(
                 requireContext(),
@@ -432,7 +429,7 @@ class HistorialFragment : Fragment() {
         editarGasto(view)
         tags.clear()
         Preferences.deletePreferencesEdicionGasto(requireContext())
-        navController!!.navigate(R.id.historialFragment)
+        findNavController().navigate(R.id.historialFragment)
     }
 
     private fun cerrarEdicion() {
@@ -447,7 +444,7 @@ class HistorialFragment : Fragment() {
             "" + R.id.historialFragment,
             "id_fragment_anterior"
         )
-        navController!!.navigate(R.id.crearMonedaFragment)
+        findNavController().navigate(R.id.crearMonedaFragment)
     }
 
     fun irATags() {
@@ -456,7 +453,7 @@ class HistorialFragment : Fragment() {
             "" + R.id.historialFragment,
             "id_fragment_anterior"
         )
-        navController!!.navigate(R.id.tagsFragment)
+        findNavController().navigate(R.id.tagsFragment)
     }
 
     fun guardarIngresoPendiente(b: Boolean) {
@@ -527,7 +524,7 @@ class HistorialFragment : Fragment() {
             hasta_date = sdf.parse(hasta)
             text_hasta = hasta
         }
-        cargarHistorial(desde_date, hasta_date)
+        //cargarHistorial(desde_date, hasta_date)
         binding!!.textDesde.text = text_desde
         binding!!.textHasta.text = text_hasta
     }

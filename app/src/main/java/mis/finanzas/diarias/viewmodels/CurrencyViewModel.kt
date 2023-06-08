@@ -20,15 +20,11 @@ class CurrencyViewModel(val context:Context) : ViewModel() {
     }
 
         fun addCurrency(currency: Currency) {
-            viewModelScope.launch {
-                db.dao.addCurrency(currency)
-            }
+            db.dao.addCurrency(currency)
         }
 
         fun deleteCurrency(currency: Currency) {
-            viewModelScope.launch {
-                db.dao.deleteCurrency(currency)
-            }
+            db.dao.deleteCurrency(currency)
         }
 
         fun getAllCurrency(): List<Currency> {

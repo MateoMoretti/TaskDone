@@ -1,32 +1,28 @@
 package mis.finanzas.diarias.activities
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.annotation.RequiresApi
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import com.example.taskdone.R
-import androidx.navigation.fragment.NavHostFragment
-import mis.finanzas.diarias.Ads
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.core.content.ContextCompat
-import android.graphics.PorterDuff
-import android.content.DialogInterface
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.taskdone.R
 import com.example.taskdone.databinding.ActivityFinanzasBinding
-import mis.finanzas.diarias.DataBase
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import mis.finanzas.diarias.Ads
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.viewmodels.UserViewModel
 
 class ActivityFinanzas : AppCompatActivity() {
-    private var mNavController: NavController? = null
-    //private var mDatabase: DataBase? = null
+    private lateinit var mNavController: NavController
     private lateinit var mBinding: ActivityFinanzasBinding
-    private val userViewModel: UserViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,17 +32,15 @@ class ActivityFinanzas : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
         mNavController = navHostFragment!!.navController
+
+        //setupActionBarWithNavController(mNavController)
+
         //Bottom bar
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         Ads.getInstance().cargarAnuncio(applicationContext)
 
-
-        //mDatabase = DataBase(userViewModel, applicationContext)
-        val loggedUser = Preferences.getPreferenceString(applicationContext, "usuario")
-        val password = Preferences.getPreferenceString(applicationContext, "password")
-        //logIn(loggedUser, password)
 
         val pesos = navView.menu.findItem(R.id.nvg_principal)
         val stats = navView.menu.findItem(R.id.nvg_stats)
@@ -116,23 +110,17 @@ class ActivityFinanzas : AppCompatActivity() {
         } else super.onOptionsItemSelected(item)
     }
 
-    private fun popupCerrarSesion() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.salir))
-        builder.setMessage(resources.getString(R.string.quieres_cerrar_sesion))
-        val c = DialogInterface.OnClickListener { dialogInterface: DialogInterface?, i: Int ->
-            Preferences.deleteFiltros(
-                applicationContext
-            )
-            Preferences.deleteUser(applicationContext)
-            Preferences.deletePreferencesGastoPendiente(applicationContext)
-            Preferences.deletePreferencesEdicionGasto(applicationContext)
-            finish()
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        onSupportNavigateUp()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return if(mNavController.navigateUp()){
+            true
+        } else{
+            super.onBackPressed()
+            false
         }
-        builder.setPositiveButton(resources.getString(R.string.si), c)
-        builder.setNegativeButton(resources.getString(R.string.no), null)
-        builder.setCancelable(true)
-        val dialog = builder.create()
-        dialog.show()
     }
 }

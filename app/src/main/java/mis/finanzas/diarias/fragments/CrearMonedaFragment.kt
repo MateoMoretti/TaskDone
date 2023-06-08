@@ -1,20 +1,16 @@
 package mis.finanzas.diarias.fragments
 
-import androidx.navigation.NavController
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
 import android.text.TextWatcher
 import android.text.Editable
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
-import com.example.taskdone.R
-import mis.finanzas.diarias.viewmodels.UserViewModel
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.taskdone.R
 import com.example.taskdone.databinding.FragmentCrearMonedaBinding
-import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.model.Currency
 import mis.finanzas.diarias.viewmodels.CurrencyViewModel
 import mis.finanzas.diarias.viewmodels.CurrencyViewmodelFactory
@@ -22,26 +18,19 @@ import java.util.*
 
 class CrearMonedaFragment : Fragment() {
     private var binding: FragmentCrearMonedaBinding? = null
-    private var navController: NavController? = null
-    private val userViewModel: UserViewModel by viewModels()
-    private val currencyViewModel: CurrencyViewModel by viewModels{CurrencyViewmodelFactory(context!!)}
+    private val currencyViewModel: CurrencyViewModel by viewModels{CurrencyViewmodelFactory(requireContext())}
 
-    //var database: DataBase? = null
     var monedas = ArrayList<String>()
     var cantidades = ArrayList<Float>()
     var simbolos = ArrayList<String>()
-    var fragment_anterior: String? = null
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentCrearMonedaBinding.inflate(inflater, container, false)
-        navController = NavHostFragment.findNavController(this)
-        //database = DataBase(userViewModel, requireContext())
-        fragment_anterior =
-            Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")
+
         binding!!.editCantidad.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -50,14 +39,7 @@ class CrearMonedaFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
-        binding!!.volver.setOnClickListener { v: View? ->
-            navController!!.navigate(
-                Preferences.getPreferenceString(
-                    requireContext(),
-                    "id_fragment_anterior"
-                ).toInt()
-            )
-        }
+        binding!!.volver.setOnClickListener { v: View? ->findNavController().navigate(R.id.action_crearMonedaFragment_to_principalFragment) }
         binding!!.buttonCrear.setOnClickListener { v: View? -> createNewCurrency() }
         //cargarMonedas()
         return binding!!.root
@@ -68,6 +50,7 @@ class CrearMonedaFragment : Fragment() {
             binding!!.editCantidad.text.toString(),
             binding!!.editSimbolo.text.toString())
         currencyViewModel.addCurrency(c)
+        findNavController().navigate(R.id.action_crearMonedaFragment_to_principalFragment)
     }
 
     private fun verificarCantidad(e: EditText) {

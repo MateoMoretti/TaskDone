@@ -2,68 +2,56 @@ package mis.finanzas.diarias.fragments
 
 import androidx.annotation.RequiresApi
 import android.os.Build
-import androidx.navigation.NavController
-import mis.finanzas.diarias.DataBase
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
-import mis.finanzas.diarias.viewmodels.UserViewModel
 import com.example.taskdone.R
 import android.view.Gravity
 import android.text.TextWatcher
 import android.text.Editable
 import mis.finanzas.diarias.DatePickerFragment
-import android.content.DialogInterface
-import kotlin.Throws
-import android.content.Intent
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
+import mis.finanzas.diarias.viewmodels.CurrencyViewModel
+import mis.finanzas.diarias.viewmodels.CurrencyViewmodelFactory
 import java.lang.StringBuilder
 import java.text.ParseException
 import java.util.*
+import kotlin.collections.ArrayList
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class PrincipalFragment : Fragment() {
-    private var binding: FragmentFinanzasPrincipalBinding? = null
-    var navController: NavController? = null
-    //var dataBase: DataBase? = null
-    private val userViewModel: UserViewModel by viewModels()
+    private lateinit var binding: FragmentFinanzasPrincipalBinding
+    private val currencyViewModel: CurrencyViewModel by viewModels{ CurrencyViewmodelFactory(requireContext()) }
 
     var tags: ArrayList<String>? = null
-    var monedas = ArrayList<String>()
-    var cantidades = ArrayList<Float>()
-    var simbolos = ArrayList<String>()
+    lateinit var monedas: List<String>
+    lateinit var cantidades: List<Float>
+    lateinit var simbolos: List<String>
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
-        navController = NavHostFragment.findNavController(this)
-        //dataBase = DataBase(userViewModel, requireContext())
 
         //Obtengo las monedas del usuario con sus cantidades y simbolos
-       //val data = dataBase!!.getMonedasByUserId(userViewModel.getId())
-       /* while (data.moveToNext()) {
-            monedas.add(data.getString(1))
-            cantidades.add(data.getFloat(2))
-            simbolos.add(data.getString(3))
-        }*/
-        if (monedas.isEmpty()) {
-            navController!!.navigate(R.id.crearMonedaFragment)
-        } else {
-            llenarLayoutMonedas()
-        }
+       val data = currencyViewModel.getAllCurrency()
+
+        monedas = data.map { it.nombre }
+        cantidades = data.map { it.cantidad.toFloat() }
+        simbolos = data.map { it.simbolo }
+
+        llenarLayoutMonedas()
+
         val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             requireActivity(),
             android.R.layout.simple_spinner_dropdown_item,
@@ -82,24 +70,7 @@ class PrincipalFragment : Fragment() {
         binding!!.spinnerMoneda.background =
             resources.getDrawable(R.drawable.fondo_blanco_redondeado)
         binding!!.spinnerMoneda.gravity = Gravity.CENTER
-        binding!!.spinnerMoneda.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    adapterView: AdapterView<*>?,
-                    view: View,
-                    i: Int,
-                    l: Long
-                ) {
-                    Preferences.savePreferenceString(
-                        requireContext(), Integer.toString(
-                            binding!!.spinnerMoneda.selectedItemPosition
-                        ), "gasto_moneda_index"
-                    )
-                }
-
-                override fun onNothingSelected(adapterView: AdapterView<*>?) {}
-            }
-        binding!!.agregarTag.setOnClickListener { v: View? -> irATags() }
+        binding!!.agregarTag.setOnClickListener { v: View? -> findNavController().navigate(R.id.action_principalFragment_to_tagsFragment) }
         //dataBase = DataBase(userViewModel, requireContext())
         binding!!.ok.setOnClickListener { v: View? ->
             try {
@@ -115,7 +86,7 @@ class PrincipalFragment : Fragment() {
             }
         }
         binding!!.editFecha.setOnClickListener { v: View? -> showDatePickerDialog() }
-        binding!!.agregarMoneda.setOnClickListener { v: View? -> irACrearMoneda() }
+        binding!!.agregarMoneda.setOnClickListener { v: View? -> findNavController().navigate(R.id.action_principalFragment_to_crearMonedaFragment) }
         binding!!.editCantidad.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -167,23 +138,6 @@ class PrincipalFragment : Fragment() {
         }
     }
 
-    private fun irACrearMoneda() {
-        Preferences.savePreferenceString(
-            requireContext(),
-            "" + R.id.principalFragment,
-            "id_fragment_anterior"
-        )
-        navController!!.navigate(R.id.crearMonedaFragment)
-    }
-
-    fun irATags() {
-        Preferences.savePreferenceString(
-            requireContext(),
-            "" + R.id.principalFragment,
-            "id_fragment_anterior"
-        )
-        navController!!.navigate(R.id.action_principalFragment_to_tagsFragment)
-    }
 
     fun cargarGastoPendiente() {
         val fecha = Preferences.getPreferenceString(requireContext(), "gasto_fecha")
@@ -313,8 +267,8 @@ class PrincipalFragment : Fragment() {
         binding!!.checkIngreso.isChecked = false
         binding!!.txtTagSeleccionados.text = resources.getString(R.string.sin_seleccionados)
         tags!!.clear()
-        monedas.clear()
-        cantidades.clear()
+        monedas = listOf()
+        cantidades = listOf()
         //val data = dataBase!!.getMonedasByUserId(userViewModel.getId())
         /*while (data.moveToNext()) {
             monedas.add(data.getString(1))

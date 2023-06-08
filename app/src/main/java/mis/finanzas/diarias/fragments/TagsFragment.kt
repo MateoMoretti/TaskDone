@@ -16,6 +16,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentTagsBinding
 import mis.finanzas.diarias.components.ItemTag
 import mis.finanzas.diarias.components.ListaTagsAdapter
@@ -25,7 +26,6 @@ import java.util.*
 
 class TagsFragment : Fragment() {
     private var binding: FragmentTagsBinding? = null
-    var navController: NavController? = null
     var database: DataBase? = null
     private val userViewModel: UserViewModel by viewModels()
     var tags_actual = ArrayList<String>()
@@ -36,7 +36,6 @@ class TagsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTagsBinding.inflate(inflater, container, false)
-        navController = NavHostFragment.findNavController(this)
         if (Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")
                 .toInt() == R.id.principalFragment
         ) {
@@ -119,7 +118,7 @@ class TagsFragment : Fragment() {
             ) {
                 Preferences.savePreferenceString(requireContext(), "", "edicion_gasto_tags")
             }
-            navController!!.navigate(R.id.tagsFragment)
+            findNavController().navigate(R.id.tagsFragment)
         } else {
             Toast.makeText(
                 requireContext(),
@@ -171,7 +170,7 @@ class TagsFragment : Fragment() {
             }
         }
         bundle.putBoolean("scroll_tags", true)
-        navController!!.navigate(
+        findNavController().navigate(
             Preferences.getPreferenceString(
                 requireContext(),
                 "id_fragment_anterior"
