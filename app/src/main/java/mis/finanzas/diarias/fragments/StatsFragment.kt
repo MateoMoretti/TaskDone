@@ -20,8 +20,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding
 import mis.finanzas.diarias.*
 import mis.finanzas.diarias.activities.ActivityFinanzas
-import mis.finanzas.diarias.viewmodels.UserViewModel
 import mis.finanzas.diarias.model.Record
+import mis.finanzas.diarias.viewmodels.DatabaseViewModel
+import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -29,7 +30,7 @@ import java.util.*
 
 class StatsFragment : Fragment() {
     private var binding: FragmentFinanzasStatsBinding? = null
-    private val userViewModel: UserViewModel by viewModels()
+    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     var all_gastos = ArrayList<Record>()
     var monedas = ArrayList<String>()
     var simbolos = ArrayList<String>()

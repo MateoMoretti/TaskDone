@@ -1,48 +1,0 @@
-
-Skotlin:S1172M"4Use "_" instead of this unused lambda parameter "v".(óµ¡8™›ÁÊ‰1
-Skotlin:S1172S"4Use "_" instead of this unused lambda parameter "v".(ÏæİÑ8š›ÁÊ‰1
-Xkotlin:S1172Y"4Use "_" instead of this unused lambda parameter "v".(‚ÁÊ‹üÿÿÿÿ8š›ÁÊ‰1
-Xkotlin:S1172_"4Use "_" instead of this unused lambda parameter "v".(¸Å½Ëşÿÿÿÿ8š›ÁÊ‰1
-Xkotlin:S1172e"4Use "_" instead of this unused lambda parameter "v".(î¹²ñıÿÿÿÿ8››ÁÊ‰1
-Xkotlin:S1172k"4Use "_" instead of this unused lambda parameter "v".(éì³øÿÿÿÿ8››ÁÊ‰1
-Ykotlin:S1172¾"4Use "_" instead of this unused lambda parameter "v".(ÓîÒÌıÿÿÿÿ8››ÁÊ‰1
-Tkotlin:S1172Ù"4Use "_" instead of this unused lambda parameter "v".(éõÄş8œ›ÁÊ‰1
-akotlin:S1172 "AUse "_" instead of this unused lambda parameter "compoundButton".(Æ²ú¥8œ›ÁÊ‰1
-Tkotlin:S1172Í"4Use "_" instead of this unused lambda parameter "v".(¤êÑ–8œ›ÁÊ‰1
-Skotlin:S1172Î"4Use "_" instead of this unused lambda parameter "v".(Şÿò<8œ›ÁÊ‰1
-Tkotlin:S1172ò"4Use "_" instead of this unused lambda parameter "v".(ÙÁ˜8›ÁÊ‰1
-Ykotlin:S1172ó"4Use "_" instead of this unused lambda parameter "v".(™ŒŠ®ıÿÿÿÿ8›ÁÊ‰1
-Tkotlin:S1172ø"4Use "_" instead of this unused lambda parameter "v".(è€ß‡8›ÁÊ‰1
-Wkotlin:S1172…"2Use "_" instead of these unused lambda parameters.(ÎÏ‹ƒùÿÿÿÿ8›ÁÊ‰1
-bkotlin:S1172Ô"=Use "_" instead of this unused lambda parameter "datePicker".(êÈæ¦úÿÿÿÿ8›ÁÊ‰1
-bkotlin:S1172—"=Use "_" instead of this unused lambda parameter "datePicker".(êÈæ¦úÿÿÿÿ8Ÿ›ÁÊ‰1
-Ckotlin:S1874°"#Deprecated code should not be used.(¤í‰ò8µ›ÁÊ‰1
-Ckotlin:S1874³"#Deprecated code should not be used.(¤í‰ò8µ›ÁÊ‰1
-Ckotlin:S1874¶"#Deprecated code should not be used.(¤í‰ò8µ›ÁÊ‰1
-Ckotlin:S1874µ"#Deprecated code should not be used.(Á‡ÿÆ8¶›ÁÊ‰1
-vkotlin:S3776z"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(²ìî”şÿÿÿÿ8¸›ÁÊ‰1
-wkotlin:S3776Ç"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(èƒõÑøÿÿÿÿ8¹›ÁÊ‰1
-qkotlin:S117z"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(²ìî”şÿÿÿÿ8»›ÁÊ‰1
-qkotlin:S117z"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(²ìî”şÿÿÿÿ8¼›ÁÊ‰1
-rkotlin:S117•"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(öµÄ·úÿÿÿÿ8¼›ÁÊ‰1
-rkotlin:S117•"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(öµÄ·úÿÿÿÿ8¼›ÁÊ‰1
-qkotlin:S1175"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(†·©Ğ8¼›ÁÊ‰1
-vkotlin:S1177"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ùôûØúÿÿÿÿ8¼›ÁÊ‰1
-rkotlin:S117"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(–¿Øâ8½›ÁÊ‰1
-wkotlin:S117¦"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ëã¼²øÿÿÿÿ8½›ÁÊ‰1
-rkotlin:S117Â"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(òü¾8½›ÁÊ‰1
-wkotlin:S117Ò"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ä–¡¤üÿÿÿÿ8¾›ÁÊ‰1
-wkotlin:S117Ó"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(òÇµÌÿÿÿÿÿ8¾›ÁÊ‰1
-wkotlin:S117å"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(İ‘¦Êÿÿÿÿÿ8¾›ÁÊ‰1
-wkotlin:S117û"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ìûº—ÿÿÿÿÿ8¿›ÁÊ‰1
-pkotlin:S117ü"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(¢ıãıÿÿÿÿ
-rkotlin:S117€"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ù½¸ğ8¿›ÁÊ‰1
-rkotlin:S117"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(áÔ î8¿›ÁÊ‰1
-rkotlin:S117Ñ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ã²–Ñ8¿›ÁÊ‰1
-qkotlin:S117Ó"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(É¼ñ;8À›ÁÊ‰1
-zkotlin:S1186ë"ZAdd a nested comment explaining why this function is empty or complete the implementation.(…±Ò8Ì›ÁÊ‰1
-zkotlin:S1186ô"ZAdd a nested comment explaining why this function is empty or complete the implementation.(°¹äû8Ì›ÁÊ‰1
-zkotlin:S1186‡"ZAdd a nested comment explaining why this function is empty or complete the implementation.(…±Ò8Ì›ÁÊ‰1
-zkotlin:S1186‘"ZAdd a nested comment explaining why this function is empty or complete the implementation.(°¹äû8Í›ÁÊ‰1
-kotlin:S1186À"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÔÑ…ÿÿÿÿÿ8Í›ÁÊ‰1
-Nkotlin:S1066è".Merge this "if" statement with the nested one.(úÜñ8Î›ÁÊ‰1

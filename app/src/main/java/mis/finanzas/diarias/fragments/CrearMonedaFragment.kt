@@ -12,13 +12,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.taskdone.R
 import com.example.taskdone.databinding.FragmentCrearMonedaBinding
 import mis.finanzas.diarias.model.Currency
-import mis.finanzas.diarias.viewmodels.CurrencyViewModel
-import mis.finanzas.diarias.viewmodels.CurrencyViewmodelFactory
+import mis.finanzas.diarias.viewmodels.DatabaseViewModel
+import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.util.*
 
 class CrearMonedaFragment : Fragment() {
     private var binding: FragmentCrearMonedaBinding? = null
-    private val currencyViewModel: CurrencyViewModel by viewModels{CurrencyViewmodelFactory(requireContext())}
+    private val databaseViewModel: DatabaseViewModel by viewModels{DatabaseViewmodelFactory(requireContext())}
 
     var monedas = ArrayList<String>()
     var cantidades = ArrayList<Float>()
@@ -49,7 +49,7 @@ class CrearMonedaFragment : Fragment() {
         val c = Currency(binding!!.editMoneda.text.toString(),
             binding!!.editCantidad.text.toString(),
             binding!!.editSimbolo.text.toString())
-        currencyViewModel.addCurrency(c)
+        databaseViewModel.addCurrency(c)
         findNavController().navigate(R.id.action_crearMonedaFragment_to_principalFragment)
     }
 

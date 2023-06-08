@@ -18,13 +18,13 @@ import mis.finanzas.diarias.components.ListaTagsAdapter
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.model.Tag
-import mis.finanzas.diarias.viewmodels.TagViewModel
-import mis.finanzas.diarias.viewmodels.TagViewmodelFactory
+import mis.finanzas.diarias.viewmodels.DatabaseViewModel
+import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.util.*
 
 class TagsFragment : Fragment() {
     private lateinit var binding: FragmentTagsBinding
-    private val tagViewModel: TagViewModel by viewModels { TagViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
 
     var tags_actual = ArrayList<String>()
     var adapter_tags: ListaTagsAdapter? = null
@@ -127,7 +127,7 @@ class TagsFragment : Fragment() {
     }*/
 
     private fun cargarTags() {
-        val listTags = tagViewModel.getAllTags()
+        val listTags = databaseViewModel.getAllTags()
         for (tag in listTags) {
 
         }
@@ -258,7 +258,7 @@ class TagsFragment : Fragment() {
 
     private fun crearTag(tag: String) {
         val tag = Tag(tag)
-        tagViewModel.addTag(tag)
+        databaseViewModel.addTag(tag)
         cargarTags()
 
 

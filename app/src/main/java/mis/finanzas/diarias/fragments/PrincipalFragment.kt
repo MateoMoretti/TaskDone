@@ -19,8 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
-import mis.finanzas.diarias.viewmodels.CurrencyViewModel
-import mis.finanzas.diarias.viewmodels.CurrencyViewmodelFactory
+import mis.finanzas.diarias.viewmodels.DatabaseViewModel
+import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.lang.StringBuilder
 import java.text.ParseException
 import java.util.*
@@ -29,7 +29,7 @@ import kotlin.collections.ArrayList
 @RequiresApi(api = Build.VERSION_CODES.O)
 class PrincipalFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasPrincipalBinding
-    private val currencyViewModel: CurrencyViewModel by viewModels{ CurrencyViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseViewModel by viewModels{DatabaseViewmodelFactory(requireContext())}
 
     var tags: ArrayList<String>? = null
     lateinit var monedas: List<String>
@@ -44,7 +44,7 @@ class PrincipalFragment : Fragment() {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
 
         //Obtengo las monedas del usuario con sus cantidades y simbolos
-       val data = currencyViewModel.getAllCurrency()
+       val data = databaseViewModel.getAllCurrency()
 
         monedas = data.map { it.nombre }
         cantidades = data.map { it.cantidad.toFloat() }

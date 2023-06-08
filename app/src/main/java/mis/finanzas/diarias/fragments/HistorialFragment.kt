@@ -1,40 +1,32 @@
 package mis.finanzas.diarias.fragments
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taskdone.R
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding
-import mis.finanzas.diarias.DataBase
 import mis.finanzas.diarias.DatePickerFragment
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
-import mis.finanzas.diarias.model.CompleteRecord
+import mis.finanzas.diarias.viewmodels.DatabaseViewModel
+import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import mis.finanzas.diarias.viewmodels.RecordViewModel
 import mis.finanzas.diarias.viewmodels.RecordViewmodelFactory
-import mis.finanzas.diarias.viewmodels.UserViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class HistorialFragment : Fragment() {
     private var binding: FragmentFinanzasHistorialBinding? = null
-    private var dataBase: DataBase? = null
-    private val userViewModel: UserViewModel by viewModels()
-    private val recordViewModel: RecordViewModel by viewModels { RecordViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
 
     var selected_date_desde: String? = null
     var selected_date_hasta: String? = null
@@ -118,13 +110,13 @@ class HistorialFragment : Fragment() {
         return binding!!.root
     }
 
-    @SuppressLint("SetTextI18n")
+    /*@SuppressLint("SetTextI18n")
     private fun cargarHistorial(desde_date: Date, hasta_date: Date) {
         cleanHistorial()
-        /*val data = dataBase!!.getGastosBySessionUser(
+        *//*val data = dataBase!!.getGastosBySessionUser(
             Utils.dateToString(desde_date),
             Utils.dateToString(hasta_date)
-        )*/
+        )*//*
         val data = recordViewModel.getRecords(desde_date, hasta_date)
         val data_items = ArrayList<CompleteRecord>()
         val fechas = ArrayList<String>()
@@ -193,9 +185,9 @@ class HistorialFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    /*@SuppressLint("UseCompatLoadingForDrawables")
     private fun irAEditarGasto(item: CompleteRecord) {
         val inflater = requireActivity().layoutInflater
         @SuppressLint("InflateParams") val view =
@@ -380,9 +372,9 @@ class HistorialFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-    }
+    }*/
 
-    private fun popupBorrarGasto(view: View) {
+    /*private fun popupBorrarGasto(view: View) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(resources.getString(R.string.eliminar))
         builder.setMessage(resources.getString(R.string.estas_seguro))
@@ -394,9 +386,9 @@ class HistorialFragment : Fragment() {
         builder.setCancelable(true)
         val dialog = builder.create()
         dialog.show()
-    }
+    }*/
 
-    private fun borrarGasto(view: View) {
+    /*private fun borrarGasto(view: View) {
         val result = dataBase!!.deleteGastoById(
             Preferences.getPreferenceString(
                 requireContext(),
@@ -422,11 +414,11 @@ class HistorialFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
+    }*/
 
     @Throws(ParseException::class)
     private fun guardarYCerrarEdicion(view: View) {
-        editarGasto(view)
+       // editarGasto(view)
         tags.clear()
         Preferences.deletePreferencesEdicionGasto(requireContext())
         findNavController().navigate(R.id.historialFragment)
@@ -574,7 +566,7 @@ class HistorialFragment : Fragment() {
         return if (n <= 9) "0$n" else n.toString()
     }
 
-    @Throws(ParseException::class)
+    /*@Throws(ParseException::class)
     fun editarGasto(view: View) {
         if (Utils.fechaMayorQueHoy((view.findViewById<View>(R.id.edit_fecha) as TextView).text.toString())) {
             Toast.makeText(requireContext(), R.string.error_fecha_futura, Toast.LENGTH_SHORT).show()
@@ -613,5 +605,5 @@ class HistorialFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 }

@@ -1,17 +1,12 @@
 package mis.finanzas.diarias.fragments
 
-import androidx.navigation.NavController
-import mis.finanzas.diarias.DataBase
 import android.annotation.SuppressLint
-import android.graphics.Color
 import androidx.annotation.RequiresApi
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
 import mis.finanzas.diarias.Ads
-import mis.finanzas.diarias.viewmodels.UserViewModel
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.taskdone.R
@@ -20,27 +15,16 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentStatsAvanzadosBinding
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieData
-import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.activities.ActivityFinanzas
+import mis.finanzas.diarias.viewmodels.DatabaseViewModel
+import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.util.*
 
 class StatsAvanzadosFragment : Fragment() {
     private var binding: FragmentStatsAvanzadosBinding? = null
-    private val userViewModel: UserViewModel by viewModels()
+    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     var monedas = ArrayList<String>()
     var cantidades = ArrayList<Float>()
     var simbolos = ArrayList<String>()

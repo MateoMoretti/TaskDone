@@ -1,63 +1,0 @@
-
-rkotlin:S1192"NDefine a constant instead of duplicating this literal "CREATE TABLE " 6 times.(§ç£äúÿÿÿÿ8¢Äˆ1
-kotlin:S1192"iDefine a constant instead of duplicating this literal " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " 6 times.(§ç£äúÿÿÿÿ8¢Äˆ1
-lkotlin:S1192"HDefine a constant instead of duplicating this literal " TEXT, " 6 times.(§ç£äúÿÿÿÿ8¢Äˆ1
-jkotlin:S1192"KDefine a constant instead of duplicating this literal " INTEGER, " 7 times.(‡Ùùš8’‰Äˆ1
-skotlin:S1192"ODefine a constant instead of duplicating this literal " FOREIGN KEY (" 6 times.(ùÆ¡Ïøÿÿÿÿ8¢Äˆ1
-rkotlin:S1192"NDefine a constant instead of duplicating this literal ") REFERENCES " 7 times.(ùÆ¡Ïøÿÿÿÿ8¢Äˆ1
-nkotlin:S11925"ODefine a constant instead of duplicating this literal "SELECT * FROM " 7 times.(ˆË«ª8¢Äˆ1
-gkotlin:S11925"HDefine a constant instead of duplicating this literal " WHERE " 6 times.(ˆË«ª8¢Äˆ1
-lkotlin:S1192"GDefine a constant instead of duplicating this literal " FROM " 7 times.(ì·™ÿüÿÿÿÿ8Â¾¡Äˆ1
-wkotlin:S1192"RDefine a constant instead of duplicating this literal " AS g INNER JOIN " 7 times.(ì·™ÿüÿÿÿÿ8“‰Äˆ1
-mkotlin:S1192"HDefine a constant instead of duplicating this literal " AS mc " 4 times.(ì·™ÿüÿÿÿÿ8“‰Äˆ1
-gkotlin:S1192‘"GDefine a constant instead of duplicating this literal " = mc." 7 times.(©®ïˆ8“‰Äˆ1
-ikotlin:S1192‘"IDefine a constant instead of duplicating this literal " AND mc." 4 times.(©®ïˆ8“‰Äˆ1
-skotlin:S1192’"NDefine a constant instead of duplicating this literal " INNER JOIN " 10 times.(Õ»Õûÿÿÿÿ8”‰Äˆ1
-lkotlin:S1192’"GDefine a constant instead of duplicating this literal " AS u " 3 times.(Õ»Õûÿÿÿÿ8’¢Äˆ1
-mkotlin:S1192“"HDefine a constant instead of duplicating this literal " AND u." 6 times.(¸–¡¿øÿÿÿÿ8’¢Äˆ1
-mkotlin:S1192"HDefine a constant instead of duplicating this literal " AND g." 3 times.(İÈ…‰øÿÿÿÿ8“¢Äˆ1
-pkotlin:S1192"KDefine a constant instead of duplicating this literal " BETWEEN '" 3 times.(İÈ…‰øÿÿÿÿ8“¢Äˆ1
-mkotlin:S1192"HDefine a constant instead of duplicating this literal "' AND '" 3 times.(İÈ…‰øÿÿÿÿ8“¢Äˆ1
-skotlin:S1192©"NDefine a constant instead of duplicating this literal "SELECT SUM(g." 3 times.(Ñ×ì‹ùÿÿÿÿ8“¢Äˆ1
-gkotlin:S1192«"GDefine a constant instead of duplicating this literal " ON u." 3 times.(ê’Ş8Æ€Äˆ1
-ikotlin:S1192«"IDefine a constant instead of duplicating this literal "' AND g." 4 times.(ê’Ş8•‰Äˆ1
-tkotlin:S1192¬"ODefine a constant instead of duplicating this literal " AND substr(g." 3 times.(ÈÙ¾óûÿÿÿÿ8•‰Äˆ1
-qkotlin:S1192¬"LDefine a constant instead of duplicating this literal ", 0, 5) = '" 3 times.(ÈÙ¾óûÿÿÿÿ8”¢Äˆ1
-lkotlin:S1192­"GDefine a constant instead of duplicating this literal " AS mc" 3 times.(ªŠæªûÿÿÿÿ8ÒèŒÄˆ1
-fkotlin:S1192®"GDefine a constant instead of duplicating this literal " ON g." 3 times.(‹°c8•¢Äˆ1
-lkotlin:S1192Ñ"GDefine a constant instead of duplicating this literal " = tg." 4 times.(›«Úƒøÿÿÿÿ8•¢Äˆ1
-qkotlin:S3776i"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(·“Ã8¢Äˆ1
-lkotlin:S117;"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ğ°¦Ø8§‰Äˆ1
-qkotlin:S117<"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(±†¶Ğúÿÿÿÿ8Ÿ¢Äˆ1
-lkotlin:S117l"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ğ°¦Ø8§‰Äˆ1
-qkotlin:S117m"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(±†¶Ğúÿÿÿÿ8 ¢Äˆ1
-rkotlin:S117ö"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(†ˆòçúÿÿÿÿ8 ¢Äˆ1
-mkotlin:S117¦"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ÿşÀ¶8 ¢Äˆ1
-mkotlin:S117¶"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ğ°¦Ø8 ¢Äˆ1
-mkotlin:S117Æ"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ğ°¦Ø8 ¢Äˆ1
-rkotlin:S117ù"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(¬¬úùÿÿÿÿ8¡¢Äˆ1
-mkotlin:S117‘"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‰×üÆ8¡¢Äˆ1
-rkotlin:S117¾"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ò¸†øÿÿÿÿ8¡¢Äˆ1
-rkotlin:S117¾"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ò¸†øÿÿÿÿ8¡¢Äˆ1
-mkotlin:S117Í"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(³Ñ¦•8¡¢Äˆ1
-rkotlin:S117‹"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(•¬ú…ûÿÿÿÿ8¢¢Äˆ1
-mkotlin:S117ª"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(°ıåç8¢¢Äˆ1
-qkotlin:S117A"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ÇûúË8¢¢Äˆ1
-vkotlin:S117D"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(¤³¨ùÿÿÿÿ8£¢Äˆ1
-qkotlin:S117\"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(•¾Ğ†8£¢Äˆ1
-qkotlin:S117r"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ÇûúË8£¢Äˆ1
-vkotlin:S117u"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(¤³¨ùÿÿÿÿ8¤¢Äˆ1
-qkotlin:S117{"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(®ÆÑâ8©‰Äˆ1
-vkotlin:S117|"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‹ú»üÿÿÿÿ8©‰Äˆ1
-qkotlin:S117}"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(êäÍÓ8©‰Äˆ1
-vkotlin:S117~"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ï”øÏûÿÿÿÿ8©‰Äˆ1
-vkotlin:S117"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ñáà¾ıÿÿÿÿ8¤¢Äˆ1
-wkotlin:S117…"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(õ°éêûÿÿÿÿ8ª‰Äˆ1
-wkotlin:S117†"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ÂÑğèúÿÿÿÿ8¥¢Äˆ1
-rkotlin:S117›"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(•¾Ğ†8¥¢Äˆ1
-rkotlin:S117Ğ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(•¾Ğ†8¥¢Äˆ1
-rkotlin:S117á"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(üàåõ8¥¢Äˆ1
-rkotlin:S117ê"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ê…õö8¥¢Äˆ1
-wkotlin:S117ø"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(¤³¨ùÿÿÿÿ8¦¢Äˆ1
-rkotlin:S117Á"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(•¾Ğ†8¦¢Äˆ1
-wkotlin:S117Ğ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(¤³¨ùÿÿÿÿ8¦¢Äˆ1
