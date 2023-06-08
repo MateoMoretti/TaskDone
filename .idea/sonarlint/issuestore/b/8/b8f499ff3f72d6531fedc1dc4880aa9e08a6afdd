@@ -1,0 +1,18 @@
+
+Rkotlin:S1172Š"4Use "_" instead of this unused lambda parameter "v".(¾şÚ´üÿÿÿÿ
+@kotlin:S1874r"#Deprecated code should not be used.(·£¬Üøÿÿÿÿ
+<kotlin:S1874²"#Deprecated code should not be used.(øœ£
+Akotlin:S1874í"#Deprecated code should not be used.(·ÿ™ùÿÿÿÿ
+jkotlin:S37767"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(©Àùè
+fkotlin:S117›"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ÿşÀ¶
+fkotlin:S117Ğ"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ºòîª
+kkotlin:S117"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ğØ¡¹
+kkotlin:S117Ÿ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ãõª
+kkotlin:S117¨"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(´ÔâÑ
+pkotlin:S117¬"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(„Ô£òÿÿÿÿÿ
+kkotlin:S117Ò"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(…ûûÔ
+kkotlin:S117Õ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(˜¶ùœ
+kkotlin:S117Ù"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(šŸ–¯
+xkotlin:S1186"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÔÑ…ÿÿÿÿÿ
+xkotlin:S1186×"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÔÑ…ÿÿÿÿÿ
+xkotlin:S1186†"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÔÑ…ÿÿÿÿÿ

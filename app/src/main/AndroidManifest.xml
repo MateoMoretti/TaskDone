@@ -15,7 +15,7 @@
             android:value="ca-app-pub-8001300265320389~8098987263"/>
 
         <activity
-            android:name="mis.finanzas.diarias.Acceso.ActivityLogin"
+            android:name="mis.finanzas.diarias.activities.ActivityFinanzas"
             android:theme="@style/AppTheme.Finanzas"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
@@ -24,12 +24,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="mis.finanzas.diarias.Finanzas.ActivityFinanzas"
-            android:label="Finanzas"
-            android:theme="@style/AppTheme.Finanzas"
-            android:windowSoftInputMode="adjustPan" >
         </activity>
         <meta-data
             android:name="preloaded_fonts"

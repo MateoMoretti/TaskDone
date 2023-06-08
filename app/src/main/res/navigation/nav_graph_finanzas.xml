@@ -6,7 +6,7 @@
     app:startDestination="@id/principalFragment">
     <fragment
         android:id="@+id/principalFragment"
-        android:name="mis.finanzas.diarias.Finanzas.PrincipalFragment"
+        android:name="mis.finanzas.diarias.fragments.PrincipalFragment"
         android:label="fragment_finanzas_principal"
         tools:layout="@layout/fragment_finanzas_principal" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/historialFragment"
-        android:name="mis.finanzas.diarias.Finanzas.HistorialFragment"
+        android:name="mis.finanzas.diarias.fragments.HistorialFragment"
         android:label="fragment_finanzas_historial"
         tools:layout="@layout/fragment_finanzas_historial" >
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/statsFragment"
-        android:name="mis.finanzas.diarias.Finanzas.StatsFragment"
+        android:name="mis.finanzas.diarias.fragments.StatsFragment"
         android:label="fragment_finanzas_statsl"
         tools:layout="@layout/fragment_finanzas_stats" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/tagsFragment"
-        android:name="mis.finanzas.diarias.Finanzas.TagsFragment"
+        android:name="mis.finanzas.diarias.fragments.TagsFragment"
         android:label="fragment_tags"
         tools:layout="@layout/fragment_tags" >
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/crearMonedaFragment"
-        android:name="mis.finanzas.diarias.Finanzas.CrearMonedaFragment"
+        android:name="mis.finanzas.diarias.fragments.CrearMonedaFragment"
         android:label="fragment_crear_moneda"
         tools:layout="@layout/fragment_crear_moneda" >
         <action
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/statsAvanzadosFragment"
-        android:name="mis.finanzas.diarias.Finanzas.StatsAvanzadosFragment"
+        android:name="mis.finanzas.diarias.fragments.StatsAvanzadosFragment"
         android:label="fragment_stats_avanzados"
         tools:layout="@layout/fragment_stats_avanzados" >
         <action
