@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity("Tag")
 data class Tag (
+    @ColumnInfo(name = "nombre") var nombre: String,
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") var id: Int = 0,
-    @ColumnInfo(name = "nombre") var nombre: String
+    @ColumnInfo(name = "id") var id: Int = 0
 )

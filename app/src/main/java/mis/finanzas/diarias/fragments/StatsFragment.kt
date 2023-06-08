@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding
 import mis.finanzas.diarias.*
+import mis.finanzas.diarias.activities.ActivityFinanzas
 import mis.finanzas.diarias.viewmodels.UserViewModel
 import mis.finanzas.diarias.model.Record
 import java.text.DecimalFormat
@@ -446,12 +447,9 @@ class StatsFragment : Fragment() {
 
     private fun aceptarPublicidadEIrAvanzados() {
         Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad")
-        Preferences.savePreferenceString(
-            requireContext(),
-            "" + R.id.statsFragment,
-            "id_fragment_anterior"
-        )
-        Ads.getInstance().show(requireActivity())
+        Ads.getInstance().show(activity)
+
+        (activity as ActivityFinanzas).updateFragment(R.id.statsAvanzadosFragment)
         findNavController().navigate(R.id.statsAvanzadosFragment)
     }
 }

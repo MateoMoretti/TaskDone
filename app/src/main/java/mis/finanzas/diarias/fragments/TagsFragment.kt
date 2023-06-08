@@ -1,12 +1,8 @@
 package mis.finanzas.diarias.fragments
 
-import androidx.navigation.NavController
-import mis.finanzas.diarias.DataBase
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
 import com.example.taskdone.R
 import android.widget.Toast
-import mis.finanzas.diarias.viewmodels.UserViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -18,25 +14,27 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentTagsBinding
-import mis.finanzas.diarias.components.ItemTag
 import mis.finanzas.diarias.components.ListaTagsAdapter
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
+import mis.finanzas.diarias.model.Tag
+import mis.finanzas.diarias.viewmodels.TagViewModel
+import mis.finanzas.diarias.viewmodels.TagViewmodelFactory
 import java.util.*
 
 class TagsFragment : Fragment() {
-    private var binding: FragmentTagsBinding? = null
-    var database: DataBase? = null
-    private val userViewModel: UserViewModel by viewModels()
+    private lateinit var binding: FragmentTagsBinding
+    private val tagViewModel: TagViewModel by viewModels { TagViewmodelFactory(requireContext()) }
+
     var tags_actual = ArrayList<String>()
     var adapter_tags: ListaTagsAdapter? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentTagsBinding.inflate(inflater, container, false)
-        if (Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")
+        /*if (Preferences.getPreferenceString(requireContext(), "id_fragment_anterior")
                 .toInt() == R.id.principalFragment
         ) {
             val tags_concatenados = Preferences.getPreferenceString(requireContext(), "gasto_tags")
@@ -51,13 +49,13 @@ class TagsFragment : Fragment() {
             if (tagsConcatenados != "") {
                 tags_actual.addAll(Arrays.asList(*tagsConcatenados.split(", ").toTypedArray()))
             }
-        }
-        database = DataBase(userViewModel, requireContext())
+        }*/
+
         cargarTags()
         binding!!.volver.setOnClickListener { v: View? -> volverAPrincipal(false) }
 
         //Cambiar
-        binding!!.buttonEliminar.setOnClickListener { v: View? -> popupBorrarTags() }
+        //binding!!.buttonEliminar.setOnClickListener { v: View? -> popupBorrarTags() }
         binding!!.buttonCrearTag.setOnClickListener { v: View? -> popupCrearTag() }
         binding!!.buttonAceptar.setOnClickListener { v: View? -> volverAPrincipal(true) }
         binding!!.ayuda.setOnClickListener { v: View? ->
@@ -74,7 +72,7 @@ class TagsFragment : Fragment() {
         return binding!!.root
     }
 
-    private fun popupBorrarTags() {
+    /*private fun popupBorrarTags() {
         if (tags_actual.isEmpty()) {
             Toast.makeText(
                 requireContext(),
@@ -86,16 +84,16 @@ class TagsFragment : Fragment() {
             builder.setTitle(resources.getString(R.string.eliminar))
             builder.setMessage(resources.getString(R.string.estas_seguro_tags))
             val c =
-                DialogInterface.OnClickListener { dialogInterface: DialogInterface?, i: Int -> borrarTags() }
+                DialogInterface.OnClickListener { dialogInterface: DialogInterface?, i: Int -> deleteTag() }
             builder.setPositiveButton(resources.getString(R.string.si), c)
             builder.setNegativeButton(resources.getString(R.string.no), null)
             builder.setCancelable(true)
             val dialog = builder.create()
             dialog.show()
         }
-    }
+    }*/
 
-    private fun borrarTags() {
+    /*private fun borrarTags() {
         var resultado = true
         for (s in tags_actual) {
             val result = database!!.deleteTagsByNombre(s)
@@ -126,10 +124,14 @@ class TagsFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
+    }*/
 
     private fun cargarTags() {
-        val tags = database!!.getTagsByUserId(
+        val listTags = tagViewModel.getAllTags()
+        for (tag in listTags) {
+
+        }
+        /*val tags = database!!.getTagsByUserId(
             userViewModel.getId()
         ) //Reemplazar por getTagsByUsuarioId si permito más cuentas en un futuro
         val tags_nombre: MutableList<ItemTag> = ArrayList()
@@ -145,7 +147,7 @@ class TagsFragment : Fragment() {
             binding!!.txtSinTags.visibility = View.INVISIBLE
         }
         binding!!.recyclerTags.layoutManager = LinearLayoutManager(context)
-        binding!!.recyclerTags.adapter = adapter_tags
+        binding!!.recyclerTags.adapter = adapter_tags*/
     }
 
     private fun volverAPrincipal(aceptar: Boolean) {
@@ -190,7 +192,7 @@ class TagsFragment : Fragment() {
             .setPositiveButton(
                 resources.getString(R.string.aceptar)
             ) { dialog: DialogInterface?, which: Int ->
-                editarTag(
+                editTag(
                     tag_viejo,
                     editar_tag.text.toString()
                 )
@@ -205,7 +207,11 @@ class TagsFragment : Fragment() {
         dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
-    private fun editarTag(tag_viejo: String, tag_nuevo: String) {
+    private fun editTag(oldTag: String, newTag: String){
+        val tag = 2
+    }
+
+    /*private fun editarTag(tag_viejo: String, tag_nuevo: String) {
         if (tag_nuevo == "") {
             Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show()
         } else {
@@ -229,7 +235,7 @@ class TagsFragment : Fragment() {
                 cargarTags()
             }
         }
-    }
+    }*/
 
     @SuppressLint("RtlHardcoded")
     private fun popupCrearTag() {
@@ -251,7 +257,12 @@ class TagsFragment : Fragment() {
     }
 
     private fun crearTag(tag: String) {
-        if (tag == "") {
+        val tag = Tag(tag)
+        tagViewModel.addTag(tag)
+        cargarTags()
+
+
+        /*if (tag == "") {
             Toast.makeText(requireContext(), R.string.tag_vacio, Toast.LENGTH_SHORT).show()
         } else {
             val tag_existente = database!!.getTagByNombre(tag)
@@ -274,5 +285,6 @@ class TagsFragment : Fragment() {
                 cargarTags()
             }
         }
+    }*/
     }
 }

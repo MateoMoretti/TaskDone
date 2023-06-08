@@ -2,9 +2,7 @@ package mis.finanzas.diarias.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import kotlinx.coroutines.launch
 import mis.finanzas.diarias.database.CurrencyDatabase
 import mis.finanzas.diarias.model.Currency
 
