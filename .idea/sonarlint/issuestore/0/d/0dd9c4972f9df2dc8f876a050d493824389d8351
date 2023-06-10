@@ -1,11 +1,0 @@
-
-Xkotlin:S1172£"8Use "_" instead of this unused lambda parameter "which".(Á¯ûø8Š–ŠÍˆ1
-<kotlin:S1128"Remove redundant import.(ÈËšŸýÿÿÿÿ8–ŠÍˆ1
-4kotlin:S1128
-"Remove unused import.(ºà—8‚–¡Íˆ1
-Gkotlin:S1874%"#Deprecated code should not be used.(êÊ¿áúÿÿÿÿ8ó×˜Íˆ1
-wkotlin:S117•"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(øÓÈÆþÿÿÿÿ8’–ŠÍˆ1
-wkotlin:S117–"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(´êéëúÿÿÿÿ8’–ŠÍˆ1
-wkotlin:S117—"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ºúá¡ÿÿÿÿÿ8’–ŠÍˆ1
-rkotlin:S117˜"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(­øÉÌ8’–ŠÍˆ1
-rkotlin:S117™"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‹šÝ³8’–ŠÍˆ1

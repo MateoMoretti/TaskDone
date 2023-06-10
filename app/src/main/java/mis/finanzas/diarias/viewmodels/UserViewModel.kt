@@ -7,9 +7,6 @@ import androidx.lifecycle.ViewModel
 
 class UserViewModel : ViewModel() {
 
-    init {
-
-    }
     private val _id = MutableLiveData(0)
     val id: LiveData<Int> get() = _id
 

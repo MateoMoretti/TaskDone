@@ -14,48 +14,44 @@ import mis.finanzas.diarias.DatePickerFragment
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding
-import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
+import mis.finanzas.diarias.activities.ActivityFinanzas
+import mis.finanzas.diarias.model.Currency
+import mis.finanzas.diarias.model.Record
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
-import java.lang.StringBuilder
+import mis.finanzas.diarias.viewmodels.RecordViewModel
 import java.text.ParseException
 import java.util.*
-import kotlin.collections.ArrayList
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class PrincipalFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasPrincipalBinding
-    private val databaseViewModel: DatabaseViewModel by viewModels{DatabaseViewmodelFactory(requireContext())}
+    private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
+    private val recordViewModel: RecordViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
-    lateinit var monedas: List<String>
-    lateinit var cantidades: List<Float>
-    lateinit var simbolos: List<String>
+    lateinit var currencies:List<Currency>
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
+        currencies = databaseViewModel.getAllCurrency()
 
-        //Obtengo las monedas del usuario con sus cantidades y simbolos
-       val data = databaseViewModel.getAllCurrency()
-
-        monedas = data.map { it.nombre }
-        cantidades = data.map { it.cantidad.toFloat() }
-        simbolos = data.map { it.simbolo }
-
-        llenarLayoutMonedas()
+        if (currencies.map { it.nombre }.isEmpty()) {
+            findNavController().navigate(R.id.crearMonedaFragment)
+        }
 
         val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             requireActivity(),
             android.R.layout.simple_spinner_dropdown_item,
-            monedas as List<String?>
+            currencies.map { it.nombre } as List<String?>
         ) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -66,59 +62,50 @@ class PrincipalFragment : Fragment() {
             }
         }
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown)
-        binding!!.spinnerMoneda.adapter = spinnerArrayAdapter
-        binding!!.spinnerMoneda.background =
+        binding.spinnerMoneda.adapter = spinnerArrayAdapter
+        binding.spinnerMoneda.background =
             resources.getDrawable(R.drawable.fondo_blanco_redondeado)
-        binding!!.spinnerMoneda.gravity = Gravity.CENTER
-        binding!!.agregarTag.setOnClickListener { v: View? -> findNavController().navigate(R.id.action_principalFragment_to_tagsFragment) }
-        //dataBase = DataBase(userViewModel, requireContext())
-        binding!!.ok.setOnClickListener { v: View? ->
-            try {
-                //addData()
-            } catch (e: ParseException) {
-                e.printStackTrace()
+        binding.spinnerMoneda.gravity = Gravity.CENTER
+
+        binding.agregarTag.setOnClickListener {
+            run {
+            (activity as ActivityFinanzas).updateFragment(R.id.action_principalFragment_to_tagsFragment)
+            findNavController().navigate(R.id.action_principalFragment_to_tagsFragment)
             }
+        }
+
+        binding.ok.setOnClickListener {
+                addRecord()
         }
         tags = ArrayList()
-        if (arguments != null) {
-            if (requireArguments().getString("scroll_tags") != null) {
-                scrollToTag()
-            }
+        if (arguments != null && requireArguments().getString("scroll_tags") != null) {
+            scrollToTag()
         }
-        binding!!.editFecha.setOnClickListener { v: View? -> showDatePickerDialog() }
-        binding!!.agregarMoneda.setOnClickListener { v: View? -> findNavController().navigate(R.id.action_principalFragment_to_crearMonedaFragment) }
-        binding!!.editCantidad.addTextChangedListener(object : TextWatcher {
+        binding.editFecha.setOnClickListener { showDatePicker() }
+        binding.agregarMoneda.setOnClickListener { findNavController().navigate(R.id.action_principalFragment_to_crearMonedaFragment) }
+        binding.editCantidad.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                verificarCantidad()
-                Preferences.savePreferenceString(
-                    requireContext(),
-                    binding!!.editCantidad.text.toString(),
-                    "gasto_cantidad"
-                )
+                verificarCantidad(charSequence.toString())
+                recordViewModel.setAmount(
+                    charSequence.toString().let {
+                        if (it != "") it.toInt() else 0
+                    })
             }
-
-            override fun afterTextChanged(editable: Editable) {}
+            override fun afterTextChanged(editable: Editable) {//
+            }
         })
-        binding!!.editMotivo.addTextChangedListener(object : TextWatcher {
+        binding.editMotivo.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                Preferences.savePreferenceString(
-                    requireContext(),
-                    binding!!.editMotivo.text.toString(),
-                    "gasto_motivo"
-                )
+                recordViewModel.setReason(binding.editMotivo.text.toString())
             }
 
-            override fun afterTextChanged(editable: Editable) {}
+            override fun afterTextChanged(editable: Editable) {//
+            }
         })
-        binding!!.checkIngreso.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            guardarIngresoPendiente(
-                b
-            )
-        }
-        cargarGastoPendiente()
-        binding!!.ayuda.setOnClickListener { v: View? ->
+        //cargarGastoPendiente()
+        binding.ayuda.setOnClickListener {
             Utils.popupAyuda(
                 requireContext(), requireActivity(), ArrayList(
                     Arrays.asList(
@@ -128,154 +115,123 @@ class PrincipalFragment : Fragment() {
                 )
             )
         }
-        return binding!!.root
+        return binding.root
     }
 
-    fun guardarIngresoPendiente(b: Boolean) {
-        Preferences.savePreferenceString(requireContext(), "0", "gasto_ingreso")
-        if (b) {
-            Preferences.savePreferenceString(requireContext(), "1", "gasto_ingreso")
-        }
+    override fun onResume() {
+        super.onResume()
+        reloadData()
     }
 
+    private fun reloadData(){
+        llenarLayoutMonedas()
+        recordViewModel.let {
+            binding.editFecha.text = it.getDate()
+            binding.spinnerMoneda.setSelection(currencies.indexOf(recordViewModel.getCurrency()))
+            binding.editCantidad.setText(it.getAmount().toString())
+            binding.editMotivo.setText( it.getReason())
+            binding.txtTagSeleccionados.text = it.getTagsString(resources)
+            binding.checkIngreso.isChecked = it.getIncome()
 
-    fun cargarGastoPendiente() {
-        val fecha = Preferences.getPreferenceString(requireContext(), "gasto_fecha")
-        val moneda_index = Preferences.getPreferenceString(requireContext(), "gasto_moneda_index")
-        val cantidad = Preferences.getPreferenceString(requireContext(), "gasto_cantidad")
-        val motivo = Preferences.getPreferenceString(requireContext(), "gasto_motivo")
-        val ingreso = Preferences.getPreferenceString(requireContext(), "gasto_ingreso")
-        val tags_concatenados = Preferences.getPreferenceString(requireContext(), "gasto_tags")
-        binding!!.editFecha.text =
-            Utils.calendarToString(Calendar.getInstance())
-        if (fecha != "") {
-            binding!!.editFecha.text = fecha
         }
-        if (moneda_index != "") {
-            binding!!.spinnerMoneda.setSelection(moneda_index.toInt())
+
+        llenarLayoutMonedas()
+        binding.checkIngreso.setOnCheckedChangeListener { _: CompoundButton?, _: Boolean ->
+            recordViewModel.setIncome(!recordViewModel.getIncome())
         }
-        if (cantidad != "") {
-            binding!!.editCantidad.setText(cantidad)
-        }
-        if (motivo != "") {
-            binding!!.editMotivo.setText(motivo)
-        }
-        if (ingreso == "1") {
-            binding!!.checkIngreso.isChecked = true
-        }
-        val tags_seleccionados = StringBuilder()
-        if (tags_concatenados != "") {
-            tags!!.addAll(Arrays.asList(*tags_concatenados.split(", ").toTypedArray()))
-            tags_seleccionados.append(Utils.arrayListToString(tags!!))
-        } else {
-            tags_seleccionados.append(resources.getString(R.string.sin_seleccionados))
-        }
-        binding!!.txtTagSeleccionados.text = tags_seleccionados
+        binding.spinnerMoneda.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    adapterView: AdapterView<*>?,
+                    view: View?,
+                    i: Int,
+                    l: Long
+                ) {
+                    recordViewModel.setCurrency(currencies[binding.spinnerMoneda.selectedItemPosition])
+                }
+
+                override fun onNothingSelected(adapterView: AdapterView<*>?) {//
+                }
+            }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun llenarLayoutMonedas() {
-        while (binding!!.layoutMonedas.childCount != 0) {
-            binding!!.layoutMonedas.removeViewAt(0)
-        }
-        val inflater = requireActivity().layoutInflater
-        for (x in monedas.indices) {
-            @SuppressLint("InflateParams") val view =
-                inflater.inflate(R.layout.item_moneda_cantidad, null)
-            @SuppressLint("CutPasteId") val moneda = view.findViewById<TextView>(R.id.moneda)
-            @SuppressLint("CutPasteId") val cantidad = view.findViewById<TextView>(R.id.cantidad)
-            moneda.text = monedas[x]
-            cantidad.text =
-                simbolos[x] + " " + Utils.formatoCantidad(cantidades[x])
-            binding!!.layoutMonedas.addView(view)
-        }
-    }
 
     private fun scrollToTag() {
-        binding!!.scrollview.post { binding!!.scrollview.fullScroll(ScrollView.FOCUS_DOWN) }
+        binding.scrollview.post { binding.scrollview.fullScroll(ScrollView.FOCUS_DOWN) }
     }
 
-    private fun verificarCantidad() {
-        if (binding!!.editCantidad.text.toString() != "" && binding!!.editCantidad.text.toString() != "0") {
-            if (binding!!.editCantidad.text.toString().startsWith("0")) {
-                binding!!.editCantidad.setText(binding!!.editCantidad.text.toString().substring(1))
-                binding!!.editCantidad.setSelection(binding!!.editCantidad.length())
-            }
+    private fun verificarCantidad(charSequence: String) {
+        if (charSequence.length > 1 && charSequence.startsWith("0")) {
+            binding.editCantidad.setText(charSequence.substring(1))
+            binding.editCantidad.setSelection(binding.editCantidad.length())
         }
     }
 
-    private fun showDatePickerDialog() {
-        val newFragment =
-            DatePickerFragment.newInstance { datePicker: DatePicker?, year: Int, month: Int, day: Int ->
-                val selectedDate =
-                    year.toString() + "/" + Utils.twoDigits(month + 1) + "/" + Utils.twoDigits(day)
-                val h = Calendar.getInstance()
-                h[year, month] = day
-                h.add(Calendar.DAY_OF_YEAR, 1)
-                binding!!.editFecha.text = selectedDate
-                Preferences.savePreferenceString(
-                    requireContext(),
-                    binding!!.editFecha.text.toString(),
-                    "gasto_fecha"
-                )
-            }
-        newFragment.show(
+    @Throws(ParseException::class)
+    fun addRecord() {
+        // FECHA DEL FUTURO NO SE PERMITE
+        if (Utils.fechaMayorQueHoy(binding.editFecha.text.toString())) {
+            Toast.makeText(requireContext(), R.string.error_fecha_futura, Toast.LENGTH_SHORT).show()
+            return
+        }
+        if(recordViewModel.getAmount() == 0) {
+            Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val record = Record(recordViewModel.getDate(),
+                            recordViewModel.getAmount(),
+                            recordViewModel.getReason(),
+                            recordViewModel.getIncome(),
+                            recordViewModel.getCurrency().id)
+        databaseViewModel.addRecord(record)
+        Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT)
+                .show()
+
+        cleanAndUpdate()
+    }
+
+    private fun showDatePicker() {
+        DatePickerFragment.newInstance { _: DatePicker?, year: Int, month: Int, day: Int ->
+            val selectedDate =
+                year.toString() + "/" + Utils.twoDigits(month + 1) + "/" + Utils.twoDigits(day)
+            val h = Calendar.getInstance()
+            h[year, month] = day
+            h.add(Calendar.DAY_OF_YEAR, 1)
+            binding.editFecha.text = selectedDate
+            recordViewModel.setDate(selectedDate)
+        }.show(
             Objects.requireNonNull(requireActivity()).supportFragmentManager,
             "datePicker"
         )
     }
 
-    /*@Throws(ParseException::class)
-    fun addData() {
-        if (Utils.fechaMayorQueHoy(binding!!.editFecha.text.toString())) {
-            Toast.makeText(requireContext(), R.string.error_fecha_futura, Toast.LENGTH_SHORT).show()
-        } else {
-            if (binding!!.editCantidad.text.toString() == "" || binding!!.editCantidad.text.toString() == "0") {
-                Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                var ingreso = "0"
-                if (binding!!.checkIngreso.isChecked) {
-                    ingreso = "1"
-                }
-                val insertData = dataBase!!.addGastos(
-                    binding!!.editFecha.text.toString(),
-                    binding!!.spinnerMoneda.selectedItem.toString(),
-                    binding!!.editCantidad.text.toString().toFloat(),
-                    binding!!.editMotivo.text.toString(),
-                    tags!!,
-                    ingreso
-                )
-                if (insertData) {
-                    Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(requireContext(), R.string.error_guardado, Toast.LENGTH_SHORT)
-                        .show()
-                }
-                cleanAndUpdate()
-            }
+
+    @SuppressLint("SetTextI18n")
+    private fun llenarLayoutMonedas() {
+        while (binding.layoutMonedas.childCount != 0) {
+            binding.layoutMonedas.removeViewAt(0)
         }
-    }*/
+        val inflater = requireActivity().layoutInflater
+        for (x in currencies.map { it.nombre }.indices) {
+            @SuppressLint("InflateParams") val view =
+                inflater.inflate(R.layout.item_moneda_cantidad, null)
+            @SuppressLint("CutPasteId") val moneda = view.findViewById<TextView>(R.id.moneda)
+            @SuppressLint("CutPasteId") val cantidad = view.findViewById<TextView>(R.id.cantidad)
+            moneda.text = currencies.map { it.nombre }[x]
+            cantidad.text =
+                currencies.map { it.simbolo }[x] + " " + Utils.formatoCantidad(currencies.map { it.cantidad }[x])
+            binding.layoutMonedas.addView(view)
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     private fun cleanAndUpdate() {
-        Preferences.deletePreferencesGastoPendiente(requireContext())
-        binding!!.spinnerMoneda.setSelection(0)
-        binding!!.editCantidad.setText("0")
-        binding!!.editMotivo.setText("")
-        binding!!.checkIngreso.isChecked = false
-        binding!!.txtTagSeleccionados.text = resources.getString(R.string.sin_seleccionados)
-        tags!!.clear()
-        monedas = listOf()
-        cantidades = listOf()
-        //val data = dataBase!!.getMonedasByUserId(userViewModel.getId())
-        /*while (data.moveToNext()) {
-            monedas.add(data.getString(1))
-            cantidades.add(data.getFloat(2))
-            simbolos.add(data.getString(3))
-        }*/
-        llenarLayoutMonedas()
-        binding!!.scrollview.fullScroll(ScrollView.FOCUS_UP)
+        //binding.spinnerMoneda.setSelection(0)
+        recordViewModel.setAmount(0)
+        recordViewModel.setReason("")
+        recordViewModel.setIncome(false)
+        recordViewModel.setSelectedTags(arrayListOf())
+        reloadData()
+        binding.scrollview.fullScroll(ScrollView.FOCUS_UP)
     }
 }

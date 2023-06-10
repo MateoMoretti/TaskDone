@@ -12,7 +12,7 @@ interface RecordDao {
     @Delete
     fun deleteRecord(record:Record)
 
-    @Query("SELECT * FROM Gasto WHERE Gasto.fecha BETWEEN :desde AND :hasta ORDER BY Gasto.fecha DESC")
+    @Query("SELECT * FROM Record WHERE Record.date BETWEEN :desde AND :hasta ORDER BY Record.date DESC")
     fun getRecords(desde: Long, hasta: Long) : List<Record>
 
 }

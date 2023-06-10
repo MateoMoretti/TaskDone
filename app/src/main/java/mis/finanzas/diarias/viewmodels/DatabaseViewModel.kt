@@ -14,6 +14,7 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
 
     private val db by lazy {
         Room.databaseBuilder(
+
             context,
             MyDataBase::class.java,
             "DATABASE"

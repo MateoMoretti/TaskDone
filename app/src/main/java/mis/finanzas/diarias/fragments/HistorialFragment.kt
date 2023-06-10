@@ -18,8 +18,6 @@ import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
-import mis.finanzas.diarias.viewmodels.RecordViewModel
-import mis.finanzas.diarias.viewmodels.RecordViewmodelFactory
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -448,12 +446,6 @@ class HistorialFragment : Fragment() {
         findNavController().navigate(R.id.tagsFragment)
     }
 
-    fun guardarIngresoPendiente(b: Boolean) {
-        Preferences.savePreferenceString(requireContext(), "0", "edicion_gasto_ingreso")
-        if (b) {
-            Preferences.savePreferenceString(requireContext(), "1", "edicion_gasto_ingreso")
-        }
-    }
 
     private fun showDatePickerDialog(t: TextView) {
         val newFragment =

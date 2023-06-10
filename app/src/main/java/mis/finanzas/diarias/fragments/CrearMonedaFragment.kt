@@ -28,7 +28,7 @@ class CrearMonedaFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCrearMonedaBinding.inflate(inflater, container, false)
 
         binding!!.editCantidad.addTextChangedListener(object : TextWatcher {
@@ -39,15 +39,15 @@ class CrearMonedaFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
-        binding!!.volver.setOnClickListener { v: View? ->findNavController().navigate(R.id.action_crearMonedaFragment_to_principalFragment) }
-        binding!!.buttonCrear.setOnClickListener { v: View? -> createNewCurrency() }
+        binding!!.volver.setOnClickListener { findNavController().navigate(R.id.action_crearMonedaFragment_to_principalFragment) }
+        binding!!.buttonCrear.setOnClickListener { createNewCurrency() }
         //cargarMonedas()
         return binding!!.root
     }
 
     private fun createNewCurrency(){
         val c = Currency(binding!!.editMoneda.text.toString(),
-            binding!!.editCantidad.text.toString(),
+            binding!!.editCantidad.text.toString().toFloat(),
             binding!!.editSimbolo.text.toString())
         databaseViewModel.addCurrency(c)
         findNavController().navigate(R.id.action_crearMonedaFragment_to_principalFragment)

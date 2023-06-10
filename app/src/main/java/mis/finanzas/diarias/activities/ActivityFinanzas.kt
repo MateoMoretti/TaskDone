@@ -100,6 +100,8 @@ class ActivityFinanzas : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         when(fragment) {
             R.id.principalFragment -> super.onBackPressedDispatcher.onBackPressed()
+            R.id.tagsFragment -> fragment = R.id.principalFragment
+            R.id.crearMonedaFragment -> fragment = R.id.principalFragment
             R.id.historialFragment -> fragment = R.id.principalFragment
             R.id.statsFragment -> fragment = R.id.principalFragment
             R.id.statsAvanzadosFragment -> fragment = R.id.statsFragment
