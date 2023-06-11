@@ -7,7 +7,7 @@
     tools:context="mis.finanzas.diarias.fragments.TagsFragment">
 
     <EditText
-        android:id="@+id/edit_nombre"
+        android:id="@+id/edit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edit_simbolo"
+        android:id="@+id/edit_symbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -28,16 +28,16 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_nombre" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_name" />
 
     <ImageView
-        android:id="@+id/borrar"
+        android:id="@+id/delete"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/titulo"
-        app:layout_constraintStart_toStartOf="@+id/edit_simbolo"
-        app:layout_constraintTop_toBottomOf="@+id/edit_simbolo"
+        app:layout_constraintStart_toStartOf="@+id/edit_symbol"
+        app:layout_constraintTop_toBottomOf="@+id/edit_symbol"
         app:srcCompat="@android:drawable/ic_menu_delete"
         app:tint="#FF1B1B" />
 </androidx.constraintlayout.widget.ConstraintLayout>

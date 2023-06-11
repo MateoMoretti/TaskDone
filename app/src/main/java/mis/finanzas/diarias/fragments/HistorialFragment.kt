@@ -16,6 +16,7 @@ import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding
 import mis.finanzas.diarias.DatePickerFragment
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
+import mis.finanzas.diarias.activities.ActivityFinanzas
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.text.ParseException
@@ -404,6 +405,7 @@ class HistorialFragment : Fragment() {
             ).show()
             tags.clear()
             Preferences.deletePreferencesEdicionGasto(requireContext())
+        (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
             findNavController().navigate(R.id.historialFragment)
         } else {
             Toast.makeText(
@@ -419,6 +421,7 @@ class HistorialFragment : Fragment() {
        // editarGasto(view)
         tags.clear()
         Preferences.deletePreferencesEdicionGasto(requireContext())
+        (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
         findNavController().navigate(R.id.historialFragment)
     }
 
@@ -434,6 +437,7 @@ class HistorialFragment : Fragment() {
             "" + R.id.historialFragment,
             "id_fragment_anterior"
         )
+        (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
         findNavController().navigate(R.id.crearMonedaFragment)
     }
 
@@ -443,6 +447,7 @@ class HistorialFragment : Fragment() {
             "" + R.id.historialFragment,
             "id_fragment_anterior"
         )
+        (activity as ActivityFinanzas).updateFragment(R.id.tagsFragment)
         findNavController().navigate(R.id.tagsFragment)
     }
 

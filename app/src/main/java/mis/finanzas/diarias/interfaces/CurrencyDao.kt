@@ -13,6 +13,6 @@ interface CurrencyDao {
     @Delete
     fun deleteCurrency(currency: Currency)
 
-    @Query("SELECT * FROM Moneda")
+    @Query("SELECT * FROM Currency")
     fun getAllCurrency():List<Currency>
 }

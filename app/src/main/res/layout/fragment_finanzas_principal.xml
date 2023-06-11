@@ -76,7 +76,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/titulo" />
 
                 <LinearLayout
-                    android:id="@+id/layout_monedas"
+                    android:id="@+id/currencyLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -108,7 +108,7 @@
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_monedas" />
+                    app:layout_constraintTop_toBottomOf="@+id/currencyLayout" />
 
                 <TextView
                     android:id="@+id/txt_fecha"

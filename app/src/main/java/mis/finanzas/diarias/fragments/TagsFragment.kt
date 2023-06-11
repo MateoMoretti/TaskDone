@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskdone.databinding.FragmentTagsBinding
 import mis.finanzas.diarias.components.ListaTagsAdapter
 import mis.finanzas.diarias.Utils
+import mis.finanzas.diarias.activities.ActivityFinanzas
 import mis.finanzas.diarias.model.Tag
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
@@ -37,8 +38,14 @@ class TagsFragment : Fragment() {
     ): View {
         binding = FragmentTagsBinding.inflate(inflater, container, false)
 
-        binding.volver.setOnClickListener { findNavController().navigateUp() }
-        binding.buttonAceptar.setOnClickListener { findNavController().navigateUp() }
+        binding.back.setOnClickListener {
+
+            (activity as ActivityFinanzas).updateFragment(R.id.principalFragment)
+            findNavController().navigate(R.id.principalFragment) }
+        binding.buttonAceptar.setOnClickListener {
+            (activity as ActivityFinanzas).updateFragment(R.id.principalFragment)
+            findNavController().navigate(R.id.principalFragment)
+        }
 
         binding.buttonEliminar.setOnClickListener { popupDeleteTags() }
         binding.buttonCrearTag.setOnClickListener { popupCrearTag() }

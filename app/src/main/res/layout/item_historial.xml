@@ -21,7 +21,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/editar"
+                android:id="@+id/edit"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_weight="1"

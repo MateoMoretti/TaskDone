@@ -1,6 +1,8 @@
 package mis.finanzas.diarias.viewmodels
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import mis.finanzas.diarias.database.MyDataBase
@@ -11,6 +13,9 @@ import java.util.*
 
 
 class DatabaseViewModel(val context:Context) : ViewModel() {
+
+    private val _currencies = MutableLiveData<List<Currency>>()
+    val currencies: LiveData<List<Currency>> get() = _currencies
 
     private val db by lazy {
         Room.databaseBuilder(
@@ -37,14 +42,23 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     // ----------- CURRENCIES --------------
     fun addCurrency(currency: Currency) {
         db.currencyDao.addCurrency(currency)
+        refreshAllCurrency()
     }
 
     fun deleteCurrency(currency: Currency) {
         db.currencyDao.deleteCurrency(currency)
+        refreshAllCurrency()
     }
 
     fun getAllCurrency(): List<Currency> {
-        return db.currencyDao.getAllCurrency()
+        _currencies.value?.let { return it }
+        return refreshAllCurrency()
+    }
+
+    fun refreshAllCurrency(): List<Currency>{
+        val result = db.currencyDao.getAllCurrency()
+        _currencies.value = result
+        return result
     }
 
     // ----------- TAGS --------------

@@ -44,14 +44,16 @@ class PrincipalFragment : Fragment() {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
         currencies = databaseViewModel.getAllCurrency()
 
-        if (currencies.map { it.nombre }.isEmpty()) {
+        if (currencies.map { it.name }.isEmpty()) {
+
+            (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
             findNavController().navigate(R.id.crearMonedaFragment)
         }
 
         val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             requireActivity(),
             android.R.layout.simple_spinner_dropdown_item,
-            currencies.map { it.nombre } as List<String?>
+            currencies.map { it.name } as List<String?>
         ) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -69,8 +71,8 @@ class PrincipalFragment : Fragment() {
 
         binding.agregarTag.setOnClickListener {
             run {
-            (activity as ActivityFinanzas).updateFragment(R.id.action_principalFragment_to_tagsFragment)
-            findNavController().navigate(R.id.action_principalFragment_to_tagsFragment)
+            (activity as ActivityFinanzas).updateFragment(R.id.tagsFragment)
+            findNavController().navigate(R.id.tagsFragment)
             }
         }
 
@@ -82,7 +84,10 @@ class PrincipalFragment : Fragment() {
             scrollToTag()
         }
         binding.editFecha.setOnClickListener { showDatePicker() }
-        binding.agregarMoneda.setOnClickListener { findNavController().navigate(R.id.action_principalFragment_to_crearMonedaFragment) }
+        binding.agregarMoneda.setOnClickListener {
+            (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
+            findNavController().navigate(R.id.crearMonedaFragment)
+        }
         binding.editCantidad.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -115,16 +120,12 @@ class PrincipalFragment : Fragment() {
                 )
             )
         }
+        reloadData()
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        reloadData()
-    }
-
     private fun reloadData(){
-        llenarLayoutMonedas()
+        loadCurrencies()
         recordViewModel.let {
             binding.editFecha.text = it.getDate()
             binding.spinnerMoneda.setSelection(currencies.indexOf(recordViewModel.getCurrency()))
@@ -134,8 +135,6 @@ class PrincipalFragment : Fragment() {
             binding.checkIngreso.isChecked = it.getIncome()
 
         }
-
-        llenarLayoutMonedas()
         binding.checkIngreso.setOnCheckedChangeListener { _: CompoundButton?, _: Boolean ->
             recordViewModel.setIncome(!recordViewModel.getIncome())
         }
@@ -207,20 +206,20 @@ class PrincipalFragment : Fragment() {
 
 
     @SuppressLint("SetTextI18n")
-    private fun llenarLayoutMonedas() {
-        while (binding.layoutMonedas.childCount != 0) {
-            binding.layoutMonedas.removeViewAt(0)
+    private fun loadCurrencies() {
+        while (binding.currencyLayout.childCount != 0) {
+            binding.currencyLayout.removeViewAt(0)
         }
         val inflater = requireActivity().layoutInflater
-        for (x in currencies.map { it.nombre }.indices) {
+        for (x in currencies.map { it.name }.indices) {
             @SuppressLint("InflateParams") val view =
                 inflater.inflate(R.layout.item_moneda_cantidad, null)
-            @SuppressLint("CutPasteId") val moneda = view.findViewById<TextView>(R.id.moneda)
+            @SuppressLint("CutPasteId") val moneda = view.findViewById<TextView>(R.id.name)
             @SuppressLint("CutPasteId") val cantidad = view.findViewById<TextView>(R.id.cantidad)
-            moneda.text = currencies.map { it.nombre }[x]
+            moneda.text = currencies.map { it.name }[x]
             cantidad.text =
-                currencies.map { it.simbolo }[x] + " " + Utils.formatoCantidad(currencies.map { it.cantidad }[x])
-            binding.layoutMonedas.addView(view)
+                currencies.map { it.symbol }[x] + " " + Utils.formatoCantidad(currencies.map { it.amount }[x])
+            binding.currencyLayout.addView(view)
         }
     }
 

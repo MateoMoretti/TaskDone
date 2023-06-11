@@ -75,9 +75,9 @@
     </fragment>
     <fragment
         android:id="@+id/crearMonedaFragment"
-        android:name="mis.finanzas.diarias.fragments.CrearMonedaFragment"
+        android:name="mis.finanzas.diarias.fragments.CreateCurrencyFragment"
         android:label="fragment_crear_moneda"
-        tools:layout="@layout/fragment_crear_moneda" >
+        tools:layout="@layout/fragment_create_currency" >
         <action
             android:id="@+id/action_crearMonedaFragment_to_principalFragment"
             app:destination="@id/principalFragment"

@@ -246,7 +246,7 @@ class StatsAvanzadosFragment : Fragment() {
         }
         binding!!.spinnerMes.setSelection(mes_seleccionado.toInt() - 1)
         check_for_spinners = 1
-        binding!!.volver.setOnClickListener { v: View? ->
+        binding!!.back.setOnClickListener { v: View? ->
             (activity as ActivityFinanzas).onBackPressed()
         }
         return binding!!.root

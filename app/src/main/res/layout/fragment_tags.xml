@@ -8,7 +8,7 @@
     tools:context="mis.finanzas.diarias.fragments.TagsFragment">
 
     <ImageView
-        android:id="@+id/volver"
+        android:id="@+id/back"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/abc_vector_test"

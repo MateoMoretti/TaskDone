@@ -41,7 +41,7 @@ class ListaTagsAdapter(
 
         init {
             tag = itemView.findViewById(R.id.check_tag)
-            edit = itemView.findViewById(R.id.editar)
+            edit = itemView.findViewById(R.id.edit)
         }
     }
 }
