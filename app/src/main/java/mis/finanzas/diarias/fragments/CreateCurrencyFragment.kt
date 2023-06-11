@@ -32,10 +32,17 @@ class CreateCurrencyFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun loadCurrencies(currencies: List<Currency>) {
         binding.currencyLayout.removeAllViews()
+        if (currencies.isEmpty()){
+            binding.yourCurrencies.visibility = View.GONE
+            binding.back.visibility = View.GONE
+            (activity as ActivityFinanzas).updateFragment(R.id.principalFragment)
+        }
+        else{
+            binding.yourCurrencies.visibility =  View.VISIBLE
+            binding.back.visibility =  View.VISIBLE
+            (activity as ActivityFinanzas).updateFragment(R.id.tagsFragment)
 
-        val empty = currencies.isEmpty()
-        binding.yourCurrencies.visibility =  if (empty) View.GONE else (View.VISIBLE)
-        binding.back.visibility = if (empty) View.GONE else (View.VISIBLE)
+        }
 
         for (c in currencies) {
             val view = ItemMonedaCantidadEditableBinding.inflate(
