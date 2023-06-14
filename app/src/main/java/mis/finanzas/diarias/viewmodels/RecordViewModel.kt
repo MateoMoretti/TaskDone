@@ -23,7 +23,7 @@ class RecordViewModel : ViewModel() {
     private val _amount = MutableLiveData<Int>()
     val amount:LiveData<Int> get() = _amount
 
-    private val _tagsSelected = MutableLiveData<ArrayList<Tag>>().apply { postValue(ArrayList<Tag>()) }
+    private val _tagsSelected = MutableLiveData<ArrayList<Tag>>().apply { postValue(ArrayList()) }
     val tagsSelected:LiveData<ArrayList<Tag>> get() = _tagsSelected
 
     private val _reason = MutableLiveData<String>()
@@ -34,28 +34,28 @@ class RecordViewModel : ViewModel() {
 
 
     fun setDate(value:String){
-        _date.postValue(value)
+        _date.value = value
     }
     fun getDate():String{
         return date.value?:Utils.calendarToString(Calendar.getInstance())
     }
 
     fun setCurrency(value:Currency){
-        _currencyIndex.postValue(value)
+        _currencyIndex.value = value
     }
     fun getCurrency():Currency{
         return currencyIndex.value?:Currency("", 0f, "")
     }
 
     fun setAmount(value:Int){
-        _amount.postValue(value)
+        _amount.value = value
     }
     fun getAmount():Int{
         return amount.value?:0
     }
 
     fun setReason(value:String){
-        _reason.postValue(value)
+        _reason.value = value
     }
     fun getReason():String{
         return reason.value?:""
@@ -67,7 +67,7 @@ class RecordViewModel : ViewModel() {
     }
 
     fun setSelectedTags(value: ArrayList<Tag>) {
-        return _tagsSelected.postValue(value)
+        _tagsSelected.value = value
     }
     fun getSelectedTags(): ArrayList<Tag> {
         return tagsSelected.value?: arrayListOf()
@@ -83,7 +83,7 @@ class RecordViewModel : ViewModel() {
     }
 
     fun setIncome(value:Boolean){
-        _income.postValue(value)
+        _income.value = value
     }
     fun getIncome():Boolean{
         return income.value?:false

@@ -34,7 +34,6 @@ class PrincipalFragment : Fragment() {
     private val recordViewModel: RecordViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
-    lateinit var currencies:List<Currency>
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi")
     override fun onCreateView(
@@ -42,29 +41,10 @@ class PrincipalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
-        currencies = databaseViewModel.getAllCurrency()
+        databaseViewModel.getAllCurrency()
 
-        if (currencies.map { it.name }.isEmpty()) {
+        setObservers()
 
-            (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
-            findNavController().navigate(R.id.crearMonedaFragment)
-        }
-
-        val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
-            requireActivity(),
-            android.R.layout.simple_spinner_dropdown_item,
-            currencies.map { it.name } as List<String?>
-        ) {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val v = super.getView(position, convertView, parent)
-                (v as TextView).textSize = 20f
-                v.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                return v
-            }
-        }
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown)
-        binding.spinnerMoneda.adapter = spinnerArrayAdapter
         binding.spinnerMoneda.background =
             resources.getDrawable(R.drawable.fondo_blanco_redondeado)
         binding.spinnerMoneda.gravity = Gravity.CENTER
@@ -124,34 +104,90 @@ class PrincipalFragment : Fragment() {
         return binding.root
     }
 
-    private fun reloadData(){
-        loadCurrencies()
-        recordViewModel.let {
-            binding.editFecha.text = it.getDate()
-            binding.spinnerMoneda.setSelection(currencies.indexOf(recordViewModel.getCurrency()))
-            binding.editCantidad.setText(it.getAmount().toString())
-            binding.editMotivo.setText( it.getReason())
-            binding.txtTagSeleccionados.text = it.getTagsString(resources)
-            binding.checkIngreso.isChecked = it.getIncome()
+    private fun setObservers(){
+        databaseViewModel.currencies.observe(viewLifecycleOwner) { currencyList ->
+            if (currencyList.map { it.name }.isEmpty()) {
 
+                (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
+                findNavController().navigate(R.id.crearMonedaFragment)
+            }
+            if(binding.spinnerMoneda.adapter == null || binding.spinnerMoneda.adapter?.count != currencyList.count()) {
+                val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
+                    requireActivity(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    currencyList.map { it.name } as List<String?>
+                ) {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    override fun getView(
+                        position: Int,
+                        convertView: View?,
+                        parent: ViewGroup
+                    ): View {
+                        val v = super.getView(position, convertView, parent)
+                        (v as TextView).textSize = 20f
+                        v.textAlignment = View.TEXT_ALIGNMENT_CENTER
+                        return v
+                    }
+                }
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown)
+                binding.spinnerMoneda.adapter = spinnerArrayAdapter
+                binding.spinnerMoneda.setSelection(currencyList.indexOf(recordViewModel.getCurrency()))
+
+                binding.spinnerMoneda.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            adapterView: AdapterView<*>?,
+                            view: View?,
+                            i: Int,
+                            l: Long
+                        ) {
+                            recordViewModel.setCurrency(currencyList[i])
+                        }
+
+                        override fun onNothingSelected(adapterView: AdapterView<*>?) {//
+                        }
+                    }
+            }
+
+            while (binding.currencyLayout.childCount != 0) {
+                binding.currencyLayout.removeViewAt(0)
+            }
+            val inflater = requireActivity().layoutInflater
+            for (x in currencyList.map { it.name }.indices) {
+                @SuppressLint("InflateParams") val view =
+                    inflater.inflate(R.layout.item_moneda_cantidad, null)
+                @SuppressLint("CutPasteId") val moneda = view.findViewById<TextView>(R.id.name)
+                @SuppressLint("CutPasteId") val cantidad = view.findViewById<TextView>(R.id.cantidad)
+                moneda.text = currencyList.map { it.name }[x]
+                cantidad.text =
+                    currencyList.map { it.symbol }[x] + " " + Utils.formatoCantidad(currencyList.map { it.amount }[x])
+                binding.currencyLayout.addView(view)
+            }
         }
         binding.checkIngreso.setOnCheckedChangeListener { _: CompoundButton?, _: Boolean ->
             recordViewModel.setIncome(!recordViewModel.getIncome())
         }
-        binding.spinnerMoneda.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    adapterView: AdapterView<*>?,
-                    view: View?,
-                    i: Int,
-                    l: Long
-                ) {
-                    recordViewModel.setCurrency(currencies[binding.spinnerMoneda.selectedItemPosition])
-                }
+    }
 
-                override fun onNothingSelected(adapterView: AdapterView<*>?) {//
-                }
-            }
+    private fun reloadData(){
+        databaseViewModel.refreshAllCurrency()
+        recordViewModel.let {
+            binding.editFecha.text = it.getDate()
+            binding.editCantidad.setText(it.getAmount().toString())
+            binding.editMotivo.setText( it.getReason())
+            binding.txtTagSeleccionados.text = it.getTagsString(resources)
+            binding.checkIngreso.isChecked = it.getIncome()
+        }
+    }
+    @SuppressLint("SetTextI18n")
+    private fun cleanAndUpdate() {
+        //binding.spinnerMoneda.setSelection(0)
+        recordViewModel.setAmount(0)
+        recordViewModel.setReason("")
+        recordViewModel.setIncome(false)
+        recordViewModel.setSelectedTags(arrayListOf())
+        reloadData()
+        binding.scrollview.fullScroll(ScrollView.FOCUS_UP)
     }
 
 
@@ -166,7 +202,6 @@ class PrincipalFragment : Fragment() {
         }
     }
 
-    @Throws(ParseException::class)
     fun addRecord() {
         // FECHA DEL FUTURO NO SE PERMITE
         if (Utils.fechaMayorQueHoy(binding.editFecha.text.toString())) {
@@ -205,32 +240,4 @@ class PrincipalFragment : Fragment() {
     }
 
 
-    @SuppressLint("SetTextI18n")
-    private fun loadCurrencies() {
-        while (binding.currencyLayout.childCount != 0) {
-            binding.currencyLayout.removeViewAt(0)
-        }
-        val inflater = requireActivity().layoutInflater
-        for (x in currencies.map { it.name }.indices) {
-            @SuppressLint("InflateParams") val view =
-                inflater.inflate(R.layout.item_moneda_cantidad, null)
-            @SuppressLint("CutPasteId") val moneda = view.findViewById<TextView>(R.id.name)
-            @SuppressLint("CutPasteId") val cantidad = view.findViewById<TextView>(R.id.cantidad)
-            moneda.text = currencies.map { it.name }[x]
-            cantidad.text =
-                currencies.map { it.symbol }[x] + " " + Utils.formatoCantidad(currencies.map { it.amount }[x])
-            binding.currencyLayout.addView(view)
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun cleanAndUpdate() {
-        //binding.spinnerMoneda.setSelection(0)
-        recordViewModel.setAmount(0)
-        recordViewModel.setReason("")
-        recordViewModel.setIncome(false)
-        recordViewModel.setSelectedTags(arrayListOf())
-        reloadData()
-        binding.scrollview.fullScroll(ScrollView.FOCUS_UP)
-    }
 }

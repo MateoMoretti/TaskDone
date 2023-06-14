@@ -29,6 +29,10 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     // ----------- RECORDS --------------
     fun addRecord(record: Record) {
         db.recordDao.addRecord(record)
+        val currency = db.currencyDao.getCurrencyById(record.idCurrency)[0]
+        if(record.isIncome) currency.amount += record.amount
+        else currency.amount -= record.amount
+        db.currencyDao.addCurrency(currency)
     }
 
     fun deleteRecord(record: Record) {

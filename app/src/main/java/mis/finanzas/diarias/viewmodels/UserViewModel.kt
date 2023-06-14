@@ -12,7 +12,7 @@ class UserViewModel : ViewModel() {
 
 
     fun setId(value:Int){
-        _id.postValue(value)
+        _id.value = value
     }
     fun getId():Int{
         return id.value?:0
