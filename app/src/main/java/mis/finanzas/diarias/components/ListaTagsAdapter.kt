@@ -8,10 +8,10 @@ import android.widget.Button
 import android.widget.CheckBox
 import mis.finanzas.diarias.fragments.TagsFragment
 import mis.finanzas.diarias.model.Tag
-import mis.finanzas.diarias.viewmodels.RecordViewModel
+import mis.finanzas.diarias.viewmodels.AddRecordViewModel
 
 class ListaTagsAdapter(
-    private val viewModel: RecordViewModel,
+    private val viewModel: AddRecordViewModel,
     private var items: List<Tag>,
     private val fragment: TagsFragment
 ) : RecyclerView.Adapter<ViewHolderAdapter>() {

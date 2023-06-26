@@ -7,12 +7,12 @@ import mis.finanzas.diarias.model.Record
 interface RecordDao {
 
     @Upsert
-    fun addRecord(record:Record)
+    fun addRecord(record:Record) :Long
 
     @Delete
     fun deleteRecord(record:Record)
 
-    @Query("SELECT * FROM Record WHERE Record.date BETWEEN :desde AND :hasta ORDER BY Record.date DESC")
-    fun getRecords(desde: Long, hasta: Long) : List<Record>
+    @Query("SELECT * FROM Record WHERE Record.date BETWEEN :from AND :to ORDER BY Record.date DESC")
+    fun getRecords(from: String, to: String) : List<Record>
 
 }

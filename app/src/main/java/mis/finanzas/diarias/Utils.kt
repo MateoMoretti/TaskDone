@@ -7,7 +7,6 @@ import android.os.Build
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.view.LayoutInflater
 import com.example.taskdone.R
 import android.widget.TextView
 import android.content.DialogInterface
@@ -112,10 +111,10 @@ object Utils {
     }
 
     //Agrega los puntos y lo hace bonito
-    fun formatoCantidad(f: Float): String {
+    fun formatAmount(n: Number): String {
         val df = DecimalFormat()
         df.maximumFractionDigits = 2
-        return df.format(f.toDouble())
+        return df.format(n.toDouble())
     }
 
     @Throws(ParseException::class)
@@ -130,7 +129,7 @@ object Utils {
         return ChronoUnit.DAYS.between(desde.time.toInstant(), hasta.time.toInstant()) + 1
     }
 
-    fun arrayListToString(a: ArrayList<String>): String {
+    fun arrayListToString(a: List<String>): String {
         val concatenada = StringBuilder()
         for (x in a.indices) {
             concatenada.append(a[x])

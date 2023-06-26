@@ -159,7 +159,7 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/sin_datos"
+        android:id="@+id/no_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"

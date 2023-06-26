@@ -17,5 +17,8 @@ interface CurrencyDao {
     fun getAllCurrency():List<Currency>
 
     @Query("SELECT * FROM Currency WHERE id = :id")
-    fun getCurrencyById(id:Int):List<Currency>
+    fun getCurrencyById(id:Int):Currency?
+
+    @Query("SELECT * FROM Currency WHERE name = :name")
+    fun getCurrencyByName(name:String):Currency?
 }

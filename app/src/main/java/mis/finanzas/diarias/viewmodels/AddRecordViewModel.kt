@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class RecordViewModel : ViewModel() {
+class AddRecordViewModel : ViewModel() {
 
     private val _date = MutableLiveData<String>()
     val date:LiveData<String> get() = _date
@@ -76,7 +76,7 @@ class RecordViewModel : ViewModel() {
     fun getTagsString(resources:Resources):String{
         tagsSelected.value.let {
             if (it != null && it.isNotEmpty()) {
-                return Utils.arrayListToString(it.map { tag -> tag.nombre } as ArrayList<String>)
+                return Utils.arrayListToString(it.map { tag -> tag.nombre })
             }
         }
         return resources.getString(R.string.sin_seleccionados)

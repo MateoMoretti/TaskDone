@@ -1,8 +1,13 @@
 package mis.finanzas.diarias.fragments
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +22,8 @@ import mis.finanzas.diarias.DatePickerFragment
 import mis.finanzas.diarias.Preferences
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.activities.ActivityFinanzas
+import mis.finanzas.diarias.model.Record
+import mis.finanzas.diarias.model.Currency
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.text.ParseException
@@ -24,81 +31,71 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class HistorialFragment : Fragment() {
-    private var binding: FragmentFinanzasHistorialBinding? = null
+    private lateinit var binding: FragmentFinanzasHistorialBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
 
     var selected_date_desde: String? = null
     var selected_date_hasta: String? = null
-    var tags = ArrayList<String>()
-    var monedas = ArrayList<String>()
-    var cantidades = ArrayList<Float>()
-    var simbolos = ArrayList<String>()
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false)
-        var selected_date_desde =
+        var selectedDateDesde =
             Preferences.getPreferenceString(requireContext(), "historial_desde")
-        var selected_date_hasta =
+        var selectedDateHasta =
             Preferences.getPreferenceString(requireContext(), "historial_hasta")
-        if (selected_date_desde == "") {
-            selected_date_desde = resources.getString(R.string.hace_un_mes)
-        } else if (Utils.isHoy(selected_date_desde)) {
-            selected_date_desde = resources.getString(R.string.hoy)
+        if (selectedDateDesde == "") {
+            selectedDateDesde = resources.getString(R.string.hace_un_mes)
+        } else if (Utils.isHoy(selectedDateDesde)) {
+            selectedDateDesde = resources.getString(R.string.hoy)
         }
-        if (selected_date_hasta == "" || Utils.isHoy(selected_date_hasta)) {
-            selected_date_hasta = resources.getString(R.string.hoy)
+        if (selectedDateHasta == "" || Utils.isHoy(selectedDateHasta)) {
+            selectedDateHasta = resources.getString(R.string.hoy)
         }
-        //dataBase = DataBase(userViewModel, requireContext())
-        //val data = dataBase!!.getMonedasByUserId(userViewModel.getId())
-        /*while (data.moveToNext()) {
-            monedas.add(data.getString(1))
-            cantidades.add(data.getFloat(2))
-            simbolos.add(data.getString(3))
-        }*/
+
         try {
-            filtrar(selected_date_desde, selected_date_hasta)
+            filtrar(selectedDateDesde, selectedDateHasta)
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        binding!!.tituloDesde.setOnClickListener { v: View? ->
+        binding.tituloDesde.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 true,
-                binding!!.textDesde
+                binding.textDesde
             )
         }
-        binding!!.tituloHasta.setOnClickListener { v: View? ->
+        binding.tituloHasta.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 false,
-                binding!!.textHasta
+                binding.textHasta
             )
         }
-        binding!!.calendarDesde.setOnClickListener { v: View? ->
+        binding.calendarDesde.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 true,
-                binding!!.textDesde
+                binding.textDesde
             )
         }
-        binding!!.calendarHasta.setOnClickListener { v: View? ->
+        binding.calendarHasta.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 false,
-                binding!!.textHasta
+                binding.textHasta
             )
         }
-        binding!!.textDesde.setOnClickListener { v: View? ->
+        binding.textDesde.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 true,
-                binding!!.textDesde
+                binding.textDesde
             )
         }
-        binding!!.textHasta.setOnClickListener { v: View? ->
+        binding.textHasta.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 false,
-                binding!!.textHasta
+                binding.textHasta
             )
         }
         //BORRAR ?
@@ -106,185 +103,89 @@ class HistorialFragment : Fragment() {
         //    irAEditarGasto()
         //}
         /////
-        return binding!!.root
+        return binding.root
     }
 
-    /*@SuppressLint("SetTextI18n")
-    private fun cargarHistorial(desde_date: Date, hasta_date: Date) {
+    @SuppressLint("SetTextI18n")
+    private fun loadRecords(from: Date, to: Date) {
         cleanHistorial()
-        *//*val data = dataBase!!.getGastosBySessionUser(
-            Utils.dateToString(desde_date),
-            Utils.dateToString(hasta_date)
-        )*//*
-        val data = recordViewModel.getRecords(desde_date, hasta_date)
-        val data_items = ArrayList<CompleteRecord>()
-        val fechas = ArrayList<String>()
-        for (item in data) {
-            if (!fechas.contains(item.fecha)) {
-                fechas.add(item.fecha)
-            }
 
-            val record = CompleteRecord(item.id,
-                item.fecha,
-                item.idMon,
-                item.totalGasto,
-                item.motivo,
-                item.ingreso,
-                if (item.ingreso == "0") "-" else "+",
-                null,
-                null,
-                null,
-                formattedAmount = Utils.formatoCantidad(item.totalGasto))
-            data_items.add(record)
+        val data = databaseViewModel.getRecords(from, to)
 
-            //Agregar al modelo de Record
-            //i.nombre_moneda = data.getString(5)
-            //i.simbolo = data.getString(6)
-        }
+        val allDates = data.map { it.date }.distinct()
 
         //LLENO LOS TITULOS DE FECHAS
-        if (fechas.size == 0) {
-            binding!!.sinDatos.visibility = View.VISIBLE
-        } else {
-            binding!!.sinDatos.visibility = View.INVISIBLE
+        if (allDates.isEmpty()) binding.noData.visibility = View.VISIBLE
+        
+        else {
+            binding.noData.visibility = View.INVISIBLE
             val inflater = requireActivity().layoutInflater
-            for (x in fechas.indices) {
-                @SuppressLint("InflateParams") val view =
-                    inflater.inflate(R.layout.elementos_historial, null)
-                if (x == 0) {
-                    view.findViewById<View>(R.id.linea).visibility = View.INVISIBLE
-                }
-                val layout_items = view.findViewById<LinearLayout>(R.id.layout_item_historial)
-                binding!!.layoutHistorial.addView(view)
+            for (x in allDates.indices) {
+                @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.elementos_historial, null)
+                if (x == 0) view.findViewById<View>(R.id.linea).visibility = View.INVISIBLE
+                
+                val layoutItems = view.findViewById<LinearLayout>(R.id.layout_item_historial)
+                binding.layoutHistorial.addView(view)
                 val fecha = view.findViewById<TextView>(R.id.fecha)
-                fecha.text = Utils.getDia(fechas[x])
-                for (i in data_items) {
-                    if (i.fecha == fechas[x]) {
-                        @SuppressLint("InflateParams") val item =
-                            inflater.inflate(R.layout.item_historial, null)
-                        if (i.currencySymbol == "-") {
-                            (item.findViewById<View>(R.id.signo_ingreso) as TextView).setTextColor(
-                                requireContext().resources.getColor(R.color.rojo_egreso)
-                            )
-                            (item.findViewById<View>(R.id.txt_simbolo) as TextView).setTextColor(
-                                requireContext().resources.getColor(R.color.rojo_egreso)
-                            )
-                            (item.findViewById<View>(R.id.txt_cantidad) as TextView).setTextColor(
-                                requireContext().resources.getColor(R.color.rojo_egreso)
-                            )
-                        }
-                        (item.findViewById<View>(R.id.signo_ingreso) as TextView).text = i.signo
-                        (item.findViewById<View>(R.id.txt_simbolo) as TextView).text = i.currencySymbol
-                        (item.findViewById<View>(R.id.txt_cantidad) as TextView).text = i.formattedAmount
-                        (item.findViewById<View>(R.id.txt_motivo) as TextView).text = i.motivo
-                        item.findViewById<View>(R.id.editar)
-                            .setOnClickListener { v: View? -> irAEditarGasto(i) }
-                        layout_items.addView(item)
+                fecha.text = Utils.getDia(allDates[x])
+
+                val recordsInDate = data.filter { it.date == allDates[x] }
+
+                for (record in recordsInDate) {
+                    @SuppressLint("InflateParams") val item = inflater.inflate(R.layout.item_historial, null)
+                    (item.findViewById<View>(R.id.signo_ingreso) as TextView).text = "+"
+                    if (!record.isIncome) {
+                        (item.findViewById<View>(R.id.signo_ingreso) as TextView).text = "-"
+                        (item.findViewById<View>(R.id.signo_ingreso) as TextView).setTextColor(
+                            requireContext().resources.getColor(R.color.rojo_egreso)
+                        )
+                        (item.findViewById<View>(R.id.txt_simbolo) as TextView).setTextColor(
+                            requireContext().resources.getColor(R.color.rojo_egreso)
+                        )
+                        (item.findViewById<View>(R.id.txt_cantidad) as TextView).setTextColor(
+                            requireContext().resources.getColor(R.color.rojo_egreso)
+                        )
                     }
+                    val currency = databaseViewModel.getCurrencyById(record.idCurrency)
+                    (item.findViewById<View>(R.id.txt_simbolo) as TextView).text = currency!!.symbol
+                    (item.findViewById<View>(R.id.txt_cantidad) as TextView).text = Utils.formatAmount(record.amount)
+                    (item.findViewById<View>(R.id.txt_motivo) as TextView).text = record.reason
+                    item.findViewById<View>(R.id.edit).setOnClickListener { editRecord(record, currency) }
+                    layoutItems.addView(item)
                 }
             }
         }
-    }*/
+    }
 
-    /*@SuppressLint("UseCompatLoadingForDrawables")
-    private fun irAEditarGasto(item: CompleteRecord) {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun editRecord(record: Record, currency: Currency) {
         val inflater = requireActivity().layoutInflater
-        @SuppressLint("InflateParams") val view =
-            inflater.inflate(R.layout.popup_edicion_gasto, binding!!.constraintEdicion)
-        if (Preferences.getPreferenceString(requireContext(), "edicion_gasto_id") == "") {
-            Preferences.savePreferenceString(
-                requireContext(),
-                Integer.toString(item.ID),
-                "edicion_gasto_id"
-            )
-        }
-        if (Preferences.getPreferenceString(requireContext(), "edicion_gasto_fecha") != "") {
-            (view.findViewById<View>(R.id.edit_fecha) as TextView).text =
-                Preferences.getPreferenceString(requireContext(), "edicion_gasto_fecha")
-        } else {
-            Preferences.savePreferenceString(requireContext(), item.fecha, "edicion_gasto_fecha")
-            (view.findViewById<View>(R.id.edit_fecha) as TextView).text = item.fecha
-        }
-        (view.findViewById<View>(R.id.edit_fecha) as TextView).setOnClickListener { v: View? ->
+        @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.popup_edicion_gasto, binding.constraintEdicion)
+        (view.findViewById<View>(R.id.edit_fecha) as TextView).text = record.date
+        (view.findViewById<View>(R.id.edit_fecha) as TextView).setOnClickListener {
             showDatePickerDialog(
                 view.findViewById<View>(R.id.edit_fecha) as TextView
             )
         }
-        if (Preferences.getPreferenceString(requireContext(), "edicion_gasto_motivo") != "") {
-            (view.findViewById<View>(R.id.edit_motivo) as EditText).setText(
-                Preferences.getPreferenceString(
-                    requireContext(),
-                    "edicion_gasto_motivo"
-                )
-            )
-        } else {
-            Preferences.savePreferenceString(requireContext(), item.motivo, "edicion_gasto_motivo")
-            (view.findViewById<View>(R.id.edit_motivo) as EditText).setText(item.motivo)
-        }
-        (view.findViewById<View>(R.id.edit_motivo) as EditText).addTextChangedListener(object :
-            TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                Preferences.savePreferenceString(
-                    requireContext(),
-                    (view.findViewById<View>(R.id.edit_motivo) as EditText).text.toString(),
-                    "edicion_gasto_motivo"
-                )
-            }
+        (view.findViewById<View>(R.id.edit_cantidad) as EditText).setText(Utils.formatAmount(record.amount))
+        (view.findViewById<View>(R.id.edit_motivo) as EditText).setText(record.reason)
 
-            override fun afterTextChanged(editable: Editable) {}
-        })
-        if (Preferences.getPreferenceString(requireContext(), "edicion_gasto_cantidad") != "") {
-            (view.findViewById<View>(R.id.edit_cantidad) as EditText).setText(
-                Preferences.getPreferenceString(
-                    requireContext(),
-                    "edicion_gasto_cantidad"
-                )
-            )
-        } else {
-            Preferences.savePreferenceString(
-                requireContext(),
-                item.formattedAmount,
-                "edicion_gasto_cantidad"
-            )
-            (view.findViewById<View>(R.id.edit_cantidad) as EditText).setText(item.formattedAmount)
-        }
-        (view.findViewById<View>(R.id.edit_cantidad) as EditText).addTextChangedListener(object :
-            TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+        (view.findViewById<View>(R.id.edit_cantidad) as EditText).addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {//-
+            }
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 verificarCantidad(view.findViewById<View>(R.id.edit_cantidad) as EditText)
-                Preferences.savePreferenceString(
-                    requireContext(),
-                    (view.findViewById<View>(R.id.edit_cantidad) as EditText).text.toString(),
-                    "edicion_gasto_cantidad"
-                )
             }
-
-            override fun afterTextChanged(editable: Editable) {}
+            override fun afterTextChanged(editable: Editable) {//-
+            }
         })
-        val ingreso = Preferences.getPreferenceString(requireContext(), "edicion_gasto_ingreso")
-        if (ingreso != "") {
-            if (ingreso == "1") {
-                (view.findViewById<View>(R.id.check_ingreso) as CheckBox).isChecked = true
-            }
-        } else {
-            if (item.signo == "+") {
-                (view.findViewById<View>(R.id.check_ingreso) as CheckBox).isChecked = true
-                Preferences.savePreferenceString(requireContext(), "1", "edicion_gasto_ingreso")
-            } else {
-                Preferences.savePreferenceString(requireContext(), "0", "edicion_gasto_ingreso")
-            }
-        }
-        (view.findViewById<View>(R.id.check_ingreso) as CheckBox).setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            guardarIngresoPendiente(
-                b
-            )
-        }
-        val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
+
+        if (record.isIncome) (view.findViewById<View>(R.id.check_ingreso) as CheckBox).isChecked = true
+
+        val spinnerArrayAdapter: ArrayAdapter<String> = object : ArrayAdapter<String>(
             requireActivity(),
             android.R.layout.simple_spinner_dropdown_item,
-            monedas as List<String?>
+            databaseViewModel.getAllCurrency().map { it.name }
         ) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -299,144 +200,66 @@ class HistorialFragment : Fragment() {
         spinnerMoneda.adapter = spinnerArrayAdapter
         spinnerMoneda.background = resources.getDrawable(R.drawable.fondo_blanco_redondeado)
         spinnerMoneda.gravity = Gravity.CENTER
-        spinnerMoneda.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
-                Preferences.savePreferenceString(
-                    requireContext(),
-                    Integer.toString(spinnerMoneda.selectedItemPosition),
-                    "edicion_gasto_moneda_index"
-                )
-            }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>?) {}
-        }
-        val moneda_index =
-            Preferences.getPreferenceString(requireContext(), "edicion_gasto_moneda_index")
-        if (moneda_index != "") {
-            spinnerMoneda.setSelection(moneda_index.toInt())
-        } else {
-            for (x in monedas.indices) {
-                if (monedas[x] == item.currencyName) {
-                    spinnerMoneda.setSelection(x)
-                }
-            }
-        }
-        (view.findViewById<View>(R.id.agregar_moneda) as Button).setOnClickListener { v: View? -> irACrearMoneda() }
-        (view.findViewById<View>(R.id.agregar_tag) as Button).setOnClickListener { v: View? -> irATags() }
-        if (Preferences.getPreferenceString(requireContext(), "edicion_gasto_tags") == "") {
-            val database = DataBase(userViewModel, requireContext())
-            val tags = database.getTagsByGastoId(item.ID)
-            var hay_tags = false
-            val tags_seleccionados = ArrayList<String>()
-            while (tags.moveToNext()) {
-                hay_tags = true
-                tags_seleccionados.add(tags.getString(1))
-            }
-            (view.findViewById<View>(R.id.txt_tag_seleccionados) as TextView).text =
-                Utils.arrayListToString(tags_seleccionados)
-            Preferences.savePreferenceString(
-                requireContext(),
-                Utils.arrayListToString(tags_seleccionados),
-                "edicion_gasto_tags"
-            )
-            if (!hay_tags) {
-                (view.findViewById<View>(R.id.txt_tag_seleccionados) as TextView).text =
-                    resources.getString(R.string.sin_seleccionados)
-                Preferences.savePreferenceString(requireContext(), "", "edicion_gasto_tags")
-            }
-        } else {
-            val tags_seleccionados = StringBuilder()
-            tags.addAll(
-                Arrays.asList(
-                    *Preferences.getPreferenceString(
-                        requireContext(),
-                        "edicion_gasto_tags"
-                    ).split(", ").toTypedArray()
-                )
-            )
-            tags_seleccionados.append(Utils.arrayListToString(tags))
-            (view.findViewById<View>(R.id.txt_tag_seleccionados) as TextView).text =
-                tags_seleccionados.toString()
-        }
-        (view.findViewById<View>(R.id.cerrar) as ImageView).setOnClickListener { v: View? -> cerrarEdicion() }
-        (view.findViewById<View>(R.id.borrar) as ImageView).setOnClickListener { v: View? ->
-            popupBorrarGasto(
-                view
-            )
-        }
-        (view.findViewById<View>(R.id.ok) as Button).setOnClickListener { v: View? ->
-            try {
-                guardarYCerrarEdicion(view)
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-        }
-    }*/
+        spinnerMoneda.setSelection(databaseViewModel.getAllCurrency().indexOf(currency))
 
-    /*private fun popupBorrarGasto(view: View) {
+        (view.findViewById<View>(R.id.agregar_moneda) as Button).setOnClickListener { irACrearMoneda() }
+        (view.findViewById<View>(R.id.agregar_tag) as Button).setOnClickListener { irATags() }
+
+        val tagsId = databaseViewModel.getAllTagRecordByRecordId(record.id).map { it.idTag }
+        val tags = databaseViewModel.getTagsByIdList(tagsId).map { it.nombre }
+        if(tags.isEmpty()) (view.findViewById<View>(R.id.txt_tag_seleccionados) as TextView).text = resources.getString(R.string.sin_seleccionados)
+        else (view.findViewById<View>(R.id.txt_tag_seleccionados) as TextView).text = Utils.arrayListToString(tags)
+
+        (view.findViewById<View>(R.id.cerrar) as ImageView).setOnClickListener { binding.constraintEdicion.removeViewAt(0) }
+        (view.findViewById<View>(R.id.delete) as ImageView).setOnClickListener { popupDeleteRecord(record) }
+        (view.findViewById<View>(R.id.ok) as Button).setOnClickListener { updateRecord(view, record) }
+    }
+
+    private fun updateRecord(view: View, record: Record) {
+        val date = (view.findViewById<View>(R.id.edit_fecha) as TextView).text.toString()
+        if (Utils.fechaMayorQueHoy(date)){
+            Toast.makeText(requireContext(), R.string.error_fecha_futura, Toast.LENGTH_SHORT).show()
+            return
+        }
+        try {
+            record.amount = (view.findViewById<View>(R.id.edit_cantidad) as EditText).text.toString().toInt()
+        }catch (e:java.lang.Exception){
+            Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        record.date = date
+        record.idCurrency = databaseViewModel.getCurrencyByName(
+            (view.findViewById<View>(R.id.spinner_moneda) as Spinner).selectedItem.toString())!!.id
+
+        record.reason = (view.findViewById<View>(R.id.edit_motivo) as EditText).text.toString()
+        record.isIncome = (view.findViewById<View>(R.id.check_ingreso) as CheckBox).isChecked
+        databaseViewModel.addRecord(record)
+
+        (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
+        findNavController().navigate(R.id.historialFragment)
+    }
+
+    private fun popupDeleteRecord(record: Record) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(resources.getString(R.string.eliminar))
         builder.setMessage(resources.getString(R.string.estas_seguro))
-        val c = DialogInterface.OnClickListener { dialogInterface: DialogInterface?, i: Int ->
-            borrarGasto(view)
+        val c = DialogInterface.OnClickListener { _: DialogInterface?, _: Int ->
+            databaseViewModel.deleteRecord(record)
+            Toast.makeText(requireContext(),resources.getString(R.string.eliminado_exito), Toast.LENGTH_SHORT).show()
+            (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
+            findNavController().navigate(R.id.historialFragment)
         }
         builder.setPositiveButton(resources.getString(R.string.si), c)
         builder.setNegativeButton(resources.getString(R.string.no), null)
         builder.setCancelable(true)
         val dialog = builder.create()
         dialog.show()
-    }*/
-
-    /*private fun borrarGasto(view: View) {
-        val result = dataBase!!.deleteGastoById(
-            Preferences.getPreferenceString(
-                requireContext(),
-                "edicion_gasto_id"
-            ).toInt(),
-            Preferences.getPreferenceString(requireContext(), "edicion_gasto_cantidad").toFloat(),
-            Preferences.getPreferenceString(requireContext(), "edicion_gasto_ingreso"),
-            (view.findViewById<View>(R.id.spinner_moneda) as Spinner).selectedItem.toString()
-        )
-        if (result) {
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.eliminado_exito),
-                Toast.LENGTH_SHORT
-            ).show()
-            tags.clear()
-            Preferences.deletePreferencesEdicionGasto(requireContext())
-        (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
-            findNavController().navigate(R.id.historialFragment)
-        } else {
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.error_eliminado),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }*/
-
-    @Throws(ParseException::class)
-    private fun guardarYCerrarEdicion(view: View) {
-       // editarGasto(view)
-        tags.clear()
-        Preferences.deletePreferencesEdicionGasto(requireContext())
-        (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
-        findNavController().navigate(R.id.historialFragment)
     }
 
-    private fun cerrarEdicion() {
-        tags.clear()
-        Preferences.deletePreferencesEdicionGasto(requireContext())
-        binding!!.constraintEdicion.removeViewAt(0)
-    }
 
     private fun irACrearMoneda() {
-        Preferences.savePreferenceString(
-            requireContext(),
-            "" + R.id.historialFragment,
-            "id_fragment_anterior"
-        )
         (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
         findNavController().navigate(R.id.crearMonedaFragment)
     }
@@ -483,10 +306,10 @@ class HistorialFragment : Fragment() {
     }
 
     private fun cleanHistorial() {
-        binding!!.textDesde.text = resources.getString(R.string.hace_un_mes)
-        binding!!.textHasta.text = resources.getString(R.string.hoy)
-        while (binding!!.layoutHistorial.childCount != 0) {
-            binding!!.layoutHistorial.removeViewAt(0)
+        binding.textDesde.text = resources.getString(R.string.hace_un_mes)
+        binding.textHasta.text = resources.getString(R.string.hoy)
+        while (binding.layoutHistorial.childCount != 0) {
+            binding.layoutHistorial.removeViewAt(0)
         }
     }
 
@@ -513,9 +336,9 @@ class HistorialFragment : Fragment() {
             hasta_date = sdf.parse(hasta)
             text_hasta = hasta
         }
-        //cargarHistorial(desde_date, hasta_date)
-        binding!!.textDesde.text = text_desde
-        binding!!.textHasta.text = text_hasta
+        loadRecords(desde_date, hasta_date)
+        binding.textDesde.text = text_desde
+        binding.textHasta.text = text_hasta
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -549,8 +372,8 @@ class HistorialFragment : Fragment() {
                 }
                 try {
                     filtrar(
-                        binding!!.textDesde.text.toString(),
-                        binding!!.textHasta.text.toString()
+                        binding.textDesde.text.toString(),
+                        binding.textHasta.text.toString()
                     )
                 } catch (e: ParseException) {
                     e.printStackTrace()

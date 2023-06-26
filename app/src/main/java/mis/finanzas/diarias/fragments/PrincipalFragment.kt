@@ -19,19 +19,18 @@ import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.activities.ActivityFinanzas
-import mis.finanzas.diarias.model.Currency
 import mis.finanzas.diarias.model.Record
+import mis.finanzas.diarias.model.TagRecord
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
-import mis.finanzas.diarias.viewmodels.RecordViewModel
-import java.text.ParseException
+import mis.finanzas.diarias.viewmodels.AddRecordViewModel
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class PrincipalFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasPrincipalBinding
     private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
-    private val recordViewModel: RecordViewModel by activityViewModels()
+    private val recordViewModel: AddRecordViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
 
@@ -160,7 +159,7 @@ class PrincipalFragment : Fragment() {
                 @SuppressLint("CutPasteId") val cantidad = view.findViewById<TextView>(R.id.cantidad)
                 moneda.text = currencyList.map { it.name }[x]
                 cantidad.text =
-                    currencyList.map { it.symbol }[x] + " " + Utils.formatoCantidad(currencyList.map { it.amount }[x])
+                    currencyList.map { it.symbol }[x] + " " + Utils.formatAmount(currencyList.map { it.amount }[x])
                 binding.currencyLayout.addView(view)
             }
         }
@@ -212,14 +211,16 @@ class PrincipalFragment : Fragment() {
             Toast.makeText(requireContext(), R.string.error_cantidad_null, Toast.LENGTH_SHORT).show()
             return
         }
-        val record = Record(recordViewModel.getDate(),
+        var record = Record(recordViewModel.getDate(),
                             recordViewModel.getAmount(),
                             recordViewModel.getReason(),
                             recordViewModel.getIncome(),
                             recordViewModel.getCurrency().id)
-        databaseViewModel.addRecord(record)
-        Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT)
-                .show()
+        var recordId = databaseViewModel.addRecord(record)
+
+        for (tag in recordViewModel.getSelectedTags()) databaseViewModel.addTagRecord(TagRecord(tag.id, recordId.toInt()))
+
+        Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show()
 
         cleanAndUpdate()
     }

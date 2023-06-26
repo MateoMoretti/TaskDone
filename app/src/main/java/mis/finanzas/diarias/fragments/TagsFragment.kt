@@ -21,13 +21,13 @@ import mis.finanzas.diarias.activities.ActivityFinanzas
 import mis.finanzas.diarias.model.Tag
 import mis.finanzas.diarias.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
-import mis.finanzas.diarias.viewmodels.RecordViewModel
+import mis.finanzas.diarias.viewmodels.AddRecordViewModel
 import java.util.*
 
 class TagsFragment : Fragment() {
     private lateinit var binding: FragmentTagsBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
-    private val recordViewModel: RecordViewModel by activityViewModels()
+    private val recordViewModel: AddRecordViewModel by activityViewModels()
 
     private lateinit var currentTags: List<Tag>
     var adapterTags: ListaTagsAdapter? = null

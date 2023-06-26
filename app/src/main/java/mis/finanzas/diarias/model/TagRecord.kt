@@ -1,13 +1,12 @@
 package mis.finanzas.diarias.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("Tag_Gasto")
+@Entity("TagRecord")
 data class TagRecord (
     var idTag: Int,
-    var idGasto: Int,
+    var idRecord: Int,
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 )

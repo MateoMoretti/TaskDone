@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class StatsFragment : Fragment() {
-    private var binding: FragmentFinanzasStatsBinding? = null
+    private lateinit var binding: FragmentFinanzasStatsBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     var all_gastos = ArrayList<Record>()
     var monedas = ArrayList<String>()
@@ -43,7 +43,7 @@ class StatsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentFinanzasStatsBinding.inflate(inflater, container, false)
         var selected_date_desde = Preferences.getPreferenceString(requireContext(), "stats_desde")
@@ -61,43 +61,43 @@ class StatsFragment : Fragment() {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        binding!!.tituloDesde.setOnClickListener { v: View? ->
+        binding.tituloDesde.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 true,
-                binding!!.textDesde
+                binding.textDesde
             )
         }
-        binding!!.tituloHasta.setOnClickListener { v: View? ->
+        binding.tituloHasta.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 false,
-                binding!!.textHasta
+                binding.textHasta
             )
         }
-        binding!!.calendarDesde.setOnClickListener { v: View? ->
+        binding.calendarDesde.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 true,
-                binding!!.textDesde
+                binding.textDesde
             )
         }
-        binding!!.calendarHasta.setOnClickListener { v: View? ->
+        binding.calendarHasta.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 false,
-                binding!!.textHasta
+                binding.textHasta
             )
         }
-        binding!!.textDesde.setOnClickListener { v: View? ->
+        binding.textDesde.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 true,
-                binding!!.textDesde
+                binding.textDesde
             )
         }
-        binding!!.textHasta.setOnClickListener { v: View? ->
+        binding.textHasta.setOnClickListener { v: View? ->
             showDatePickerDialog(
                 false,
-                binding!!.textHasta
+                binding.textHasta
             )
         }
-        binding!!.avanzado.setOnClickListener { v: View? ->
+        binding.avanzado.setOnClickListener { v: View? ->
             popupAvanzado(
                 ArrayList(
                     listOf(
@@ -106,7 +106,7 @@ class StatsFragment : Fragment() {
                 )
             )
         }
-        return binding!!.root
+        return binding.root
     }
 
     /*@SuppressLint("SetTextI18n", "InflateParams")
@@ -152,21 +152,21 @@ class StatsFragment : Fragment() {
             if (!hay_gastos) {
                 @SuppressLint("InflateParams") val view_tipo =
                     inflater.inflate(R.layout.item_texto_simple, null)
-                binding!!.layoutTipoGastos.addView(view_tipo)
+                binding.layoutTipoGastos.addView(view_tipo)
                 @SuppressLint("InflateParams") val view =
                     inflater.inflate(R.layout.item_stats, null)
                 (view.findViewById<View>(R.id.total) as TextView).typeface = Typeface.DEFAULT_BOLD
                 (view.findViewById<View>(R.id.promedio) as TextView).typeface =
                     Typeface.DEFAULT_BOLD
-                binding!!.layoutGastos.addView(view)
+                binding.layoutGastos.addView(view)
                 hay_gastos = true
             }
             agregarGastoIngreso(
                 total_gastos.getString(2),
                 total_gastos.getFloat(1),
                 total_gastos.getString(3),
-                binding!!.layoutGastos,
-                binding!!.layoutTipoGastos
+                binding.layoutGastos,
+                binding.layoutTipoGastos
             )
         }
         total_gastos.moveToFirst()
@@ -176,26 +176,26 @@ class StatsFragment : Fragment() {
             (view.findViewById<View>(R.id.texto) as TextView).text =
                 resources.getString(R.string.sin_gastos)
             (view.findViewById<View>(R.id.texto) as TextView).typeface = Typeface.DEFAULT_BOLD
-            binding!!.layoutTituloGasto.addView(view)
+            binding.layoutTituloGasto.addView(view)
         }
         while (total_ingresos.moveToNext()) {
             if (!hay_ingresos) {
                 hay_ingresos = true
                 @SuppressLint("InflateParams") val view_tipo =
                     inflater.inflate(R.layout.item_texto_simple, null)
-                binding!!.layoutTipoIngresos.addView(view_tipo)
+                binding.layoutTipoIngresos.addView(view_tipo)
                 val view = inflater.inflate(R.layout.item_stats, null)
                 (view.findViewById<View>(R.id.total) as TextView).typeface = Typeface.DEFAULT_BOLD
                 (view.findViewById<View>(R.id.promedio) as TextView).typeface =
                     Typeface.DEFAULT_BOLD
-                binding!!.layoutIngresos.addView(view)
+                binding.layoutIngresos.addView(view)
             }
             agregarGastoIngreso(
                 total_ingresos.getString(2),
                 total_ingresos.getFloat(1),
                 total_ingresos.getString(3),
-                binding!!.layoutIngresos,
-                binding!!.layoutTipoIngresos
+                binding.layoutIngresos,
+                binding.layoutTipoIngresos
             )
         }
         total_ingresos.moveToFirst()
@@ -205,7 +205,7 @@ class StatsFragment : Fragment() {
             (view.findViewById<View>(R.id.texto) as TextView).text =
                 resources.getString(R.string.sin_ingresos)
             (view.findViewById<View>(R.id.texto) as TextView).typeface = Typeface.DEFAULT_BOLD
-            binding!!.layoutTituloIngresos.addView(view)
+            binding.layoutTituloIngresos.addView(view)
         }
 
         //STATS AVANZADOS
@@ -223,10 +223,10 @@ class StatsFragment : Fragment() {
         (view.findViewById<View>(R.id.texto) as TextView).text =
             resources.getString(R.string.sin_info_sobre_tags)
         view.setPadding(0, 0, 0, 10)
-        binding!!.layoutTituloTags.addView(view)
+        binding.layoutTituloTags.addView(view)
         while (total_by_tags.moveToNext()) {
             if (!hay_tags) {
-                binding!!.layoutTituloTags.removeViewAt(1)
+                binding.layoutTituloTags.removeViewAt(1)
                 hay_tags = true
             }
             val total = total_by_tags.getFloat(1)
@@ -245,14 +245,14 @@ class StatsFragment : Fragment() {
                     )
                     (view_tipo.findViewById<View>(R.id.texto) as TextView).typeface =
                         Typeface.DEFAULT_BOLD
-                    binding!!.layoutTipoTags.addView(view_tipo)
+                    binding.layoutTipoTags.addView(view_tipo)
 
                     val viewStats = inflater.inflate(R.layout.item_stats, null)
                     (viewStats.findViewById<View>(R.id.total) as TextView).typeface =
                         Typeface.DEFAULT_BOLD
                     (viewStats.findViewById<View>(R.id.promedio) as TextView).typeface =
                         Typeface.DEFAULT_BOLD
-                    binding!!.layoutTags.addView(view)
+                    binding.layoutTags.addView(view)
                     hay_gasto_tag = true
                 }
             } else {
@@ -267,14 +267,14 @@ class StatsFragment : Fragment() {
                     (view_tipo.findViewById<View>(R.id.texto) as TextView).typeface =
                         Typeface.DEFAULT_BOLD
                     view_tipo.setPadding(0, 20, 0, 0)
-                    binding!!.layoutTipoTags.addView(view_tipo)
+                    binding.layoutTipoTags.addView(view_tipo)
                     val viewStats = inflater.inflate(R.layout.item_stats, null)
                     (viewStats.findViewById<View>(R.id.total) as TextView).typeface =
                         Typeface.DEFAULT_BOLD
                     (viewStats.findViewById<View>(R.id.promedio) as TextView).typeface =
                         Typeface.DEFAULT_BOLD
                     viewStats.setPadding(0, 20, 0, 0)
-                    binding!!.layoutTags.addView(view)
+                    binding.layoutTags.addView(view)
                     hay_ingreso_tag = true
                 }
             }
@@ -282,13 +282,13 @@ class StatsFragment : Fragment() {
                 inflater.inflate(R.layout.item_texto_simple, null)
             (view_tipo.findViewById<View>(R.id.texto) as TextView).text = "$nombre_tag: "
             (view_tipo.findViewById<View>(R.id.texto) as TextView).typeface = Typeface.DEFAULT_BOLD
-            binding!!.layoutTipoTags.addView(view_tipo)
+            binding.layoutTipoTags.addView(view_tipo)
             val viewStats = inflater.inflate(R.layout.item_stats, null)
             (viewStats.findViewById<View>(R.id.total) as TextView).text =
                 simbolo + " " + Utils.formatoCantidad(total)
             (viewStats.findViewById<View>(R.id.promedio) as TextView).text =
                 simbolo + " " + Utils.formatoCantidad(total / cantidad_dias)
-            binding!!.layoutTags.addView(view)
+            binding.layoutTags.addView(view)
         }
     }*/
 
@@ -311,9 +311,9 @@ class StatsFragment : Fragment() {
         layout_tipo.addView(view_tipo)
         @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.item_stats, null)
         (view.findViewById<View>(R.id.total) as TextView).text =
-            simbolo + " " + Utils.formatoCantidad(total)
+            simbolo + " " + Utils.formatAmount(total)
         (view.findViewById<View>(R.id.promedio) as TextView).text =
-            simbolo + " " + Utils.formatoCantidad(total / cantidad_dias)
+            simbolo + " " + Utils.formatAmount(total / cantidad_dias)
         layout.addView(view)
     }
 
@@ -341,36 +341,36 @@ class StatsFragment : Fragment() {
             text_hasta = hasta
         }
         //cargarStats(Utils.dateToCalendar(desde_date), Utils.dateToCalendar(hasta_date))
-        binding!!.textDesde.text = text_desde
-        binding!!.textHasta.text = text_hasta
+        binding.textDesde.text = text_desde
+        binding.textHasta.text = text_hasta
     }
 
     private fun cleanLayouts() {
         cantidad_dias = 0L
         gastos.clear()
         ingresos.clear()
-        binding!!.textDesde.text = resources.getString(R.string.hace_un_mes)
-        binding!!.textHasta.text = resources.getString(R.string.hoy)
-        while (binding!!.layoutTituloGasto.childCount != 1) {
-            binding!!.layoutTituloGasto.removeViewAt(1)
+        binding.textDesde.text = resources.getString(R.string.hace_un_mes)
+        binding.textHasta.text = resources.getString(R.string.hoy)
+        while (binding.layoutTituloGasto.childCount != 1) {
+            binding.layoutTituloGasto.removeViewAt(1)
         }
-        while (binding!!.layoutTituloIngresos.childCount != 1) {
-            binding!!.layoutTituloIngresos.removeViewAt(1)
+        while (binding.layoutTituloIngresos.childCount != 1) {
+            binding.layoutTituloIngresos.removeViewAt(1)
         }
-        while (binding!!.layoutTituloTags.childCount != 1) {
-            binding!!.layoutTituloTags.removeViewAt(1)
+        while (binding.layoutTituloTags.childCount != 1) {
+            binding.layoutTituloTags.removeViewAt(1)
         }
-        while (binding!!.layoutGastos.childCount != 0) {
-            binding!!.layoutGastos.removeViewAt(0)
-            binding!!.layoutTipoGastos.removeViewAt(0)
+        while (binding.layoutGastos.childCount != 0) {
+            binding.layoutGastos.removeViewAt(0)
+            binding.layoutTipoGastos.removeViewAt(0)
         }
-        while (binding!!.layoutIngresos.childCount != 0) {
-            binding!!.layoutIngresos.removeViewAt(0)
-            binding!!.layoutTipoIngresos.removeViewAt(0)
+        while (binding.layoutIngresos.childCount != 0) {
+            binding.layoutIngresos.removeViewAt(0)
+            binding.layoutTipoIngresos.removeViewAt(0)
         }
-        while (binding!!.layoutTags.childCount != 0) {
-            binding!!.layoutTags.removeViewAt(0)
-            binding!!.layoutTipoTags.removeViewAt(0)
+        while (binding.layoutTags.childCount != 0) {
+            binding.layoutTags.removeViewAt(0)
+            binding.layoutTipoTags.removeViewAt(0)
         }
     }
 
@@ -397,8 +397,8 @@ class StatsFragment : Fragment() {
                 }
                 try {
                     filtrar(
-                        binding!!.textDesde.text.toString(),
-                        binding!!.textHasta.text.toString()
+                        binding.textDesde.text.toString(),
+                        binding.textHasta.text.toString()
                     )
                 } catch (e: ParseException) {
                     e.printStackTrace()

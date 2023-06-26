@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
+import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.database.MyDataBase
 import mis.finanzas.diarias.model.Currency
 import mis.finanzas.diarias.model.Record
 import mis.finanzas.diarias.model.Tag
+import mis.finanzas.diarias.model.TagRecord
 import java.util.*
 
 
@@ -27,20 +29,26 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     }
 
     // ----------- RECORDS --------------
-    fun addRecord(record: Record) {
-        db.recordDao.addRecord(record)
-        val currency = db.currencyDao.getCurrencyById(record.idCurrency)[0]
-        if(record.isIncome) currency.amount += record.amount
-        else currency.amount -= record.amount
-        db.currencyDao.addCurrency(currency)
+    fun addRecord(record: Record): Long {
+        // Update amount
+        val currency = db.currencyDao.getCurrencyById(record.idCurrency)
+        if(record.isIncome) currency!!.amount += record.amount
+        else currency!!.amount -= record.amount
+        db.currencyDao.addCurrency(currency!!)
+        //add and return record
+        return db.recordDao.addRecord(record)
     }
 
     fun deleteRecord(record: Record) {
         db.recordDao.deleteRecord(record)
+        val tagRecords = getAllTagRecordByRecordId(record.id)
+        for(tr in tagRecords){
+            db.tagRecordDao.deleteTagRecord(tr)
+        }
     }
 
-    fun getRecords(desde: Date, hasta: Date): List<Record> {
-        return db.recordDao.getRecords(desde.time, hasta.time)
+    fun getRecords(from: Date, to: Date): List<Record> {
+        return db.recordDao.getRecords(Utils.dateToString(from), Utils.dateToString(to))
     }
 
     // ----------- CURRENCIES --------------
@@ -52,6 +60,13 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     fun deleteCurrency(currency: Currency) {
         db.currencyDao.deleteCurrency(currency)
         refreshAllCurrency()
+    }
+
+    fun getCurrencyById(id:Int): Currency? {
+        return db.currencyDao.getCurrencyById(id)
+    }
+    fun getCurrencyByName(name:String): Currency? {
+        return db.currencyDao.getCurrencyByName(name)
     }
 
     fun getAllCurrency(): List<Currency> {
@@ -73,8 +88,25 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     fun deleteTag(tag: Tag) {
         db.tagDao.deleteTag(tag)
     }
+    fun getTagsByIdList(tags:List<Int>): List<Tag> {
+        return db.tagDao.getTagsByIdList(tags)
+    }
 
     fun getAllTags(): List<Tag> {
         return db.tagDao.getTags()
+    }
+
+    // ----------- TAG-RECORD --------------
+    fun addTagRecord(tagRecord: TagRecord) {
+        db.tagRecordDao.addTagRecord(tagRecord)
+    }
+    fun deleteTagRecord(tagRecord: TagRecord) {
+        db.tagRecordDao.deleteTagRecord(tagRecord)
+    }
+    fun getAllTagRecord(): List<TagRecord> {
+        return db.tagRecordDao.getTagRecords()
+    }
+    fun getAllTagRecordByRecordId(id:Int): List<TagRecord> {
+        return db.tagRecordDao.getAllTagRecordByRecordId(id)
     }
 }

@@ -23,7 +23,7 @@ import mis.finanzas.diarias.viewmodels.DatabaseViewmodelFactory
 import java.util.*
 
 class StatsAvanzadosFragment : Fragment() {
-    private var binding: FragmentStatsAvanzadosBinding? = null
+    private lateinit var binding: FragmentStatsAvanzadosBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     var monedas = ArrayList<String>()
     var cantidades = ArrayList<Float>()
@@ -39,7 +39,7 @@ class StatsAvanzadosFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentStatsAvanzadosBinding.inflate(inflater, container, false)
         Ads.getInstance().cargarAnuncio(requireContext())
@@ -54,27 +54,27 @@ class StatsAvanzadosFragment : Fragment() {
             /*graficoBarrasGastosMensuales(
                 year_seleccionado,
                 "0",
-                binding!!.chartGastosMensuales,
+                binding.chartGastosMensuales,
                 monedas[0]
             )
             graficoBarrasGastosMensuales(
                 year_seleccionado,
                 "1",
-                binding!!.chartIngresosMensuales,
+                binding.chartIngresosMensuales,
                 monedas[0]
             )*/
             /*graficoTortaGastosPorTags(
                 year_seleccionado,
                 mes_seleccionado,
                 "0",
-                binding!!.piechartGastosTag,
+                binding.piechartGastosTag,
                 monedas[0]
             )
             graficoTortaGastosPorTags(
                 year_seleccionado,
                 mes_seleccionado,
                 "1",
-                binding!!.piechartIngresosTag,
+                binding.piechartIngresosTag,
                 monedas[0]
             )*/
         }
@@ -92,11 +92,11 @@ class StatsAvanzadosFragment : Fragment() {
             }
         }
         adapterSpinnerMonedas.setDropDownViewResource(R.layout.spinner_dropdown)
-        binding!!.spinnerMoneda.adapter = adapterSpinnerMonedas
-        binding!!.spinnerMoneda.background =
+        binding.spinnerMoneda.adapter = adapterSpinnerMonedas
+        binding.spinnerMoneda.background =
             resources.getDrawable(R.drawable.fondo_blanco_redondeado)
-        binding!!.spinnerMoneda.gravity = Gravity.CENTER
-        binding!!.spinnerMoneda.onItemSelectedListener =
+        binding.spinnerMoneda.gravity = Gravity.CENTER
+        binding.spinnerMoneda.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     adapterView: AdapterView<*>?,
@@ -110,27 +110,27 @@ class StatsAvanzadosFragment : Fragment() {
                             /*graficoBarrasGastosMensuales(
                                 year_seleccionado,
                                 "0",
-                                binding!!.chartGastosMensuales,
+                                binding.chartGastosMensuales,
                                 monedas[moneda_seleccionada]
                             )
                             graficoBarrasGastosMensuales(
                                 year_seleccionado,
                                 "1",
-                                binding!!.chartIngresosMensuales,
+                                binding.chartIngresosMensuales,
                                 monedas[moneda_seleccionada]
                             )*/
                             /*graficoTortaGastosPorTags(
                                 year_seleccionado,
                                 mes_seleccionado,
                                 "0",
-                                binding!!.piechartGastosTag,
+                                binding.piechartGastosTag,
                                 monedas[moneda_seleccionada]
                             )
                             graficoTortaGastosPorTags(
                                 year_seleccionado,
                                 mes_seleccionado,
                                 "1",
-                                binding!!.piechartIngresosTag,
+                                binding.piechartIngresosTag,
                                 monedas[moneda_seleccionada]
                             )*/
                         }
@@ -157,38 +157,38 @@ class StatsAvanzadosFragment : Fragment() {
             }
         }
         adapterSpinnerYear.setDropDownViewResource(R.layout.spinner_dropdown)
-        binding!!.spinnerYear.adapter = adapterSpinnerYear
-        binding!!.spinnerYear.background = resources.getDrawable(R.drawable.fondo_blanco_redondeado)
-        binding!!.spinnerYear.gravity = Gravity.CENTER
-        binding!!.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerYear.adapter = adapterSpinnerYear
+        binding.spinnerYear.background = resources.getDrawable(R.drawable.fondo_blanco_redondeado)
+        binding.spinnerYear.gravity = Gravity.CENTER
+        binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
                 if (check_for_spinners > 0) {
-                    year_seleccionado = binding!!.spinnerYear.selectedItem.toString()
+                    year_seleccionado = binding.spinnerYear.selectedItem.toString()
                     if (!monedas.isEmpty()) {
                         /*graficoBarrasGastosMensuales(
                             year_seleccionado,
                             "0",
-                            binding!!.chartGastosMensuales,
+                            binding.chartGastosMensuales,
                             monedas[moneda_seleccionada]
                         )
                         graficoBarrasGastosMensuales(
                             year_seleccionado,
                             "1",
-                            binding!!.chartIngresosMensuales,
+                            binding.chartIngresosMensuales,
                             monedas[moneda_seleccionada]
                         )*/
                         /*graficoTortaGastosPorTags(
                             year_seleccionado,
                             mes_seleccionado,
                             "0",
-                            binding!!.piechartGastosTag,
+                            binding.piechartGastosTag,
                             monedas[moneda_seleccionada]
                         )
                         graficoTortaGastosPorTags(
                             year_seleccionado,
                             mes_seleccionado,
                             "1",
-                            binding!!.piechartIngresosTag,
+                            binding.piechartIngresosTag,
                             monedas[moneda_seleccionada]
                         )*/
                     }
@@ -197,7 +197,7 @@ class StatsAvanzadosFragment : Fragment() {
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
-        binding!!.spinnerYear.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2021)
+        binding.spinnerYear.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2021)
         val meses = ArrayList<String>()
         for (x in 0..11) {
             meses.add(Utils.getMesPorNumero(x))
@@ -216,10 +216,10 @@ class StatsAvanzadosFragment : Fragment() {
             }
         }
         adapterSpinnerMeses.setDropDownViewResource(R.layout.spinner_dropdown)
-        binding!!.spinnerMes.adapter = adapterSpinnerMeses
-        binding!!.spinnerMes.background = resources.getDrawable(R.drawable.fondo_blanco_redondeado)
-        binding!!.spinnerMes.gravity = Gravity.CENTER
-        binding!!.spinnerMes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerMes.adapter = adapterSpinnerMeses
+        binding.spinnerMes.background = resources.getDrawable(R.drawable.fondo_blanco_redondeado)
+        binding.spinnerMes.gravity = Gravity.CENTER
+        binding.spinnerMes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View, i: Int, l: Long) {
                 if (check_for_spinners > 0) {
                     mes_seleccionado = Integer.toString(i + 1)
@@ -228,14 +228,14 @@ class StatsAvanzadosFragment : Fragment() {
                             year_seleccionado,
                             mes_seleccionado,
                             "0",
-                            binding!!.piechartGastosTag,
+                            binding.piechartGastosTag,
                             monedas[moneda_seleccionada]
                         )
                         graficoTortaGastosPorTags(
                             year_seleccionado,
                             mes_seleccionado,
                             "1",
-                            binding!!.piechartIngresosTag,
+                            binding.piechartIngresosTag,
                             monedas[moneda_seleccionada]
                         )*/
                     }
@@ -244,12 +244,12 @@ class StatsAvanzadosFragment : Fragment() {
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
-        binding!!.spinnerMes.setSelection(mes_seleccionado.toInt() - 1)
+        binding.spinnerMes.setSelection(mes_seleccionado.toInt() - 1)
         check_for_spinners = 1
-        binding!!.back.setOnClickListener { v: View? ->
+        binding.back.setOnClickListener { v: View? ->
             (activity as ActivityFinanzas).onBackPressed()
         }
-        return binding!!.root
+        return binding.root
     }
 
     /*@SuppressLint("SetTextI18n", "InflateParams")
