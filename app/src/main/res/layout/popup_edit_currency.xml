@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mis.finanzas.diarias.fragments.TagsFragment">
+    tools:context="mis.finanzas.diarias.finanzas.fragments.TagsFragment">
 
     <EditText
         android:id="@+id/edit_name"

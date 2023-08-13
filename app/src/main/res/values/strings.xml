@@ -8,6 +8,7 @@
 
     <!-- TITULOS -->
 
+    <string name="agenda">Agenda</string>
     <string name="finanzas">Finanzas</string>
     <string name="estadisticas">Estadísticas</string>
     <string name="historial">Historial</string>

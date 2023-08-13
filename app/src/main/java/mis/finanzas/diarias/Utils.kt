@@ -13,6 +13,7 @@ import android.content.DialogInterface
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import java.lang.Exception
 import java.lang.StringBuilder
 import java.text.*
 import java.time.temporal.ChronoUnit
@@ -94,16 +95,38 @@ object Utils {
                 && getPrimerDiaDelMes().get(Calendar.MONTH)+1 == Integer.parseInt(fecha.substring(5,7))
                 && getPrimerDiaDelMes().get(Calendar.DAY_OF_MONTH) == Integer.parseInt(fecha.substring(8,10));
     }*/
-    fun isHoy(fecha: String): Boolean {
-        return Calendar.getInstance()[Calendar.YEAR] == fecha.substring(0, 4)
-            .toInt() && Calendar.getInstance()[Calendar.MONTH] + 1 == fecha.substring(5, 7)
-            .toInt() && Calendar.getInstance()[Calendar.DAY_OF_MONTH] == fecha.substring(8, 10)
-            .toInt()
+
+    private fun equalsStringCalendar(fecha: String, calendar: Calendar): Boolean {
+        return calendar[Calendar.YEAR] == fecha.substring(0, 4).toInt()
+                && calendar[Calendar.MONTH] + 1 == fecha.substring(5, 7).toInt()
+                && calendar[Calendar.DAY_OF_MONTH] == fecha.substring(8, 10).toInt()
     }
+
+    fun isMonthAgo(fecha: String): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_MONTH, -30)
+        return equalsStringCalendar(fecha, calendar)
+    }
+    fun isHoy(date: String): Boolean = equalsStringCalendar(date, Calendar.getInstance())
+
+    fun isHoy(date: Date): Boolean = isHoy(dateToString(date))
 
     fun dateToString(d: Date?): String {
         @SuppressLint("SimpleDateFormat") val sdf = SimpleDateFormat("yyyy/MM/dd")
         return sdf.format(d)
+    }
+
+    fun stringToDate(s: String?): Date {
+        s?.let {
+            try {
+                @SuppressLint("SimpleDateFormat") val sdf = SimpleDateFormat("yyyy/MM/dd")
+                return sdf.parse(s)
+            }catch (exception:Exception){
+                return Calendar.getInstance().time
+            }
+        }
+        return Calendar.getInstance().time
+
     }
 
     fun twoDigits(n: Int): String {
@@ -125,8 +148,8 @@ object Utils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun diferenciaDeDias(desde: Calendar, hasta: Calendar): Long {
-        return ChronoUnit.DAYS.between(desde.time.toInstant(), hasta.time.toInstant()) + 1
+    fun diferenciaDeDias(from: Date, to: Date): Long {
+        return ChronoUnit.DAYS.between(from.toInstant(), to.toInstant()) + 1
     }
 
     fun arrayListToString(a: List<String>): String {

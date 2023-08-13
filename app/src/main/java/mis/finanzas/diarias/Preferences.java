@@ -37,39 +37,6 @@ public class Preferences {
         preferences.edit().clear().apply();
     }*/
 
-    public static void deleteFiltros(Context c) {
-        Preferences.deletePreferenceString(c, "stats_desde");
-        Preferences.deletePreferenceString(c, "stats_hasta");
-        Preferences.deletePreferenceString(c, "historial_desde");
-        Preferences.deletePreferenceString(c, "historial_hasta");
-    }
-
-    public static void deleteUser(Context c) {
-        Preferences.deletePreferenceString(c, "usuario");
-        Preferences.deletePreferenceString(c, "password");
-    }
-
-    public static void deletePreferencesGastoPendiente(Context c){
-        Preferences.deletePreferenceString(c, "gasto_fecha");
-        Preferences.deletePreferenceString(c, "gasto_moneda_index");
-        Preferences.deletePreferenceString(c, "gasto_cantidad");
-        Preferences.deletePreferenceString(c, "gasto_motivo");
-        Preferences.deletePreferenceString(c, "gasto_ingreso");
-        Preferences.deletePreferenceString(c, "gasto_tags");
-        Preferences.deletePreferenceString(c, "scroll_tags");
-    }
-
-
-    public static void deletePreferencesEdicionGasto(Context c){
-        Preferences.deletePreferenceString(c, "edicion_gasto_id");
-        Preferences.deletePreferenceString(c, "edicion_gasto_fecha");
-        Preferences.deletePreferenceString(c, "edicion_gasto_moneda_index");
-        Preferences.deletePreferenceString(c, "edicion_gasto_cantidad");
-        Preferences.deletePreferenceString(c, "edicion_gasto_motivo");
-        Preferences.deletePreferenceString(c, "edicion_gasto_ingreso");
-        Preferences.deletePreferenceString(c, "edicion_gasto_tags");
-        Preferences.deletePreferenceString(c, "scroll_tags");
-    }
 
 }
 
