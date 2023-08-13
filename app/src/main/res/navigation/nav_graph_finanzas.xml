@@ -3,96 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_finanzas"
-    app:startDestination="@id/principalFragment">
+    app:startDestination="@id/finanzasPrincipalFragment">
     <fragment
-        android:id="@+id/principalFragment"
+        android:id="@+id/finanzasPrincipalFragment"
         android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasFragment"
         android:label="fragment_finanzas_principal"
         tools:layout="@layout/fragment_finanzas_principal" >
         <action
             android:id="@+id/action_principalFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
+            app:destination="@id/finanzasStatsFragment" />
         <action
             android:id="@+id/action_principalFragment_to_historialFragment"
-            app:destination="@id/historialFragment" />
+            app:destination="@id/finanzasHistorialFragment" />
         <action
             android:id="@+id/action_principalFragment_self"
-            app:destination="@id/principalFragment" />
+            app:destination="@id/finanzasPrincipalFragment" />
         <action
             android:id="@+id/action_principalFragment_to_tagsFragment"
-            app:destination="@id/tagsFragment" />
+            app:destination="@id/finanzasTagsFragment" />
         <action
             android:id="@+id/action_principalFragment_to_crearMonedaFragment"
-            app:destination="@id/crearMonedaFragment" />
+            app:destination="@id/finanzasCrearMonedaFragment" />
+        <action
+            android:id="@+id/action_finanzasPrincipalFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
     </fragment>
     <fragment
-        android:id="@+id/historialFragment"
+        android:id="@+id/finanzasHistorialFragment"
         android:name="mis.finanzas.diarias.finanzas.fragments.HistorialFragment"
         android:label="fragment_finanzas_historial"
         tools:layout="@layout/fragment_finanzas_historial" >
         <action
             android:id="@+id/action_historialFragment_to_principalFragment"
-            app:destination="@id/principalFragment"
-            app:popUpTo="@id/principalFragment"
+            app:destination="@id/finanzasPrincipalFragment"
+            app:popUpTo="@id/finanzasPrincipalFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_historialFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
+            app:destination="@id/finanzasStatsFragment" />
         <action
             android:id="@+id/action_historialFragment_self"
-            app:destination="@id/historialFragment" />
+            app:destination="@id/finanzasHistorialFragment" />
+        <action
+            android:id="@+id/action_finanzasHistorialFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
     </fragment>
     <fragment
-        android:id="@+id/statsFragment"
+        android:id="@+id/finanzasStatsFragment"
         android:name="mis.finanzas.diarias.finanzas.fragments.StatsFragment"
         android:label="fragment_finanzas_statsl"
         tools:layout="@layout/fragment_finanzas_stats" >
         <action
             android:id="@+id/action_statsFragment_to_historialFragment"
-            app:destination="@id/historialFragment" />
+            app:destination="@id/finanzasHistorialFragment" />
         <action
             android:id="@+id/action_statsFragment_to_principalFragment"
-            app:destination="@id/principalFragment"
-            app:popUpTo="@id/principalFragment"
+            app:destination="@id/finanzasPrincipalFragment"
+            app:popUpTo="@id/finanzasPrincipalFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_statsFragment_self"
-            app:destination="@id/statsFragment" />
+            app:destination="@id/finanzasStatsFragment" />
         <action
             android:id="@+id/action_statsFragment_to_statsAvanzadosFragment2"
-            app:destination="@id/statsAvanzadosFragment" />
+            app:destination="@id/finanzasStatsAvanzadosFragment" />
+        <action
+            android:id="@+id/action_finanzasStatsFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
     </fragment>
     <fragment
-        android:id="@+id/tagsFragment"
+        android:id="@+id/finanzasTagsFragment"
         android:name="mis.finanzas.diarias.finanzas.fragments.TagsFragment"
         android:label="fragment_tags"
         tools:layout="@layout/fragment_tags" >
         <action
             android:id="@+id/action_tagsFragment_to_principalFragment"
-            app:destination="@id/principalFragment"
-            app:popUpTo="@id/principalFragment"
+            app:destination="@id/finanzasPrincipalFragment"
+            app:popUpTo="@id/finanzasPrincipalFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_finanzasTagsFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
     </fragment>
     <fragment
-        android:id="@+id/crearMonedaFragment"
+        android:id="@+id/finanzasCrearMonedaFragment"
         android:name="mis.finanzas.diarias.finanzas.fragments.CreateCurrencyFragment"
         android:label="fragment_crear_moneda"
         tools:layout="@layout/fragment_create_currency" >
         <action
             android:id="@+id/action_crearMonedaFragment_to_principalFragment"
-            app:destination="@id/principalFragment"
-            app:popUpTo="@id/principalFragment"
+            app:destination="@id/finanzasPrincipalFragment"
+            app:popUpTo="@id/finanzasPrincipalFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_finanzasCrearMonedaFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
     </fragment>
     <fragment
-        android:id="@+id/statsAvanzadosFragment"
+        android:id="@+id/finanzasStatsAvanzadosFragment"
         android:name="mis.finanzas.diarias.finanzas.fragments.StatsAvanzadosFragment"
         android:label="fragment_stats_avanzados"
         tools:layout="@layout/fragment_stats_avanzados" >
         <action
             android:id="@+id/action_statsAvanzadosFragment_to_statsFragment2"
-            app:destination="@id/statsFragment"
-            app:popUpTo="@id/statsFragment"
+            app:destination="@id/finanzasStatsFragment"
+            app:popUpTo="@id/finanzasStatsFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_finanzasStatsAvanzadosFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/agendaFragment"
+        android:name="mis.finanzas.diarias.agenda.fragments.AgendaFragment"
+        android:label="fragment_agenda_principal"
+        tools:layout="@layout/fragment_agenda_principal" />
 </navigation>

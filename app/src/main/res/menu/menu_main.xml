@@ -1,10 +1,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.taskdone.MenuPrincipalActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/agenda"
+            android:icon="@drawable/agenda"
+            android:title="@string/agenda" />
+        <item
+            android:id="@+id/finanzas"
+            android:icon="@drawable/signo_pesos"
+            android:title="@string/finanzas" />
+        <item
+            android:id="@+id/comidas"
+            android:icon="@drawable/comidas"
+            android:title="@string/comidas" />
+        <item
+            android:id="@+id/objetivos"
+            android:icon="@drawable/objetivos"
+            android:title="@string/objetivos" />
+        <item
+            android:id="@+id/extras"
+            android:icon="@android:drawable/ic_input_add"
+            android:title="@string/extras" />
+        <item
+            android:id="@+id/compartir"
+            android:icon="@android:drawable/ic_menu_share"
+            android:title="@string/compartir" />
+        <item
+            android:id="@+id/configuracion"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="@string/configuracion" />
+    </group>
 </menu>

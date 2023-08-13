@@ -16,7 +16,7 @@ import com.example.taskdone.R
 import com.example.taskdone.databinding.FragmentCreateCurrencyBinding
 import com.example.taskdone.databinding.ItemMonedaCantidadEditableBinding
 import com.example.taskdone.databinding.PopupEditCurrencyBinding
-import mis.finanzas.diarias.finanzas.ActivityFinanzas
+import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.model.Currency
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewmodelFactory
@@ -36,7 +36,7 @@ class CreateCurrencyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreateCurrencyBinding.inflate(inflater, container, false)
-        (activity as ActivityFinanzas).updateFragment(R.id.crearMonedaFragment)
+        (activity as ActivityMain).updateFragment(R.id.finanzasCrearMonedaFragment)
 
         databaseViewModel.getAllCurrency()
         setListeners()

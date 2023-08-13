@@ -20,7 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasStatsBinding
 import mis.finanzas.diarias.*
-import mis.finanzas.diarias.finanzas.ActivityFinanzas
+import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.model.Record
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewmodelFactory
@@ -42,7 +42,7 @@ class StatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFinanzasStatsBinding.inflate(inflater, container, false)
-        (activity as ActivityFinanzas).updateFragment(R.id.statsFragment)
+        (activity as ActivityMain).updateFragment(R.id.finanzasStatsFragment)
         this.inflater = inflater
 
         loadStats(statsViewModel.getDesdeDate(), statsViewModel.getHastaDate())
@@ -288,6 +288,6 @@ class StatsFragment : Fragment() {
         Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad")
         Ads.getInstance().show(activity)
 
-        findNavController().navigate(R.id.statsAvanzadosFragment)
+        findNavController().navigate(R.id.finanzasStatsAvanzadosFragment)
     }
 }

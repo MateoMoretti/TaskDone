@@ -15,13 +15,7 @@
             android:value="ca-app-pub-8001300265320389~8098987263"/>
 
         <activity
-            android:name="mis.finanzas.diarias.finanzas.ActivityFinanzas"
-            android:theme="@style/AppTheme.Finanzas"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name="mis.finanzas.diarias.agenda.ActivityAgenda"
+            android:name="mis.finanzas.diarias.ActivityMain"
             android:theme="@style/AppTheme.Finanzas"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">

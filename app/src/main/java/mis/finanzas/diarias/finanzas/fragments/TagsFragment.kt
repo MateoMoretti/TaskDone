@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskdone.databinding.FragmentTagsBinding
 import mis.finanzas.diarias.Utils
-import mis.finanzas.diarias.finanzas.ActivityFinanzas
+import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.model.Tag
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewmodelFactory
@@ -40,11 +40,11 @@ class TagsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTagsBinding.inflate(inflater, container, false)
-        when((activity as ActivityFinanzas).getFragmentId()){
-            R.id.principalFragment -> viewModel = addRecordViewModel
-            R.id.historialFragment -> viewModel = editRecordViewModel
+        when((activity as ActivityMain).getFragmentId()){
+            R.id.finanzasPrincipalFragment -> viewModel = addRecordViewModel
+            R.id.finanzasHistorialFragment -> viewModel = editRecordViewModel
         }
-        (activity as ActivityFinanzas).updateFragment(R.id.tagsFragment)
+        (activity as ActivityMain).updateFragment(R.id.finanzasTagsFragment)
 
         binding.back.setOnClickListener {
             findNavController().navigateUp()

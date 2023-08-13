@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mis Finanzas Diarias </string>
+    <string name="app_name">Life Tracker</string>
     <string name="action_settings">Configuración</string>
 
     <string name="elige_idioma">Elige idioma…</string>
@@ -10,6 +10,14 @@
 
     <string name="agenda">Agenda</string>
     <string name="finanzas">Finanzas</string>
+    <string name="comidas">Comidas</string>
+    <string name="objetivos">Objetivos</string>
+    <string name="extras">Extras</string>
+    <string name="compartir">Compartir</string>
+    <string name="configuracion">Configuracion</string>
+    <string name="secciones">Secciones</string>
+
+
     <string name="estadisticas">Estadísticas</string>
     <string name="historial">Historial</string>
     <string name="monedas">Monedas</string>
@@ -18,6 +26,11 @@
     <string name="registrarse">Registrarse</string>
     <string name="editar">Editar</string>
 
+
+    <!-- ACTIVITY -->
+    navigation_drawer_close
+    <string name="navigation_drawer_open">Abrir</string>
+    <string name="navigation_drawer_close">Cerrar</string>
     <!-- LOGIN -->
     <string name="bienvenido">Bienvenido !</string>
     <string name="name">Nombre</string>

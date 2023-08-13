@@ -22,7 +22,7 @@ import com.example.taskdone.R
 import com.example.taskdone.databinding.FragmentFinanzasHistorialBinding
 import mis.finanzas.diarias.DatePickerFragment
 import mis.finanzas.diarias.Utils
-import mis.finanzas.diarias.finanzas.ActivityFinanzas
+import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.model.Record
 import mis.finanzas.diarias.finanzas.model.Currency
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
@@ -48,7 +48,7 @@ class HistorialFragment : Fragment() {
     ): View {
 
         binding = FragmentFinanzasHistorialBinding.inflate(inflater, container, false)
-        (activity as ActivityFinanzas).updateFragment(R.id.historialFragment)
+        (activity as ActivityMain).updateFragment(R.id.finanzasHistorialFragment)
 
         currencyList = databaseViewModel.refreshAllCurrency()
         loadRecords(historialFilterViewModel.getDesdeDate(), historialFilterViewModel.getHastaDate())
@@ -213,10 +213,10 @@ class HistorialFragment : Fragment() {
             }
 
         (view.findViewById<View>(R.id.agregar_moneda) as Button).setOnClickListener {
-            findNavController().navigate(R.id.crearMonedaFragment)
+            findNavController().navigate(R.id.finanzasCrearMonedaFragment)
         }
         (view.findViewById<View>(R.id.agregar_tag) as Button).setOnClickListener {
-            findNavController().navigate(R.id.tagsFragment)
+            findNavController().navigate(R.id.finanzasTagsFragment)
         }
 
 
@@ -259,7 +259,7 @@ class HistorialFragment : Fragment() {
         databaseViewModel.updateRecord(oldRecord = databaseViewModel.getRecordById(record.id), record)
         editRecordViewModel.endEdit()
 
-        findNavController().navigate(R.id.historialFragment)
+        findNavController().navigate(R.id.finanzasHistorialFragment)
     }
 
     private fun popupDeleteRecord(record: Record) {
@@ -270,7 +270,7 @@ class HistorialFragment : Fragment() {
             databaseViewModel.deleteRecord(record)
             editRecordViewModel.endEdit()
             Toast.makeText(requireContext(),resources.getString(R.string.eliminado_exito), Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.historialFragment)
+            findNavController().navigate(R.id.finanzasHistorialFragment)
         }
         builder.setPositiveButton(resources.getString(R.string.si), c)
         builder.setNegativeButton(resources.getString(R.string.no), null)

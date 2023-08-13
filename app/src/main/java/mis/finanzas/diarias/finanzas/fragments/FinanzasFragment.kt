@@ -18,7 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding
 import mis.finanzas.diarias.Utils
-import mis.finanzas.diarias.finanzas.ActivityFinanzas
+import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.model.Record
 import mis.finanzas.diarias.finanzas.model.TagRecord
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
@@ -40,7 +40,7 @@ class FinanzasFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
-        (activity as ActivityFinanzas).updateFragment(R.id.principalFragment)
+        (activity as ActivityMain).updateFragment(R.id.finanzasPrincipalFragment)
         databaseViewModel.getAllCurrency()
 
         setObservers()
@@ -51,7 +51,7 @@ class FinanzasFragment : Fragment() {
 
         binding.agregarTag.setOnClickListener {
             run {
-            findNavController().navigate(R.id.tagsFragment)
+            findNavController().navigate(R.id.finanzasTagsFragment)
             }
         }
 
@@ -64,7 +64,7 @@ class FinanzasFragment : Fragment() {
         }
         binding.editFecha.setOnClickListener { showDatePicker() }
         binding.agregarMoneda.setOnClickListener {
-            findNavController().navigate(R.id.crearMonedaFragment)
+            findNavController().navigate(R.id.finanzasCrearMonedaFragment)
         }
         binding.editCantidad.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -106,7 +106,7 @@ class FinanzasFragment : Fragment() {
         databaseViewModel.currencies.observe(viewLifecycleOwner) { currencyList ->
             if (currencyList.map { it.name }.isEmpty()) {
 
-                findNavController().navigate(R.id.crearMonedaFragment)
+                findNavController().navigate(R.id.finanzasCrearMonedaFragment)
             }
             if(binding.spinnerMoneda.adapter == null || binding.spinnerMoneda.adapter?.count != currencyList.count()) {
                 val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(

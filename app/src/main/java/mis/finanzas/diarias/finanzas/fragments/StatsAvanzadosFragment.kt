@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.taskdone.databinding.FragmentStatsAvanzadosBinding
 import mis.finanzas.diarias.Utils
-import mis.finanzas.diarias.finanzas.ActivityFinanzas
+import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewmodelFactory
 import java.util.*
@@ -42,7 +42,7 @@ class StatsAvanzadosFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentStatsAvanzadosBinding.inflate(inflater, container, false)
-        (activity as ActivityFinanzas).updateFragment(R.id.statsAvanzadosFragment)
+        (activity as ActivityMain).updateFragment(R.id.finanzasStatsAvanzadosFragment)
         Ads.getInstance().cargarAnuncio(requireContext())
 
         /*val data = database!!.getMonedasByUserId(userViewModel.getId())
@@ -243,7 +243,7 @@ class StatsAvanzadosFragment : Fragment() {
         binding.spinnerMes.setSelection(mes_seleccionado.toInt() - 1)
         check_for_spinners = 1
         binding.back.setOnClickListener { v: View? ->
-            (activity as ActivityFinanzas).onBackPressed()
+            (activity as ActivityMain).onBackPressed()
         }
         return binding.root
     }

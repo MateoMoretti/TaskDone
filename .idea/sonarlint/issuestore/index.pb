@@ -33,9 +33,5 @@ Mapp/src/main/java/mis/finanzas/diarias/finanzas/interfaces/RecordInterface.kt,
 Qapp/src/main/java/mis/finanzas/diarias/finanzas/viewmodels/EditRecordViewModel.kt,c\d\cdf06ffabe6842ddca96e488ab286af4777fd2c7
 }
 Mapp/src/main/java/mis/finanzas/diarias/finanzas/components/ItemHistorial.java,f\a\fa5a18cd86c4a33061b5df03b1c7336d54458a69
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 ~
 Napp/src/main/java/mis/finanzas/diarias/finanzas/fragments/PrincipalFragment.kt,a\6\a65dce787f968ca8f94d0fc2b678c069e82dbdae
-o
-?app/src/main/java/mis/finanzas/diarias/agenda/ActivityAgenda.kt,4\f\4f38a0b06bbb76e50514586cab5df44a914bed50
