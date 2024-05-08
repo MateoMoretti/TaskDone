@@ -22,4 +22,8 @@
     <color name="azul_agenda">#229FFF</color>
     <color name="white">#FFFFFF</color>
 
+
+    <color name="azul_notificacion">#7FB1D6</color>
+    <color name="azul_detalles">#B5D4EC</color>
+
 </resources>

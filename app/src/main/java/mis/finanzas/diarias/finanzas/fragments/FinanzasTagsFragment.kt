@@ -41,7 +41,7 @@ class FinanzasTagsFragment : Fragment() {
     ): View {
         binding = FragmentTagsBinding.inflate(inflater, container, false)
         when((activity as ActivityMain).getFragmentId()){
-            R.id.finanzasPrincipalFragment -> viewModel = addRecordViewModel
+            R.id.finanzasFragment -> viewModel = addRecordViewModel
             R.id.finanzasHistorialFragment -> viewModel = editRecordViewModel
         }
         (activity as ActivityMain).updateFragment(R.id.finanzasTagsFragment)

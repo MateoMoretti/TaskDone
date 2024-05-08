@@ -16,7 +16,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.taskdone.databinding.FragmentFinanzasPrincipalBinding
+import com.example.taskdone.databinding.FragmentFinanzasBinding
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.ActivityMain
 import mis.finanzas.diarias.finanzas.model.Record
@@ -27,8 +27,8 @@ import mis.finanzas.diarias.finanzas.viewmodels.AddRecordViewModel
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-class FinanzasPrincipalFragment : Fragment() {
-    private lateinit var binding: FragmentFinanzasPrincipalBinding
+class FinanzasFragment : Fragment() {
+    private lateinit var binding: FragmentFinanzasBinding
     private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
     private val recordViewModel: AddRecordViewModel by activityViewModels()
 
@@ -39,8 +39,8 @@ class FinanzasPrincipalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFinanzasPrincipalBinding.inflate(inflater, container, false)
-        (activity as ActivityMain).updateFragment(R.id.finanzasPrincipalFragment)
+        binding = FragmentFinanzasBinding.inflate(inflater, container, false)
+        (activity as ActivityMain).updateFragment(R.id.finanzasFragment)
         databaseViewModel.getAllCurrency()
 
         setObservers()
@@ -92,8 +92,8 @@ class FinanzasPrincipalFragment : Fragment() {
             Utils.popupAyuda(
                 requireContext(), requireActivity(), ArrayList(
                     Arrays.asList(
-                        resources.getString(R.string.ayuda_principal_1),
-                        resources.getString(R.string.ayuda_principal_2)
+                        resources.getString(R.string.ayuda_finanzas_1),
+                        resources.getString(R.string.ayuda_finanzas_2)
                     )
                 )
             )

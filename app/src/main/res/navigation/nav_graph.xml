@@ -3,33 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_finanzas"
-    app:startDestination="@id/agendaPrincipalFragment">
+    app:startDestination="@id/agendaFragment">
     <fragment
-        android:id="@+id/finanzasPrincipalFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasPrincipalFragment"
-        android:label="fragment_finanzas_principal"
-        tools:layout="@layout/fragment_finanzas_principal" >
+        android:id="@+id/finanzasFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasFragment"
+        android:label="fragment_finanzas"
+        tools:layout="@layout/fragment_finanzas" >
         <action
-            android:id="@+id/action_principalFragment_to_statsFragment"
+            android:id="@+id/action_menuFragment_to_statsFragment"
             app:destination="@id/finanzasStatsFragment" />
         <action
-            android:id="@+id/action_principalFragment_to_historialFragment"
+            android:id="@+id/action_menuFragment_to_historialFragment"
             app:destination="@id/finanzasHistorialFragment" />
         <action
-            android:id="@+id/action_principalFragment_self"
-            app:destination="@id/finanzasPrincipalFragment" />
+            android:id="@+id/action_menuFragment_self"
+            app:destination="@id/finanzasFragment" />
         <action
-            android:id="@+id/action_principalFragment_to_tagsFragment"
+            android:id="@+id/action_menuFragment_to_tagsFragment"
             app:destination="@id/finanzasTagsFragment" />
         <action
-            android:id="@+id/action_principalFragment_to_crearMonedaFragment"
+            android:id="@+id/action_menuFragment_to_crearMonedaFragment"
             app:destination="@id/finanzasCrearMonedaFragment" />
         <action
-            android:id="@+id/action_finanzasPrincipalFragment_to_agendaFragment2"
-            app:destination="@id/agendaPrincipalFragment" />
+            android:id="@+id/action_finanzasFragment_to_agendaFragment2"
+            app:destination="@id/agendaFragment" />
         <action
-            android:id="@+id/action_finanzasPrincipalFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            android:id="@+id/action_finanzasFragment_to_comidasFragment"
+            app:destination="@id/comidasFragment" />
+        <action
+            android:id="@+id/action_finanzasFragment_to_principalFragment"
+            app:destination="@id/principalFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasHistorialFragment"
@@ -37,9 +40,9 @@
         android:label="fragment_finanzas_historial"
         tools:layout="@layout/fragment_finanzas_historial" >
         <action
-            android:id="@+id/action_historialFragment_to_principalFragment"
-            app:destination="@id/finanzasPrincipalFragment"
-            app:popUpTo="@id/finanzasPrincipalFragment"
+            android:id="@+id/action_historialFragment_to_menuFragment"
+            app:destination="@id/finanzasFragment"
+            app:popUpTo="@id/finanzasFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_historialFragment_to_statsFragment"
@@ -49,10 +52,10 @@
             app:destination="@id/finanzasHistorialFragment" />
         <action
             android:id="@+id/action_finanzasHistorialFragment_to_agendaFragment2"
-            app:destination="@id/agendaPrincipalFragment" />
+            app:destination="@id/agendaFragment" />
         <action
             android:id="@+id/action_finanzasHistorialFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            app:destination="@id/comidasFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasStatsFragment"
@@ -63,9 +66,9 @@
             android:id="@+id/action_statsFragment_to_historialFragment"
             app:destination="@id/finanzasHistorialFragment" />
         <action
-            android:id="@+id/action_statsFragment_to_principalFragment"
-            app:destination="@id/finanzasPrincipalFragment"
-            app:popUpTo="@id/finanzasPrincipalFragment"
+            android:id="@+id/action_statsFragment_to_menuFragment"
+            app:destination="@id/finanzasFragment"
+            app:popUpTo="@id/finanzasFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_statsFragment_self"
@@ -75,10 +78,10 @@
             app:destination="@id/finanzasStatsAvanzadosFragment" />
         <action
             android:id="@+id/action_finanzasStatsFragment_to_agendaFragment2"
-            app:destination="@id/agendaPrincipalFragment" />
+            app:destination="@id/agendaFragment" />
         <action
             android:id="@+id/action_finanzasStatsFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            app:destination="@id/comidasFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasTagsFragment"
@@ -86,16 +89,16 @@
         android:label="fragment_tags"
         tools:layout="@layout/fragment_tags" >
         <action
-            android:id="@+id/action_tagsFragment_to_principalFragment"
-            app:destination="@id/finanzasPrincipalFragment"
-            app:popUpTo="@id/finanzasPrincipalFragment"
+            android:id="@+id/action_tagsFragment_to_menuFragment"
+            app:destination="@id/finanzasFragment"
+            app:popUpTo="@id/finanzasFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_finanzasTagsFragment_to_agendaFragment2"
-            app:destination="@id/agendaPrincipalFragment" />
+            app:destination="@id/agendaFragment" />
         <action
             android:id="@+id/action_finanzasTagsFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            app:destination="@id/comidasFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasCrearMonedaFragment"
@@ -103,16 +106,16 @@
         android:label="fragment_crear_moneda"
         tools:layout="@layout/fragment_create_currency" >
         <action
-            android:id="@+id/action_crearMonedaFragment_to_principalFragment"
-            app:destination="@id/finanzasPrincipalFragment"
-            app:popUpTo="@id/finanzasPrincipalFragment"
+            android:id="@+id/action_crearMonedaFragment_to_menuFragment"
+            app:destination="@id/finanzasFragment"
+            app:popUpTo="@id/finanzasFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_finanzasCrearMonedaFragment_to_agendaFragment2"
-            app:destination="@id/agendaPrincipalFragment" />
+            app:destination="@id/agendaFragment" />
         <action
             android:id="@+id/action_finanzasCrearMonedaFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            app:destination="@id/comidasFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasStatsAvanzadosFragment"
@@ -126,23 +129,27 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_finanzasStatsAvanzadosFragment_to_agendaFragment2"
-            app:destination="@id/agendaPrincipalFragment" />
+            app:destination="@id/agendaFragment" />
         <action
             android:id="@+id/action_finanzasStatsAvanzadosFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            app:destination="@id/comidasFragment" />
     </fragment>
     <fragment
-        android:id="@+id/agendaPrincipalFragment"
-        android:name="mis.finanzas.diarias.agenda.fragments.AgendaPrincipalFragment"
-        android:label="fragment_agenda_principal"
-        tools:layout="@layout/fragment_agenda_principal" >
+        android:id="@+id/agendaFragment"
+        android:name="mis.finanzas.diarias.agenda.fragments.AgendaFragment"
+        android:label="fragment_agenda"
+        tools:layout="@layout/fragment_agenda" >
         <action
             android:id="@+id/action_agendaFragment_to_comidasFragment"
-            app:destination="@id/comidasPrincipalFragment" />
+            app:destination="@id/comidasFragment" />
     </fragment>
     <fragment
-        android:id="@+id/comidasPrincipalFragment"
-        android:name="mis.finanzas.diarias.comidas.fragments.ComidasPrincipalFragment"
-        android:label="fragment_comidas_principal"
-        tools:layout="@layout/fragment_comidas_principal" />
+        android:id="@+id/comidasFragment"
+        android:name="mis.finanzas.diarias.comidas.fragments.ComidasFragment"
+        android:label="fragment_comidas"
+        tools:layout="@layout/fragment_comidas" />
+    <fragment
+        android:id="@+id/principalFragment"
+        android:name="mis.finanzas.diarias.principal.fragments.PrincipalFragment"
+        android:label="PrincipalFragment" />
 </navigation>

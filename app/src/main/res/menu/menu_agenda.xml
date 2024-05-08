@@ -9,9 +9,9 @@
         android:title="Historial" />
 
     <item
-        android:id="@+id/nvg_principal"
+        android:id="@+id/nvg_menu"
         android:icon="@drawable/agenda"
-        android:title="Principal" />
+        android:title="Menu" />
     <item
         android:id="@+id/nvg_stats"
         android:icon="@drawable/stats"

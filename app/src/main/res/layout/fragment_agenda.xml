@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
     android:backgroundTintMode="add"
-    tools:context="mis.finanzas.diarias.agenda.fragments.AgendaPrincipalFragment">
+    tools:context="mis.finanzas.diarias.agenda.fragments.AgendaFragment">
 
     <ScrollView
         android:id="@+id/scrollview"

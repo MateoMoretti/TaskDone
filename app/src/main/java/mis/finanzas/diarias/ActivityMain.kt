@@ -24,7 +24,7 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
-    private var fragment = R.id.finanzasPrincipalFragment
+    private var fragment = R.id.finanzasFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +47,9 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.bottomBar.itemIconTintList = null
         binding.bottomBar.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.nvg_principal -> { fragment = R.id.agendaPrincipalFragment }
-                R.id.nvg_historial -> { fragment = R.id.agendaPrincipalFragment }
-                R.id.nvg_stats -> { fragment = R.id.agendaPrincipalFragment }
+                R.id.nvg_menu -> { fragment = R.id.agendaFragment }
+                R.id.nvg_historial -> { fragment = R.id.agendaFragment }
+                R.id.nvg_stats -> { fragment = R.id.agendaFragment }
             }
             navController.navigate(fragment)
             return@setOnItemSelectedListener true
@@ -59,24 +59,24 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setBottomNavBar(){
         val iconStats = ContextCompat.getDrawable(applicationContext, R.drawable.stats)
-        val center = binding.bottomBar.menu.findItem(R.id.nvg_principal)
+        val center = binding.bottomBar.menu.findItem(R.id.nvg_menu)
         val right = binding.bottomBar.menu.findItem(R.id.nvg_stats)
         val left = binding.bottomBar.menu.findItem(R.id.nvg_historial)
 
         when(fragment){
-            R.id.agendaPrincipalFragment -> {
+            R.id.agendaFragment -> {
                 center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.agenda)
                 iconStats!!.mutate().setColorFilter(getColor(R.color.azul_agenda), PorterDuff.Mode.SRC_IN)
                 right.icon = iconStats
                 left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
             }
-            R.id.finanzasPrincipalFragment -> {
+            R.id.finanzasFragment -> {
                 center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.signo_pesos)
                 iconStats!!.mutate().setColorFilter(getColor(R.color.naranja_finanzas), PorterDuff.Mode.SRC_IN)
                 right.icon = iconStats
                 left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
             }
-            R.id.comidasPrincipalFragment -> {
+            R.id.comidasFragment -> {
                 center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.comidas)
                 iconStats!!.mutate().setColorFilter(getColor(R.color.violeta_comidas), PorterDuff.Mode.SRC_IN)
                 right.icon = iconStats
@@ -85,21 +85,6 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
-    }
 
     fun updateFragment(id: Int) {
         fragment = id
@@ -123,14 +108,27 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun sideBarNavigate(menuItem: MenuItem) {
         when (menuItem.itemId) {
-            R.id.agenda -> {
-                binding.toolbar.title = getString(R.string.agenda)
-                fragment = R.id.agendaPrincipalFragment
+            R.id.principal -> {
+                binding.toolbar.title = getString(R.string.principal)
+                fragment = R.id.principalFragment
                 binding.bottomBar.setOnItemSelectedListener {
                     when (it.itemId) {
-                        R.id.nvg_principal -> { fragment = R.id.agendaPrincipalFragment }
-                        R.id.nvg_historial -> { fragment = R.id.agendaPrincipalFragment }
-                        R.id.nvg_stats -> { fragment = R.id.agendaPrincipalFragment }
+                        R.id.nvg_menu -> { fragment = R.id.agendaFragment }
+                        R.id.nvg_historial -> { fragment = R.id.agendaFragment }
+                        R.id.nvg_stats -> { fragment = R.id.agendaFragment }
+                    }
+                    navController.navigate(fragment)
+                    return@setOnItemSelectedListener true
+                }
+            }
+            R.id.agenda -> {
+                binding.toolbar.title = getString(R.string.agenda)
+                fragment = R.id.agendaFragment
+                binding.bottomBar.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.nvg_menu -> { fragment = R.id.agendaFragment }
+                        R.id.nvg_historial -> { fragment = R.id.agendaFragment }
+                        R.id.nvg_stats -> { fragment = R.id.agendaFragment }
                     }
                     navController.navigate(fragment)
                     return@setOnItemSelectedListener true
@@ -138,10 +136,10 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.finanzas -> {
                 binding.toolbar.title = getString(R.string.finanzas)
-                fragment = R.id.finanzasPrincipalFragment
+                fragment = R.id.finanzasFragment
                 binding.bottomBar.setOnItemSelectedListener {
                     when (it.itemId) {
-                        R.id.nvg_principal -> { fragment = R.id.finanzasPrincipalFragment }
+                        R.id.nvg_menu -> { fragment = R.id.finanzasFragment }
                         R.id.nvg_historial -> { fragment = R.id.finanzasHistorialFragment }
                         R.id.nvg_stats -> { fragment = R.id.finanzasStatsFragment }
                     }
@@ -151,12 +149,12 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.comidas -> {
                 binding.toolbar.title = getString(R.string.comidas)
-                fragment = R.id.comidasPrincipalFragment
+                fragment = R.id.comidasFragment
                 binding.bottomBar.setOnItemSelectedListener {
                     when (it.itemId) {
-                        R.id.nvg_principal -> { fragment = R.id.comidasPrincipalFragment }
-                        R.id.nvg_historial -> { fragment = R.id.comidasPrincipalFragment }
-                        R.id.nvg_stats -> { fragment = R.id.comidasPrincipalFragment }
+                        R.id.nvg_menu -> { fragment = R.id.comidasFragment }
+                        R.id.nvg_historial -> { fragment = R.id.comidasFragment }
+                        R.id.nvg_stats -> { fragment = R.id.comidasFragment }
                     }
                     navController.navigate(fragment)
                     return@setOnItemSelectedListener true
@@ -201,19 +199,4 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mTimePicker.setTitle("Selecciona la hora")
         mTimePicker.show()
     }
-
-
-    /*override fun onSupportNavigateUp(): Boolean {
-        when(fragment) {
-            R.id.principalFragment -> super.onBackPressedDispatcher.onBackPressed()
-            R.id.tagsFragment -> fragment = R.id.principalFragment
-            R.id.crearMonedaFragment -> fragment = R.id.principalFragment
-            R.id.historialFragment -> fragment = R.id.principalFragment
-            R.id.statsFragment -> fragment = R.id.principalFragment
-            R.id.statsAvanzadosFragment -> fragment = R.id.statsFragment
-            else -> return navController.navigateUp()
-        }
-        navController.navigate(fragment)
-        return true
-    }*/
 }

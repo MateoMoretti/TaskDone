@@ -10,9 +10,9 @@
     <!--        android:icon="@drawable/home"-->
 
     <item
-        android:id="@+id/nvg_principal"
+        android:id="@+id/nvg_menu"
         android:icon="@drawable/agenda"
-        android:title="Principal" />
+        android:title="Registrar gasto" />
 
     <item
         android:id="@+id/nvg_stats"

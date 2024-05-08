@@ -4,6 +4,10 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/principal"
+            android:icon="@drawable/principal"
+            android:title="@string/principal" />
+        <item
             android:id="@+id/agenda"
             android:icon="@drawable/agenda"
             android:checked="true"
