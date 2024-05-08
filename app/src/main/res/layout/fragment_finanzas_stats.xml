@@ -5,19 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
-    tools:context="mis.finanzas.diarias.finanzas.fragments.StatsFragment">
+    tools:context="mis.finanzas.diarias.finanzas.fragments.FinanzasStatsFragment">
 
     <TextView
         android:id="@+id/titulo"
-        style="@style/Titulos"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="@string/estadisticas"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="36sp"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -346,7 +345,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/tags"
-                        android:textColor="@color/naranja"
+                        android:textColor="@color/naranja_finanzas"
                         android:textSize="28sp" />
                 </LinearLayout>
 

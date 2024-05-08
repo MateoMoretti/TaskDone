@@ -8,11 +8,8 @@ import android.annotation.SuppressLint
 import android.widget.TextView
 import android.graphics.Typeface
 import android.widget.LinearLayout
-import android.app.Dialog
-import android.content.DialogInterface
 import android.view.*
 import android.widget.DatePicker
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -29,7 +26,7 @@ import java.text.DecimalFormat
 import java.util.*
 import java.util.stream.Collectors
 
-class StatsFragment : Fragment() {
+class FinanzasStatsFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasStatsBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     private val statsViewModel: StatsViewModel by activityViewModels()
@@ -54,9 +51,7 @@ class StatsFragment : Fragment() {
         binding.textDesde.setOnClickListener { showDatePickerDialog(binding.textDesde) }
         binding.textHasta.setOnClickListener { showDatePickerDialog(binding.textHasta) }
 
-        binding.avanzado.setOnClickListener { _: View? ->
-            popupAvanzado(ArrayList(listOf(resources.getString(R.string.mostrar_publicidad))))
-        }
+        binding.avanzado.setOnClickListener { findNavController().navigate(R.id.finanzasStatsAvanzadosFragment) }
         return binding.root
     }
     @SuppressLint("InflateParams")
@@ -158,7 +153,6 @@ class StatsFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n", "InflateParams")
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private fun loadStats(from: Date, to: Date) {
         cleanLayouts()
         dayDifference = Utils.diferenciaDeDias(from, to)
@@ -230,10 +224,9 @@ class StatsFragment : Fragment() {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private fun showDatePickerDialog(updateDate: TextView) {
         val newFragment =
-            DatePickerFragment.newInstance { datePicker: DatePicker?, year: Int, month: Int, day: Int ->
+            DatePickerFragment.newInstance { _: DatePicker?, year: Int, month: Int, day: Int ->
                 val selectedDate = year.toString() + "/" + twoDigits(month + 1) + "/" + twoDigits(day)
                 updateDate.text = selectedDate
 
@@ -250,44 +243,4 @@ class StatsFragment : Fragment() {
         return if (n <= 9) "0$n" else n.toString()
     }
 
-    //Mostrar solo la primera vez, luego acceder de una
-    @SuppressLint("RtlHardcoded")
-    fun popupAvanzado(strings: ArrayList<String>) {
-        if (Preferences.getPreferenceString(requireContext(), "acepto_publicidad") == "1") {
-            aceptarPublicidadEIrAvanzados()
-        } else {
-            val inflater = requireActivity().layoutInflater
-            val vista = inflater.inflate(R.layout.popup_informacion, null)
-            val text1 = vista.findViewById<TextView>(R.id.texto_1)
-            val texto_2 = vista.findViewById<TextView>(R.id.texto_2)
-            val texto_3 = vista.findViewById<TextView>(R.id.texto_3)
-            val texto_4 = vista.findViewById<TextView>(R.id.texto_4)
-            val texto_5 = vista.findViewById<TextView>(R.id.texto_5)
-            val textos = ArrayList(Arrays.asList(text1, texto_2, texto_3, texto_4, texto_5))
-            for (x in strings.indices) {
-                textos[x].text = strings[x]
-            }
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(requireContext().resources.getString(R.string.informacion))
-            builder.setView(vista)
-                .setPositiveButton(
-                    requireContext().resources.getString(R.string.aceptar)
-                ) { dialog: DialogInterface?, which: Int -> aceptarPublicidadEIrAvanzados() }
-            builder.setCancelable(true)
-            builder.setNegativeButton(resources.getString(R.string.cancelar), null)
-            val dialog: Dialog = builder.create()
-            val window = dialog.window
-            window?.setGravity(Gravity.CENTER or Gravity.RIGHT)
-            dialog.show()
-            dialog.window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-            dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        }
-    }
-
-    private fun aceptarPublicidadEIrAvanzados() {
-        Preferences.savePreferenceString(requireContext(), "1", "acepto_publicidad")
-        Ads.getInstance().show(activity)
-
-        findNavController().navigate(R.id.finanzasStatsAvanzadosFragment)
-    }
 }

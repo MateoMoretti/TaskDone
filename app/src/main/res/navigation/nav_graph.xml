@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_finanzas"
-    app:startDestination="@id/finanzasPrincipalFragment">
+    app:startDestination="@id/agendaPrincipalFragment">
     <fragment
         android:id="@+id/finanzasPrincipalFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasPrincipalFragment"
         android:label="fragment_finanzas_principal"
         tools:layout="@layout/fragment_finanzas_principal" >
         <action
@@ -26,11 +26,14 @@
             app:destination="@id/finanzasCrearMonedaFragment" />
         <action
             android:id="@+id/action_finanzasPrincipalFragment_to_agendaFragment2"
-            app:destination="@id/agendaFragment" />
+            app:destination="@id/agendaPrincipalFragment" />
+        <action
+            android:id="@+id/action_finanzasPrincipalFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasHistorialFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.HistorialFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasHistorialFragment"
         android:label="fragment_finanzas_historial"
         tools:layout="@layout/fragment_finanzas_historial" >
         <action
@@ -46,11 +49,14 @@
             app:destination="@id/finanzasHistorialFragment" />
         <action
             android:id="@+id/action_finanzasHistorialFragment_to_agendaFragment2"
-            app:destination="@id/agendaFragment" />
+            app:destination="@id/agendaPrincipalFragment" />
+        <action
+            android:id="@+id/action_finanzasHistorialFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasStatsFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.StatsFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasStatsFragment"
         android:label="fragment_finanzas_statsl"
         tools:layout="@layout/fragment_finanzas_stats" >
         <action
@@ -69,11 +75,14 @@
             app:destination="@id/finanzasStatsAvanzadosFragment" />
         <action
             android:id="@+id/action_finanzasStatsFragment_to_agendaFragment2"
-            app:destination="@id/agendaFragment" />
+            app:destination="@id/agendaPrincipalFragment" />
+        <action
+            android:id="@+id/action_finanzasStatsFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasTagsFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.TagsFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasTagsFragment"
         android:label="fragment_tags"
         tools:layout="@layout/fragment_tags" >
         <action
@@ -83,11 +92,14 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_finanzasTagsFragment_to_agendaFragment2"
-            app:destination="@id/agendaFragment" />
+            app:destination="@id/agendaPrincipalFragment" />
+        <action
+            android:id="@+id/action_finanzasTagsFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasCrearMonedaFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.CreateCurrencyFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasCreateCurrencyFragment"
         android:label="fragment_crear_moneda"
         tools:layout="@layout/fragment_create_currency" >
         <action
@@ -97,11 +109,14 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_finanzasCrearMonedaFragment_to_agendaFragment2"
-            app:destination="@id/agendaFragment" />
+            app:destination="@id/agendaPrincipalFragment" />
+        <action
+            android:id="@+id/action_finanzasCrearMonedaFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
     </fragment>
     <fragment
         android:id="@+id/finanzasStatsAvanzadosFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.StatsAvanzadosFragment"
+        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasStatsAvanzadosFragment"
         android:label="fragment_stats_avanzados"
         tools:layout="@layout/fragment_stats_avanzados" >
         <action
@@ -111,11 +126,23 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_finanzasStatsAvanzadosFragment_to_agendaFragment2"
-            app:destination="@id/agendaFragment" />
+            app:destination="@id/agendaPrincipalFragment" />
+        <action
+            android:id="@+id/action_finanzasStatsAvanzadosFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
     </fragment>
     <fragment
-        android:id="@+id/agendaFragment"
-        android:name="mis.finanzas.diarias.agenda.fragments.AgendaFragment"
+        android:id="@+id/agendaPrincipalFragment"
+        android:name="mis.finanzas.diarias.agenda.fragments.AgendaPrincipalFragment"
         android:label="fragment_agenda_principal"
-        tools:layout="@layout/fragment_agenda_principal" />
+        tools:layout="@layout/fragment_agenda_principal" >
+        <action
+            android:id="@+id/action_agendaFragment_to_comidasFragment"
+            app:destination="@id/comidasPrincipalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/comidasPrincipalFragment"
+        android:name="mis.finanzas.diarias.comidas.fragments.ComidasPrincipalFragment"
+        android:label="fragment_comidas_principal"
+        tools:layout="@layout/fragment_comidas_principal" />
 </navigation>

@@ -1,9 +1,13 @@
 package mis.finanzas.diarias
 
+import android.app.TimePickerDialog
+import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.taskdone.R
 import com.example.taskdone.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import java.util.Calendar
 
 
 class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,57 +33,55 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
         navController = navHostFragment!!.navController
-
-        setSupportActionBar(binding.toolbar)
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout,
-            binding.toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        );
-        binding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState()
-        binding.sideBar.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
-        val menuItem: MenuItem = binding.sideBar.menu.getItem(1)
-        onNavigationItemSelected(menuItem)
-        menuItem.isChecked = true
-
-        Ads.getInstance().cargarAnuncio(applicationContext)
-
-
-        val pesos = binding.bottomBar.menu.findItem(R.id.nvg_principal)
-        val stats = binding.bottomBar.menu.findItem(R.id.nvg_stats)
-        val historial = binding.bottomBar.menu.findItem(R.id.nvg_historial)
-
-        val drSignoPesos = ContextCompat.getDrawable(applicationContext, R.drawable.signo_pesos)
-        val drStats = ContextCompat.getDrawable(applicationContext, R.drawable.stats)
-        val drHistorial = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
-
-        drSignoPesos!!.mutate().setColorFilter(getColor(R.color.verde), PorterDuff.Mode.SRC_IN)
-        drStats!!.mutate().setColorFilter(getColor(R.color.naranja), PorterDuff.Mode.SRC_IN)
-        drHistorial!!.mutate().setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_IN)
-        pesos.icon = drSignoPesos
-        stats.icon = drStats
-        historial.icon = drHistorial
         Utils.setContext(applicationContext)
 
+        setSupportActionBar(binding.toolbar)
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        binding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState()
+
+        binding.sideBar.itemIconTintList = null
+        binding.sideBar.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
+
+
+        binding.bottomBar.itemIconTintList = null
         binding.bottomBar.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.nvg_principal -> {
-                    fragment = R.id.finanzasPrincipalFragment
-                }
-
-                R.id.nvg_historial -> {
-                    fragment = R.id.finanzasHistorialFragment
-                }
-
-                R.id.nvg_stats -> {
-                    fragment = R.id.finanzasStatsFragment
-                }
+                R.id.nvg_principal -> { fragment = R.id.agendaPrincipalFragment }
+                R.id.nvg_historial -> { fragment = R.id.agendaPrincipalFragment }
+                R.id.nvg_stats -> { fragment = R.id.agendaPrincipalFragment }
             }
             navController.navigate(fragment)
             return@setOnItemSelectedListener true
+        }
+        setBottomNavBar()
+    }
+
+    private fun setBottomNavBar(){
+        val iconStats = ContextCompat.getDrawable(applicationContext, R.drawable.stats)
+        val center = binding.bottomBar.menu.findItem(R.id.nvg_principal)
+        val right = binding.bottomBar.menu.findItem(R.id.nvg_stats)
+        val left = binding.bottomBar.menu.findItem(R.id.nvg_historial)
+
+        when(fragment){
+            R.id.agendaPrincipalFragment -> {
+                center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.agenda)
+                iconStats!!.mutate().setColorFilter(getColor(R.color.azul_agenda), PorterDuff.Mode.SRC_IN)
+                right.icon = iconStats
+                left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
+            }
+            R.id.finanzasPrincipalFragment -> {
+                center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.signo_pesos)
+                iconStats!!.mutate().setColorFilter(getColor(R.color.naranja_finanzas), PorterDuff.Mode.SRC_IN)
+                right.icon = iconStats
+                left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
+            }
+            R.id.comidasPrincipalFragment -> {
+                center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.comidas)
+                iconStats!!.mutate().setColorFilter(getColor(R.color.violeta_comidas), PorterDuff.Mode.SRC_IN)
+                right.icon = iconStats
+                left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
+            }
         }
     }
 
@@ -114,39 +117,89 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         sideBarNavigate(menuItem)
-        menuItem.isChecked = true
-        binding.drawerLayout.closeDrawer(GravityCompat.START);
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
     private fun sideBarNavigate(menuItem: MenuItem) {
         when (menuItem.itemId) {
             R.id.agenda -> {
-                title = getString(R.string.agenda)
-                fragment = R.id.agendaFragment
+                binding.toolbar.title = getString(R.string.agenda)
+                fragment = R.id.agendaPrincipalFragment
+                binding.bottomBar.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.nvg_principal -> { fragment = R.id.agendaPrincipalFragment }
+                        R.id.nvg_historial -> { fragment = R.id.agendaPrincipalFragment }
+                        R.id.nvg_stats -> { fragment = R.id.agendaPrincipalFragment }
+                    }
+                    navController.navigate(fragment)
+                    return@setOnItemSelectedListener true
+                }
             }
             R.id.finanzas -> {
-                getString(R.string.finanzas)
+                binding.toolbar.title = getString(R.string.finanzas)
                 fragment = R.id.finanzasPrincipalFragment
+                binding.bottomBar.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.nvg_principal -> { fragment = R.id.finanzasPrincipalFragment }
+                        R.id.nvg_historial -> { fragment = R.id.finanzasHistorialFragment }
+                        R.id.nvg_stats -> { fragment = R.id.finanzasStatsFragment }
+                    }
+                    navController.navigate(fragment)
+                    return@setOnItemSelectedListener true
+                }
             }
             R.id.comidas -> {
-                getString(R.string.comidas)
+                binding.toolbar.title = getString(R.string.comidas)
+                fragment = R.id.comidasPrincipalFragment
+                binding.bottomBar.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.nvg_principal -> { fragment = R.id.comidasPrincipalFragment }
+                        R.id.nvg_historial -> { fragment = R.id.comidasPrincipalFragment }
+                        R.id.nvg_stats -> { fragment = R.id.comidasPrincipalFragment }
+                    }
+                    navController.navigate(fragment)
+                    return@setOnItemSelectedListener true
+                }
             }
             R.id.objetivos -> {
-                getString(R.string.objetivos)
+                binding.toolbar.title = getString(R.string.objetivos)
             }
             R.id.extras -> {
-                getString(R.string.extras)
+                binding.toolbar.title = getString(R.string.extras)
             }
             R.id.compartir -> {
-                getString(R.string.compartir)
+                binding.toolbar.title = getString(R.string.compartir)
             }
             R.id.configuracion -> {
-                getString(R.string.configuracion)
+                binding.toolbar.title = getString(R.string.configuracion)
             }
             else -> ""
         }
+        setBottomNavBar()
         navController.navigate(fragment)
+    }
+
+
+    fun selectTime(editText: TextView, context:Context) {
+        val mcurrentTime = Calendar.getInstance()
+        val hourOfDay: Int = mcurrentTime.get(Calendar.HOUR_OF_DAY)
+        val minute: Int = mcurrentTime.get(Calendar.MINUTE)
+        val mTimePicker = TimePickerDialog(context,
+            { _, selectedHour, selectedMinute ->
+                run {
+                    val min = if (selectedMinute < 10) "0$selectedMinute" else selectedMinute
+                    val hour = if (selectedHour < 10) "0$selectedHour" else selectedHour
+                    editText.setText("$hour:$min")
+                }
+            },
+            hourOfDay,
+            minute,
+            true
+        )
+
+        mTimePicker.setTitle("Selecciona la hora")
+        mTimePicker.show()
     }
 
 

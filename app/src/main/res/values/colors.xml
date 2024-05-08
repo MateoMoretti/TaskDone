@@ -17,7 +17,9 @@
     <color name="rojo_egreso">#A60101</color>
     <color name="rojo_fuerte">#FF3B3B</color>
     <color name="rojo_egreso_fondo">#FFDADA</color>
-    <color name="naranja">#FF8922</color>
+    <color name="naranja_finanzas">#FF8922</color>
+    <color name="violeta_comidas">#B78AFF</color>
+    <color name="azul_agenda">#229FFF</color>
     <color name="white">#FFFFFF</color>
 
 </resources>

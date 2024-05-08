@@ -15,7 +15,6 @@
     <string name="extras">Extras</string>
     <string name="compartir">Compartir</string>
     <string name="configuracion">Configuracion</string>
-    <string name="secciones">Secciones</string>
 
 
     <string name="estadisticas">Estadísticas</string>
@@ -80,7 +79,6 @@
     <string name="por_dia">Por día</string>
 
     <!-- MONEDAS -->
-
     <string name="moneda">Moneda</string>
     <string name="simbolo">Simbolo</string>
     <string name="cantidad">Cantidad</string>
@@ -88,6 +86,18 @@
     <string name="example_moneda">Pesos</string>
     <string name="example_simbolo">$</string>
 
+    <!-- ADD RECORD -->
+    <string name="fecha_input">Fecha:</string>
+    <string name="moneda_input">Moneda:</string>
+    <string name="cantidad_input">Cantidad:</string>
+    <string name="motivo_input">Motivo:</string>
+    <string name="tags_input">Etiquetas:</string>
+    <string name="tag...">Etiqueta…</string>
+    <string name="nombre...">Nombre…</string>
+    <string name="simbolo...">Simbolo…</string>
+    <string name="sin_seleccionados">0 seleccionadas</string>
+    <string name="seleccionados">seleccionadas</string>
+    <string name="es_ingreso">Es ingreso</string>
 
     <!-- FECHAS -->
     <string name="desde">Desde</string>
@@ -96,24 +106,21 @@
     <string name="comienzo_de_year">Comienzo de año</string>
     <string name="hace_un_mes">Hace 30 días</string>
     <string name="hoy">Hoy</string>
-    <string name="year.">Año:</string>
+    <string name="year_input">Año:</string>
     <string name="year">Año</string>
     <string name="mes">Mes</string>
+    <string name="time">Hora: </string>
 
+    <!-- COMIDAS -->
+    <string name="food_favorites">Tus comidas favoritas</string>
+    <string name="add_food">Agregar comida</string>
+    <string name="food_description">Descripcion: </string>
 
-    <!-- AGREGAR GASTO -->
+    <!-- AGENDA -->
+    <string name="current_day_schedule">Estos son tus planes para el día</string>
+    <string name="add_event">Agregar evento</string>
+    <string name="event">Evento</string>
 
-    <string name="fecha.">Fecha:</string>
-    <string name="moneda.">Moneda:</string>
-    <string name="cantidad.">Cantidad:</string>
-    <string name="motivo.">Motivo:</string>
-    <string name="tags.">Etiquetas:</string>
-    <string name="tag...">Etiqueta…</string>
-    <string name="nombre...">Nombre…</string>
-    <string name="simbolo...">Simbolo…</string>
-    <string name="sin_seleccionados">0 seleccionadas</string>
-    <string name="seleccionados">seleccionadas</string>
-    <string name="es_ingreso">Es ingreso</string>
 
     <!-- ACCIONES -->
     <string name="crea_una_moneda">Crea una moneda</string>

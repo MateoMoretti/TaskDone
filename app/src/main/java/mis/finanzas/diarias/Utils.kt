@@ -147,7 +147,6 @@ object Utils {
         return df.parse(s)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     fun diferenciaDeDias(from: Date, to: Date): Long {
         return ChronoUnit.DAYS.between(from.toInstant(), to.toInstant()) + 1
     }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
-    tools:context="mis.finanzas.diarias.finanzas.fragments.FinanzasFragment">
+    tools:context="mis.finanzas.diarias.finanzas.fragments.FinanzasPrincipalFragment">
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -28,44 +28,10 @@
                 android:layout_gravity="center"
                 android:layout_weight="2">
 
-                <ImageView
-                    android:id="@+id/logout"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/logout"
-                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
-                    app:layout_constraintEnd_toStartOf="@+id/titulo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/titulo" />
-
-                <TextView
-                    android:id="@+id/titulo"
-                    style="@style/Titulos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/finanzas"
-                    android:textColor="#FFFFFF"
-                    android:textSize="36sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/ayuda"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@android:drawable/ic_dialog_info"
-                    app:layout_constraintBottom_toBottomOf="@+id/titulo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titulo"
-                    app:layout_constraintTop_toTopOf="@+id/titulo" />
-
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:text="@string/tu_dinero"
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
@@ -73,10 +39,10 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/titulo" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
-                    android:id="@+id/currencyLayout"
+                    android:id="@+id/contentLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -108,13 +74,13 @@
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/currencyLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/contentLayout" />
 
                 <TextView
                     android:id="@+id/txt_fecha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fecha."
+                    android:text="@string/fecha_input"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_fecha"
@@ -140,7 +106,7 @@
                     android:id="@+id/txt_tipo_moneda"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/moneda."
+                    android:text="@string/moneda_input"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/spinner_moneda"
@@ -169,7 +135,7 @@
                     android:id="@+id/txt_cantidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/cantidad."
+                    android:text="@string/cantidad_input"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_cantidad"
@@ -197,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:text="@string/motivo."
+                    android:text="@string/motivo_input"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_motivo"
@@ -252,7 +218,7 @@
                     android:id="@+id/txt_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tags."
+                    android:text="@string/tags_input"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/txt_tag_seleccionados"

@@ -25,7 +25,7 @@ import mis.finanzas.diarias.finanzas.viewmodels.BaseRecordViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.EditRecordViewModel
 import java.util.*
 
-class TagsFragment : Fragment() {
+class FinanzasTagsFragment : Fragment() {
     private lateinit var binding: FragmentTagsBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     private val addRecordViewModel: AddRecordViewModel by activityViewModels()

@@ -44,6 +44,7 @@
     <style name="Titulos">
         <item name="android:color" tools:ignore="PrivateResource">@color/cardview_light_background</item>
         <item name="android:fontFamily">@font/frijole</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
 </resources>

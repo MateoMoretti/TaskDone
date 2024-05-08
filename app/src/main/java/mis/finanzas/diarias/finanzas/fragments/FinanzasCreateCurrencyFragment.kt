@@ -21,7 +21,7 @@ import mis.finanzas.diarias.finanzas.model.Currency
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewmodelFactory
 
-class CreateCurrencyFragment : Fragment() {
+class FinanzasCreateCurrencyFragment : Fragment() {
     private lateinit var binding: FragmentCreateCurrencyBinding
     private val databaseViewModel: DatabaseViewModel by activityViewModels {
         DatabaseViewmodelFactory(
@@ -73,7 +73,7 @@ class CreateCurrencyFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun loadCurrencies(currencies: List<Currency>) {
-        binding.currencyLayout.removeAllViews()
+        binding.contentLayout.removeAllViews()
         if (currencies.isEmpty()){
             binding.yourCurrencies.visibility = View.GONE
             binding.back.visibility = View.GONE
@@ -87,7 +87,7 @@ class CreateCurrencyFragment : Fragment() {
         for (c in currencies) {
             val view = ItemMonedaCantidadEditableBinding.inflate(
                 layoutInflater,
-                binding.currencyLayout,
+                binding.contentLayout,
                 true
             )
             view.name.text = c.name

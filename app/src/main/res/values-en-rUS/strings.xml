@@ -44,11 +44,11 @@
     <string name="hasta">To</string>
     <string name="comienzo_de_mes">Start of the month</string>
     <string name="hoy">Today</string>
-    <string name="fecha.">"Date: "</string>
-    <string name="moneda.">Currency:</string>
-    <string name="cantidad.">Amount:</string>
-    <string name="motivo.">Reason:</string>
-    <string name="tags.">Tags:</string>
+    <string name="fecha_input">"Date: "</string>
+    <string name="moneda_input">Currency:</string>
+    <string name="cantidad_input">Amount:</string>
+    <string name="motivo_input">Reason:</string>
+    <string name="tags_input">Tags:</string>
     <string name="tag...">Tag…</string>
     <string name="sin_seleccionados">0 selected</string>
     <string name="seleccionados">selected</string>
@@ -101,7 +101,7 @@
     <string name="stats_avanzados">Advanced stats</string>
     <string name="mostrar_publicidad">Watch an ad and access advanced stats</string>
     <string name="seleciona">Select…</string>
-    <string name="year.">Year:</string>
+    <string name="year_input">Year:</string>
     <string name="year">Year</string>
     <string name="comienzo_de_year">Start of the year</string>
     <string name="hace_un_mes">30 days ago</string>
@@ -111,4 +111,12 @@
     <string name="gastos_por_tags">Expenses per tags</string>
     <string name="ingresos_por_tags">Income per tags</string>
     <string name="sin_tag">Without tag</string>
+    <string name="agenda">Schedule</string>
+    <string name="comidas">Food</string>
+    <string name="objetivos">Tasks</string>
+    <string name="extras">Extras</string>
+    <string name="compartir">Share</string>
+    <string name="configuracion">Settings</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
 </resources>

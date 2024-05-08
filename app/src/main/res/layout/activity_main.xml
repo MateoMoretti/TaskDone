@@ -19,6 +19,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="@color/white"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/Titulos"
+            app:title="@string/agenda"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:navGraph="@navigation/nav_graph_finanzas" />
+            app:navGraph="@navigation/nav_graph" />
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

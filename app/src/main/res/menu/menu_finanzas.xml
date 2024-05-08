@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/nvg_principal"
-        android:icon="@drawable/signo_pesos"
+        android:icon="@drawable/agenda"
         android:title="Principal" />
 
     <item

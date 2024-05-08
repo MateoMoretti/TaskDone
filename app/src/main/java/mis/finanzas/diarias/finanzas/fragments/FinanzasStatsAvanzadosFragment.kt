@@ -6,7 +6,6 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.os.Bundle
-import mis.finanzas.diarias.Ads
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.taskdone.R
@@ -15,6 +14,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.taskdone.databinding.FragmentStatsAvanzadosBinding
 import mis.finanzas.diarias.Utils
 import mis.finanzas.diarias.ActivityMain
@@ -22,7 +22,7 @@ import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewModel
 import mis.finanzas.diarias.finanzas.viewmodels.DatabaseViewmodelFactory
 import java.util.*
 
-class StatsAvanzadosFragment : Fragment() {
+class FinanzasStatsAvanzadosFragment : Fragment() {
     private lateinit var binding: FragmentStatsAvanzadosBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     var monedas = ArrayList<String>()
@@ -43,7 +43,6 @@ class StatsAvanzadosFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentStatsAvanzadosBinding.inflate(inflater, container, false)
         (activity as ActivityMain).updateFragment(R.id.finanzasStatsAvanzadosFragment)
-        Ads.getInstance().cargarAnuncio(requireContext())
 
         /*val data = database!!.getMonedasByUserId(userViewModel.getId())
         while (data.moveToNext()) {
@@ -242,8 +241,7 @@ class StatsAvanzadosFragment : Fragment() {
         }
         binding.spinnerMes.setSelection(mes_seleccionado.toInt() - 1)
         check_for_spinners = 1
-        binding.back.setOnClickListener { v: View? ->
-            (activity as ActivityMain).onBackPressed()
+        binding.back.setOnClickListener {findNavController().navigate(R.id.finanzasStatsFragment)
         }
         return binding.root
     }

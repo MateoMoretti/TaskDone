@@ -33,7 +33,7 @@ import java.util.Calendar
 import java.util.Objects
 import java.util.Date
 
-class HistorialFragment : Fragment() {
+class FinanzasHistorialFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasHistorialBinding
     private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
     private val editRecordViewModel: EditRecordViewModel by activityViewModels()

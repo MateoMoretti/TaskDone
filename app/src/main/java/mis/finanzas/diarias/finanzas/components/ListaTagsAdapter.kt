@@ -6,14 +6,14 @@ import com.example.taskdone.R
 import android.view.*
 import android.widget.Button
 import android.widget.CheckBox
-import mis.finanzas.diarias.finanzas.fragments.TagsFragment
+import mis.finanzas.diarias.finanzas.fragments.FinanzasTagsFragment
 import mis.finanzas.diarias.finanzas.model.Tag
 import mis.finanzas.diarias.finanzas.viewmodels.BaseRecordViewModel
 
 class ListaTagsAdapter(
     private val viewModel: BaseRecordViewModel,
     private var items: List<Tag>,
-    private val fragment: TagsFragment
+    private val fragment: FinanzasTagsFragment
 ) : RecyclerView.Adapter<ViewHolderAdapter>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderAdapter {

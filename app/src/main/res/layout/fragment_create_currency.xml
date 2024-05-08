@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
-    tools:context="mis.finanzas.diarias.finanzas.fragments.CreateCurrencyFragment">
+    tools:context="mis.finanzas.diarias.finanzas.fragments.FinanzasCreateCurrencyFragment">
 
     <ImageView
         android:id="@+id/back"
@@ -78,7 +78,7 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:id="@+id/currencyLayout"
+                    android:id="@+id/contentLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -100,7 +100,7 @@
                 android:gravity="center"
                 android:text="@string/crea_una_moneda"
                 android:textAlignment="center"
-                android:textColor="@color/naranja"
+                android:textColor="@color/naranja_finanzas"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -248,7 +248,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="50dp"
-                android:background="@color/naranja"
+                android:background="@color/naranja_finanzas"
                 android:text="@string/crear" />
 
         </LinearLayout>

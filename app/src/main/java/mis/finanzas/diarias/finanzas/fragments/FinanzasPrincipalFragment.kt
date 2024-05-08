@@ -27,7 +27,7 @@ import mis.finanzas.diarias.finanzas.viewmodels.AddRecordViewModel
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-class FinanzasFragment : Fragment() {
+class FinanzasPrincipalFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasPrincipalBinding
     private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
     private val recordViewModel: AddRecordViewModel by activityViewModels()
@@ -88,7 +88,7 @@ class FinanzasFragment : Fragment() {
             }
         })
         //cargarGastoPendiente()
-        binding.ayuda.setOnClickListener {
+        /*binding.ayuda.setOnClickListener {
             Utils.popupAyuda(
                 requireContext(), requireActivity(), ArrayList(
                     Arrays.asList(
@@ -97,7 +97,7 @@ class FinanzasFragment : Fragment() {
                     )
                 )
             )
-        }
+        }*/
         reloadData()
         return binding.root
     }
@@ -141,8 +141,8 @@ class FinanzasFragment : Fragment() {
                     }
             }
 
-            while (binding.currencyLayout.childCount != 0) {
-                binding.currencyLayout.removeViewAt(0)
+            while (binding.contentLayout.childCount != 0) {
+                binding.contentLayout.removeViewAt(0)
             }
             val inflater = requireActivity().layoutInflater
             for (x in currencyList.map { it.name }.indices) {
@@ -153,7 +153,7 @@ class FinanzasFragment : Fragment() {
                 moneda.text = currencyList.map { it.name }[x]
                 cantidad.text =
                     currencyList.map { it.symbol }[x] + " " + Utils.formatAmount(currencyList.map { it.amount }[x])
-                binding.currencyLayout.addView(view)
+                binding.contentLayout.addView(view)
             }
         }
         binding.checkIngreso.setOnCheckedChangeListener { _: CompoundButton?, _: Boolean ->

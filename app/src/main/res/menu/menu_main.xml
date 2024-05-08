@@ -6,6 +6,7 @@
         <item
             android:id="@+id/agenda"
             android:icon="@drawable/agenda"
+            android:checked="true"
             android:title="@string/agenda" />
         <item
             android:id="@+id/finanzas"
