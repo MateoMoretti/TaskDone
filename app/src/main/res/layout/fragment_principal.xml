@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
     android:backgroundTintMode="add"
-    tools:context="mis.finanzas.diarias.agenda.fragments.AgendaFragment">
+    tools:context="my.life.tracker.agenda.fragments.AgendaFragment">
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -24,18 +24,18 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <mis.finanzas.diarias.components.Widget
+            <my.life.tracker.components.Widget
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            </mis.finanzas.diarias.components.Widget>
+            </my.life.tracker.components.Widget>
 
-            <mis.finanzas.diarias.components.Widget
+            <my.life.tracker.components.Widget
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
             >
 
-            </mis.finanzas.diarias.components.Widget>
+            </my.life.tracker.components.Widget>
         </LinearLayout>
     </ScrollView>
 

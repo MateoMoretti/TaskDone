@@ -6,7 +6,7 @@
     app:startDestination="@id/agendaFragment">
     <fragment
         android:id="@+id/finanzasFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasFragment"
+        android:name="my.life.tracker.finanzas.fragments.FinanzasFragment"
         android:label="fragment_finanzas"
         tools:layout="@layout/fragment_finanzas" >
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/finanzasHistorialFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasHistorialFragment"
+        android:name="my.life.tracker.finanzas.fragments.FinanzasHistorialFragment"
         android:label="fragment_finanzas_historial"
         tools:layout="@layout/fragment_finanzas_historial" >
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/finanzasStatsFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasStatsFragment"
+        android:name="my.life.tracker.finanzas.fragments.FinanzasStatsFragment"
         android:label="fragment_finanzas_statsl"
         tools:layout="@layout/fragment_finanzas_stats" >
         <action
@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/finanzasTagsFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasTagsFragment"
+        android:name="my.life.tracker.finanzas.fragments.FinanzasTagsFragment"
         android:label="fragment_tags"
         tools:layout="@layout/fragment_tags" >
         <action
@@ -102,7 +102,7 @@
     </fragment>
     <fragment
         android:id="@+id/finanzasCrearMonedaFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasCreateCurrencyFragment"
+        android:name="my.life.tracker.finanzas.fragments.FinanzasCreateCurrencyFragment"
         android:label="fragment_crear_moneda"
         tools:layout="@layout/fragment_create_currency" >
         <action
@@ -119,7 +119,7 @@
     </fragment>
     <fragment
         android:id="@+id/finanzasStatsAvanzadosFragment"
-        android:name="mis.finanzas.diarias.finanzas.fragments.FinanzasStatsAvanzadosFragment"
+        android:name="my.life.tracker.finanzas.fragments.FinanzasStatsAvanzadosFragment"
         android:label="fragment_stats_avanzados"
         tools:layout="@layout/fragment_stats_avanzados" >
         <action
@@ -136,7 +136,7 @@
     </fragment>
     <fragment
         android:id="@+id/agendaFragment"
-        android:name="mis.finanzas.diarias.agenda.fragments.AgendaFragment"
+        android:name="my.life.tracker.agenda.fragments.AgendaFragment"
         android:label="fragment_agenda"
         tools:layout="@layout/fragment_agenda" >
         <action
@@ -145,11 +145,11 @@
     </fragment>
     <fragment
         android:id="@+id/comidasFragment"
-        android:name="mis.finanzas.diarias.comidas.fragments.ComidasFragment"
+        android:name="my.life.tracker.comidas.fragments.ComidasFragment"
         android:label="fragment_comidas"
         tools:layout="@layout/fragment_comidas" />
     <fragment
         android:id="@+id/principalFragment"
-        android:name="mis.finanzas.diarias.principal.fragments.PrincipalFragment"
+        android:name="my.life.tracker.principal.fragments.PrincipalFragment"
         android:label="PrincipalFragment" />
 </navigation>

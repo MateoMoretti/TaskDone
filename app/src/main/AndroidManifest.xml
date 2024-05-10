@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.taskdone">
+    package="my.life.tracker">
 
     <application
         android:allowBackup="true"
@@ -15,7 +15,7 @@
             android:value="ca-app-pub-8001300265320389~8098987263"/>
 
         <activity
-            android:name="mis.finanzas.diarias.ActivityMain"
+            android:name="my.life.tracker.ActivityMain"
             android:theme="@style/AppTheme.Finanzas"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">

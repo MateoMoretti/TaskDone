@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
-    tools:context="mis.finanzas.diarias.finanzas.fragments.FinanzasTagsFragment">
+    tools:context="my.life.tracker.finanzas.fragments.FinanzasTagsFragment">
 
     <ImageView
         android:id="@+id/back"

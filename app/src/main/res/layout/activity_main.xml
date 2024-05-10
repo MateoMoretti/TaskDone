@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo"
     android:fitsSystemWindows="true"
-    tools:context="mis.finanzas.diarias.ActivityMain"
+    tools:context="my.life.tracker.ActivityMain"
     tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -26,4 +26,6 @@
     <color name="azul_notificacion">#7FB1D6</color>
     <color name="azul_detalles">#B5D4EC</color>
 
+    <color name="text">#121010</color>
+
 </resources>

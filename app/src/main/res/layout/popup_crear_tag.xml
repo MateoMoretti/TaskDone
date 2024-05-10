@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mis.finanzas.diarias.finanzas.fragments.FinanzasTagsFragment">
+    tools:context="my.life.tracker.finanzas.fragments.FinanzasTagsFragment">
 
     <EditText
         android:id="@+id/edit_crear_tag"
