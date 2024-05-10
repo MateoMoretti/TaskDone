@@ -170,7 +170,7 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.configuracion -> {
                 binding.toolbar.title = getString(R.string.configuracion)
             }
-            else -> ""
+            else -> Unit
         }
         setBottomNavBar()
         navController.navigate(fragment)
@@ -186,7 +186,7 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 run {
                     val min = if (selectedMinute < 10) "0$selectedMinute" else selectedMinute
                     val hour = if (selectedHour < 10) "0$selectedHour" else selectedHour
-                    editText.setText("$hour:$min")
+                    editText.text = "$hour:$min"
                 }
             },
             hourOfDay,

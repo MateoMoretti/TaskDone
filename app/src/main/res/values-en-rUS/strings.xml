@@ -53,6 +53,13 @@
     <string name="sin_seleccionados">0 selected</string>
     <string name="seleccionados">selected</string>
     <string name="es_ingreso">Is income</string>
+    <string name="time">"Hour: "</string>
+    <string name="food_favorites">Your favorite food</string>
+    <string name="add_food">Add food</string>
+    <string name="food_description">"Description: "</string>
+    <string name="current_day_schedule">Today\'s schedule</string>
+    <string name="add_event">Add event</string>
+    <string name="event">Event</string>
     <string name="crea_una_moneda">Create a currency</string>
     <string name="crea_una_cuenta">Create an account</string>
     <string name="crear_cuenta">Create account</string>

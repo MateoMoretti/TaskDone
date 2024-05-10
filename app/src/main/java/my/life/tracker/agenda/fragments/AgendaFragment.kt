@@ -39,10 +39,10 @@ class AgendaFragment : Fragment() {
     }
 
     private fun setListeners(){
-        binding.editTime.let { edit ->
+        /*binding.editTime.let { edit ->
             edit.setOnClickListener {
                 (activity as ActivityMain).selectTime(edit, requireContext())
             }
-        }
+        }*/
     }
 }

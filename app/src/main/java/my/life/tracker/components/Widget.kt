@@ -11,9 +11,9 @@ import my.life.tracker.databinding.WidgetBinding
 
 class Widget : LinearLayout {
 
-    private val isShowingDetails = false
-    val colorNotificacion = R.color.azul_notificacion
-    val colorDetalles = R.color.azul_detalles
+    private var isShowingDetails = false
+    private val colorNotificacion = R.color.azul_notificacion
+    private val colorDetalles = R.color.azul_detalles
 
     var binding: WidgetBinding = WidgetBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -25,13 +25,6 @@ class Widget : LinearLayout {
         defStyleAttr
     )
 
-    constructor(
-        context: Context?,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes)
-
     init {
         binding.notificacion.setOnClickListener(){
             showDetails()
@@ -42,6 +35,6 @@ class Widget : LinearLayout {
 
     private fun showDetails(){
         binding.detalles.visibility = if (binding.detalles.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-
+        isShowingDetails = binding.detalles.visibility == View.VISIBLE
     }
 }
