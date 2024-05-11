@@ -25,8 +25,7 @@ import my.life.tracker.Utils
 import my.life.tracker.ActivityMain
 import my.life.tracker.finanzas.model.Record
 import my.life.tracker.finanzas.model.Currency
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import my.life.tracker.finanzas.viewmodels.EditRecordViewModel
 import my.life.tracker.finanzas.viewmodels.HistorialFilterViewModel
 import java.util.Calendar
@@ -35,7 +34,7 @@ import java.util.Date
 
 class FinanzasHistorialFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasHistorialBinding
-    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseFinanzasViewModel by viewModels()
     private val editRecordViewModel: EditRecordViewModel by activityViewModels()
     private val historialFilterViewModel: HistorialFilterViewModel by activityViewModels()
 

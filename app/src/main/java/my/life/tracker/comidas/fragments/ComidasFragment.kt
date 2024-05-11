@@ -12,15 +12,14 @@ import androidx.fragment.app.activityViewModels
 import my.life.tracker.R
 import my.life.tracker.databinding.FragmentComidasBinding
 import my.life.tracker.ActivityMain
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import my.life.tracker.finanzas.viewmodels.AddRecordViewModel
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class ComidasFragment : Fragment() {
     private lateinit var binding: FragmentComidasBinding
-    private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
+    private val databaseViewModel: DatabaseFinanzasViewModel by activityViewModels()
     private val recordViewModel: AddRecordViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null

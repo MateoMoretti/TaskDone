@@ -119,8 +119,15 @@
 
     <!-- AGENDA -->
     <string name="current_day_schedule">Estos son tus planes para el día</string>
-    <string name="add_event">Agregar evento</string>
+    <string name="agregar_linea">Agregar linea</string>
     <string name="event">Evento</string>
+    <string name="actividad">Actividad</string>
+    <string name="fin">Fin</string>
+    <string name="tipo">Tipo</string>
+    <string name="comienzo">Comienzo</string>
+    <string name="importancia">Importancia</string>
+    <string name="comentarios">Comentarios</string>
+
 
 
     <!-- ACCIONES -->

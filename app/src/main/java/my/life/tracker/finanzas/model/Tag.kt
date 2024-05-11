@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class Tag (
     @ColumnInfo(name = "nombre") var nombre: String,
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") var id: Int = 0
+    @ColumnInfo(name = "id") var id: Long = 0
 )

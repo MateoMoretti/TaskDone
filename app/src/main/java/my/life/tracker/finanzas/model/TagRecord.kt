@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity("TagRecord")
 data class TagRecord (
-    var idTag: Int,
-    var idRecord: Int,
+    var idTag: Long,
+    var idRecord: Long,
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 )

@@ -10,7 +10,7 @@ data class Record (
     var amount: Int,
     var reason: String,
     var isIncome: Boolean,
-    var idCurrency: Int,
+    var idCurrency: Long,
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") var id: Int = 0
+    @ColumnInfo(name = "id") var id: Long = 0
 )

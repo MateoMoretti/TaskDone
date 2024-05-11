@@ -18,8 +18,7 @@ import my.life.tracker.databinding.FragmentTagsBinding
 import my.life.tracker.Utils
 import my.life.tracker.ActivityMain
 import my.life.tracker.finanzas.model.Tag
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import my.life.tracker.finanzas.viewmodels.AddRecordViewModel
 import my.life.tracker.finanzas.viewmodels.BaseRecordViewModel
 import my.life.tracker.finanzas.viewmodels.EditRecordViewModel
@@ -27,7 +26,7 @@ import java.util.*
 
 class FinanzasTagsFragment : Fragment() {
     private lateinit var binding: FragmentTagsBinding
-    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseFinanzasViewModel by viewModels()
     private val addRecordViewModel: AddRecordViewModel by activityViewModels()
     private val editRecordViewModel: EditRecordViewModel by activityViewModels()
 

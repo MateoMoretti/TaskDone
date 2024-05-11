@@ -1,7 +1,9 @@
-package my.life.tracker.finanzas.database
+package my.life.tracker.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import my.life.tracker.agenda.interfaces.ActividadDao
+import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.finanzas.interfaces.CurrencyDao
 import my.life.tracker.finanzas.interfaces.RecordDao
 import my.life.tracker.finanzas.interfaces.TagDao
@@ -13,11 +15,16 @@ import my.life.tracker.finanzas.model.TagRecord
 
 
 @Database(
-    entities = [Record::class, Currency::class, Tag::class, TagRecord::class],
+    entities = [Record::class, Currency::class, Tag::class, TagRecord::class,
+                Actividad::class],
     version = 1
 )
-abstract class MyDataBase : RoomDatabase() {
+abstract class LifeTrackerDataBase : RoomDatabase() {
 
+    //AGENDA
+    abstract val actividadDao: ActividadDao
+
+    //FINANZAS
     abstract val tagDao: TagDao
     abstract val tagRecordDao: TagRecordDao
     abstract val recordDao: RecordDao

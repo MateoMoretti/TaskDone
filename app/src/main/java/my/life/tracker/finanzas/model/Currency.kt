@@ -10,5 +10,5 @@ data class Currency (
     var amount: Float,
     var symbol: String,
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Int = 0
+    @ColumnInfo(name = "id") val id: Long = 0
 )

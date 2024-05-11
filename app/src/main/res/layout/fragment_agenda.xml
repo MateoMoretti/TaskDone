@@ -20,22 +20,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Agenda"
-            android:textAlignment="center"
-            android:textColor="@color/text"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_margin="10dp"
-            android:background="?android:attr/listDivider" />
-
-        <TextView
             android:id="@+id/dia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,151 +50,30 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/layout_agenda"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Agenda"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_margin="10dp"
-                    android:background="?android:attr/listDivider" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                        <my.life.tracker.components.LineaAgenda
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:isSelectable="false"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    </LinearLayout>
+                </HorizontalScrollView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jueves 23 de Mayo"
-                    android:textAlignment="center"
-                    android:textColor="@color/text"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
             </LinearLayout>
         </ScrollView>
 
@@ -226,10 +89,10 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/add_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_event" />
+            android:text="@string/agregar_linea" />
 
     </LinearLayout>
 

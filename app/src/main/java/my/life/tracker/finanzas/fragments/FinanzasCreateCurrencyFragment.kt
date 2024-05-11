@@ -18,16 +18,11 @@ import my.life.tracker.databinding.ItemMonedaCantidadEditableBinding
 import my.life.tracker.databinding.PopupEditCurrencyBinding
 import my.life.tracker.ActivityMain
 import my.life.tracker.finanzas.model.Currency
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 
 class FinanzasCreateCurrencyFragment : Fragment() {
     private lateinit var binding: FragmentCreateCurrencyBinding
-    private val databaseViewModel: DatabaseViewModel by activityViewModels {
-        DatabaseViewmodelFactory(
-            requireContext()
-        )
-    }
+    private val databaseViewModel: DatabaseFinanzasViewModel by activityViewModels()
 
 
     @SuppressLint("SetTextI18n")

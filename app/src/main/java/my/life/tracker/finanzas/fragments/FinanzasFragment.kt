@@ -21,15 +21,14 @@ import my.life.tracker.Utils
 import my.life.tracker.ActivityMain
 import my.life.tracker.finanzas.model.Record
 import my.life.tracker.finanzas.model.TagRecord
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import my.life.tracker.finanzas.viewmodels.AddRecordViewModel
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class FinanzasFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasBinding
-    private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
+    private val databaseViewModel: DatabaseFinanzasViewModel by activityViewModels()
     private val recordViewModel: AddRecordViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
@@ -211,7 +210,7 @@ class FinanzasFragment : Fragment() {
                             recordViewModel.getCurrency().id)
         val recordId = databaseViewModel.addRecord(record)
 
-        for (tag in recordViewModel.getSelectedTags()) databaseViewModel.addTagRecord(TagRecord(tag.id, recordId.toInt()))
+        for (tag in recordViewModel.getSelectedTags()) databaseViewModel.addTagRecord(TagRecord(tag.id, recordId))
 
         Toast.makeText(requireContext(), R.string.guardado_exito, Toast.LENGTH_SHORT).show()
 

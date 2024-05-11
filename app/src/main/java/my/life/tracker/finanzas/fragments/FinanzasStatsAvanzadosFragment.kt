@@ -18,13 +18,12 @@ import androidx.navigation.fragment.findNavController
 import my.life.tracker.databinding.FragmentStatsAvanzadosBinding
 import my.life.tracker.Utils
 import my.life.tracker.ActivityMain
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import java.util.*
 
 class FinanzasStatsAvanzadosFragment : Fragment() {
     private lateinit var binding: FragmentStatsAvanzadosBinding
-    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseFinanzasViewModel by viewModels()
     var monedas = ArrayList<String>()
     var cantidades = ArrayList<Float>()
     var simbolos = ArrayList<String>()

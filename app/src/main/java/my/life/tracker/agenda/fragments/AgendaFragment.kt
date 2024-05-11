@@ -12,16 +12,17 @@ import androidx.fragment.app.activityViewModels
 import my.life.tracker.R
 import my.life.tracker.databinding.FragmentAgendaBinding
 import my.life.tracker.ActivityMain
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
-import my.life.tracker.finanzas.viewmodels.AddRecordViewModel
+import my.life.tracker.agenda.model.Actividad
+import my.life.tracker.agenda.viewmodels.AgendaViewModel
+import my.life.tracker.components.LineaAgenda
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import java.util.*
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class AgendaFragment : Fragment() {
     private lateinit var binding: FragmentAgendaBinding
-    private val databaseViewModel: DatabaseViewModel by activityViewModels{DatabaseViewmodelFactory(requireContext())}
-    private val recordViewModel: AddRecordViewModel by activityViewModels()
+    private val databaseViewModel: DatabaseFinanzasViewModel by activityViewModels()
+    private val agendaViewModel: AgendaViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
 
@@ -39,10 +40,25 @@ class AgendaFragment : Fragment() {
     }
 
     private fun setListeners(){
+        binding.addLine.setOnClickListener(){
+            addLine()
+        }
         /*binding.editTime.let { edit ->
             edit.setOnClickListener {
                 (activity as ActivityMain).selectTime(edit, requireContext())
             }
         }*/
+    }
+
+    private fun addLine(){
+
+        val newActividad = Actividad("", "", "", "", -1, "")
+        newActividad.id = agendaViewModel.addActividad(newActividad)
+        val lineaAgenda = LineaAgenda(
+            requireContext(),
+            agendaViewModel,
+            newActividad)
+        binding.layoutAgenda.addView(lineaAgenda)
+        agendaViewModel.addActividadToScreen(newActividad, lineaAgenda)
     }
 }

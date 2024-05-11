@@ -19,8 +19,7 @@ import my.life.tracker.databinding.FragmentFinanzasStatsBinding
 import my.life.tracker.*
 import my.life.tracker.ActivityMain
 import my.life.tracker.finanzas.model.Record
-import my.life.tracker.finanzas.viewmodels.DatabaseViewModel
-import my.life.tracker.finanzas.viewmodels.DatabaseViewmodelFactory
+import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import my.life.tracker.finanzas.viewmodels.StatsViewModel
 import java.text.DecimalFormat
 import java.util.*
@@ -28,7 +27,7 @@ import java.util.stream.Collectors
 
 class FinanzasStatsFragment : Fragment() {
     private lateinit var binding: FragmentFinanzasStatsBinding
-    private val databaseViewModel: DatabaseViewModel by viewModels{ DatabaseViewmodelFactory(requireContext()) }
+    private val databaseViewModel: DatabaseFinanzasViewModel by viewModels()
     private val statsViewModel: StatsViewModel by activityViewModels()
 
     private lateinit var inflater: LayoutInflater

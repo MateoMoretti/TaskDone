@@ -1,12 +1,11 @@
 package my.life.tracker.finanzas.viewmodels
 
-import android.content.Context
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.room.Room
+import my.life.tracker.App
 import my.life.tracker.Utils
-import my.life.tracker.finanzas.database.MyDataBase
 import my.life.tracker.finanzas.model.Currency
 import my.life.tracker.finanzas.model.Record
 import my.life.tracker.finanzas.model.Tag
@@ -15,41 +14,34 @@ import java.util.*
 import java.util.stream.Collectors
 
 
-class DatabaseViewModel(val context:Context) : ViewModel() {
+class DatabaseFinanzasViewModel(app: Application) : AndroidViewModel(app) {
 
+    private val database = (app as App).lifeTrackerDataBase
     private val _currencies = MutableLiveData<List<Currency>>()
     val currencies: LiveData<List<Currency>> get() = _currencies
 
-    private val db by lazy {
-        Room.databaseBuilder(
-
-            context,
-            MyDataBase::class.java,
-            "DATABASE"
-        ).allowMainThreadQueries().build()
-    }
 
     // ----------- RECORDS --------------
     fun addRecord(record: Record): Long {
         // Update amount
-        val currency = db.currencyDao.getCurrencyById(record.idCurrency)
+        val currency = database.currencyDao.getCurrencyById(record.idCurrency)
         if(record.isIncome) currency!!.amount += record.amount
         else currency!!.amount -= record.amount
-        db.currencyDao.addCurrency(currency!!)
-        return db.recordDao.addRecord(record)
+        database.currencyDao.addCurrency(currency!!)
+        return database.recordDao.addRecord(record)
     }
     fun updateRecord(oldRecord: Record, newRecord: Record): Long {
         // Update amount
-        val currency = db.currencyDao.getCurrencyById(newRecord.idCurrency)
+        val currency = database.currencyDao.getCurrencyById(newRecord.idCurrency)
         currency!!.amount += if(oldRecord.isIncome) -oldRecord.amount else oldRecord.amount
         currency!!.amount += if(newRecord.isIncome) newRecord.amount else -newRecord.amount
 
-        db.currencyDao.addCurrency(currency!!)
-        return db.recordDao.addRecord(newRecord)
+        database.currencyDao.addCurrency(currency!!)
+        return database.recordDao.addRecord(newRecord)
     }
 
     fun deleteRecord(record: Record) {
-        db.recordDao.deleteRecord(record)
+        database.recordDao.deleteRecord(record)
         val tagRecordsId = getAllTagRecordByRecordId(record.id)
             .stream()
             .map { it.id }
@@ -59,28 +51,28 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     }
 
     fun getRecords(from: Date, to: Date): List<Record> {
-        return db.recordDao.getRecords(Utils.dateToString(from), Utils.dateToString(to))
+        return database.recordDao.getRecords(Utils.dateToString(from), Utils.dateToString(to))
     }
-    fun getRecordById(id:Int): Record {
-        return db.recordDao.getRecordById(id)
+    fun getRecordById(id:Long): Record {
+        return database.recordDao.getRecordById(id)
     }
 
     // ----------- CURRENCIES --------------
     fun addCurrency(currency: Currency) {
-        db.currencyDao.addCurrency(currency)
+        database.currencyDao.addCurrency(currency)
         refreshAllCurrency()
     }
 
     fun deleteCurrency(currency: Currency) {
-        db.currencyDao.deleteCurrency(currency)
+        database.currencyDao.deleteCurrency(currency)
         refreshAllCurrency()
     }
 
-    fun getCurrencyById(id:Int): Currency? {
-        return db.currencyDao.getCurrencyById(id)
+    fun getCurrencyById(id:Long): Currency? {
+        return database.currencyDao.getCurrencyById(id)
     }
     fun getCurrencyByName(name:String): Currency? {
-        return db.currencyDao.getCurrencyByName(name)
+        return database.currencyDao.getCurrencyByName(name)
     }
 
     fun getAllCurrency(): List<Currency> {
@@ -89,17 +81,17 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
     }
 
     fun refreshAllCurrency(): List<Currency>{
-        val result = db.currencyDao.getAllCurrency()
+        val result = database.currencyDao.getAllCurrency()
         _currencies.value = result
         return result
     }
 
     // ----------- TAGS --------------
     fun addTag(tag: Tag) {
-        db.tagDao.addTag(tag)
+        database.tagDao.addTag(tag)
     }
-    fun getTagById(id:Int):Tag? {
-        return db.tagDao.getTagById(id)
+    fun getTagById(id:Long):Tag? {
+        return database.tagDao.getTagById(id)
     }
 
     fun deleteTag(tag: Tag) {
@@ -109,36 +101,36 @@ class DatabaseViewModel(val context:Context) : ViewModel() {
             .collect(Collectors.toList())
 
         deleteTagRecords(tagRecordsId)
-        db.tagDao.deleteTag(tag)
+        database.tagDao.deleteTag(tag)
     }
-    fun getTagsByIdList(tags:List<Int>): List<Tag> {
-        return db.tagDao.getTagsByIdList(tags)
+    fun getTagsByIdList(tags:List<Long>): List<Tag> {
+        return database.tagDao.getTagsByIdList(tags)
     }
 
     fun getAllTags(): List<Tag> {
-        return db.tagDao.getTags()
+        return database.tagDao.getTags()
     }
 
     // ----------- TAG-RECORD --------------
     fun addTagRecord(tagRecord: TagRecord) {
-        db.tagRecordDao.addTagRecord(tagRecord)
+        database.tagRecordDao.addTagRecord(tagRecord)
     }
     fun deleteTagRecord(tagRecord: TagRecord) {
-        db.tagRecordDao.deleteTagRecord(tagRecord)
+        database.tagRecordDao.deleteTagRecord(tagRecord)
     }
-    fun deleteTagRecords(tagRecordIdList: List<Int>) {
-        db.tagRecordDao.deleteTagRecords(tagRecordIdList)
+    fun deleteTagRecords(tagRecordIdList: List<Long>) {
+        database.tagRecordDao.deleteTagRecords(tagRecordIdList)
     }
     fun getAllTagRecord(): List<TagRecord> {
-        return db.tagRecordDao.getTagRecords()
+        return database.tagRecordDao.getTagRecords()
     }
-    fun getAllTagRecordByRecordId(id:Int): List<TagRecord> {
-        return db.tagRecordDao.getAllTagRecordByRecordId(id)
+    fun getAllTagRecordByRecordId(id:Long): List<TagRecord> {
+        return database.tagRecordDao.getAllTagRecordByRecordId(id)
     }
-    fun getAllTagRecordByTagId(id:Int): List<TagRecord> {
-        return db.tagRecordDao.getAllTagRecordByTagId(id)
+    fun getAllTagRecordByTagId(id:Long): List<TagRecord> {
+        return database.tagRecordDao.getAllTagRecordByTagId(id)
     }
-    fun getAllTagRecordByRecordIdList(idList:List<Int>): List<TagRecord> {
-        return db.tagRecordDao.getAllTagRecordByRecordIdList(idList)
+    fun getAllTagRecordByRecordIdList(idList:List<Long>): List<TagRecord> {
+        return database.tagRecordDao.getAllTagRecordByRecordIdList(idList)
     }
 }

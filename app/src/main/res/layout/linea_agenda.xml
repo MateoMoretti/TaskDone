@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:context="my.life.tracker.agenda.fragments.AgendaFragment">
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FF909090">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/actividad"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/actividad"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/tipo"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/tipo"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/comienza"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/comienzo"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/fin"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/fin"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/importancia"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/importancia"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/comentarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:maxLines="1"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/comentarios"
+            android:textColor="@color/text" />
+
+    </TableRow>
+
+</LinearLayout>
