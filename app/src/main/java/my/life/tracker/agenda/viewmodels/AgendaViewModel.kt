@@ -20,29 +20,29 @@ class AgendaViewModel(app: Application) : AndroidViewModel(app) {
 
     private val database = (app as App).lifeTrackerDataBase
 
-    private val _actividades = MutableLiveData<MutableMap<Actividad, View>>()
-    val actividades:LiveData<MutableMap<Actividad, View>> get() = _actividades
+    private val _actividades = MutableLiveData<ArrayList<Actividad>>()
+    val actividades:LiveData<ArrayList<Actividad>> get() = _actividades
 
+    private val _idPreviousLineSelected = MutableLiveData<View>()
+    val idPreviousLineSelected:LiveData<View> get() = _idPreviousLineSelected
 
-    private val _idLineSelected = MutableLiveData<Long>()
-    val idLineSelected:LiveData<Long> get() = _idLineSelected
+    private val _idLineSelected = MutableLiveData<View>()
+    val idLineSelected:LiveData<View> get() = _idLineSelected
 
     init {
-        _actividades.value = mutableMapOf()
+        _actividades.value = arrayListOf()
     }
 
 
-    fun selectLine(context: Context, value:Long){
-        val actividadAsociada = _actividades.value!!.filter { it.key.id == _idLineSelected.value }.map { it.key }
-        if(actividadAsociada.isNotEmpty()){
-            _actividades.value!![actividadAsociada[0]]!!.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+    fun selectLine(view: View){
+        if(_idLineSelected.value != null){
+            _idPreviousLineSelected.value = view
         }
-       _idLineSelected.value = value
-
+       _idLineSelected.value = view
     }
 
-    fun addActividadToScreen(actividad: Actividad, view: View){
-        _actividades.value!![actividad] = view
+    fun addActividadToScreen(actividad: Actividad,){
+        _actividades.value!!.add(actividad)
     }
     fun addActividad(actividad: Actividad): Long {
         val newActividad = database.actividadDao.addActividad(actividad)

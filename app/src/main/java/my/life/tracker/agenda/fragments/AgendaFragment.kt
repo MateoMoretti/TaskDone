@@ -1,22 +1,27 @@
 package my.life.tracker.agenda.fragments
 
-import androidx.annotation.RequiresApi
-import android.os.Build
 import android.annotation.SuppressLint
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import my.life.tracker.R
-import my.life.tracker.databinding.FragmentAgendaBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 import my.life.tracker.ActivityMain
+import my.life.tracker.R
+import my.life.tracker.agenda.adapters.AgendaAdapter
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.viewmodels.AgendaViewModel
 import my.life.tracker.components.LineaAgenda
+import my.life.tracker.databinding.FragmentAgendaBinding
 import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import java.util.*
+
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 class AgendaFragment : Fragment() {
@@ -43,22 +48,27 @@ class AgendaFragment : Fragment() {
         binding.addLine.setOnClickListener(){
             addLine()
         }
+        val adapter = AgendaAdapter(requireContext(), arrayListOf(Actividad()))
+        binding.layoutAgenda.setLayoutManager(LinearLayoutManager(context));
+        binding.layoutAgenda.adapter = adapter
+    }
+
+
+        /*agendaViewModel.idPreviousLineSelected.observe(viewLifecycleOwner){
+            binding.layoutAgenda.get(1).gesetBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+        }*/
         /*binding.editTime.let { edit ->
             edit.setOnClickListener {
                 (activity as ActivityMain).selectTime(edit, requireContext())
             }
         }*/
-    }
+
 
     private fun addLine(){
 
-        val newActividad = Actividad("", "", "", "", -1, "")
+        val newActividad = Actividad("", "", "", "", "100", "")
         newActividad.id = agendaViewModel.addActividad(newActividad)
-        val lineaAgenda = LineaAgenda(
-            requireContext(),
-            agendaViewModel,
-            newActividad)
-        binding.layoutAgenda.addView(lineaAgenda)
-        agendaViewModel.addActividadToScreen(newActividad, lineaAgenda)
+        (binding.layoutAgenda.adapter as AgendaAdapter).addLinea(newActividad)
+        //agendaViewModel.addActividadToScreen(newActividad)
     }
 }

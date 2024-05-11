@@ -17,12 +17,8 @@ class LineaAgenda : LinearLayout {
     private var isSelected = false
     private var isSelectable = false
     private val colorSelectable = R.color.azul_notificacion
-    private lateinit var agendaViewModel: AgendaViewModel
-    private lateinit var actividad: Actividad
 
     var binding: LineaAgendaBinding = LineaAgendaBinding.inflate(LayoutInflater.from(context), this, true)
-
-    constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){
         val attributes = context?.obtainStyledAttributes(attrs, R.styleable.LineaAgenda);
         if (attributes != null) {
@@ -31,10 +27,8 @@ class LineaAgenda : LinearLayout {
         }
         setListeners()
     }
-    constructor(context: Context?, agendaViewModel: AgendaViewModel, actividad: Actividad) : super(context){
+    constructor(context: Context?) : super(context){
         isSelectable = true
-        this.agendaViewModel = agendaViewModel
-        this.actividad = actividad
         setListeners()
     }
 
@@ -48,12 +42,18 @@ class LineaAgenda : LinearLayout {
             binding.actividad.setOnClickListener() {
                 selectCell(it)
             }
+            /*agendaViewModel.idPreviousLineSelected.observe(findFragment()){
+                binding.findViewById<View>(it).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+            }*/
         }
     }
 
-    private fun selectCell(view: View){
-        agendaViewModel.selectLine(context, actividad.id)
+    fun selectCell(view: View){
+        //agendaViewModel.selectLine(view)
         view.setBackgroundColor(ContextCompat.getColor(context, colorSelectable))
+    }
 
+    fun unselectCell(view: View){
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
     }
 }

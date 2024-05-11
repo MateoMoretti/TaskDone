@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity("Actividad")
 data class Actividad (
-    @ColumnInfo(name = "actividad") var actividad: String,
-    @ColumnInfo(name = "tipo") var tipo: String,
-    @ColumnInfo(name = "comienza") var comienza: String,
-    @ColumnInfo(name = "fin") var fin: String,
-    @ColumnInfo(name = "importancia") var importancia: Int,
-    @ColumnInfo(name = "comentarios") var comentarios: String,
+    @ColumnInfo(name = "actividad") var actividad: String="actividad",
+    @ColumnInfo(name = "tipo") var tipo: String="tipo",
+    @ColumnInfo(name = "comienza") var comienza: String="comienza",
+    @ColumnInfo(name = "fin") var fin: String="fin",
+    @ColumnInfo(name = "importancia") var importancia: String="importancia",
+    @ColumnInfo(name = "comentarios") var comentarios: String="comentarios",
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") var id: Long = 0
 )
