@@ -72,6 +72,7 @@ class Celda : LinearLayout {
     fun unselectCell(){
         isAlreadySelected=false
         binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        saveData()
     }
 
 }
