@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class Actividad (
     @ColumnInfo(name = "actividad") var actividad: String="actividad",
     @ColumnInfo(name = "tipo") var tipo: String="tipo",
-    @ColumnInfo(name = "comienza") var comienza: String="comienza",
+    @ColumnInfo(name = "comienzo") var comienzo: String="comienzo",
     @ColumnInfo(name = "fin") var fin: String="fin",
     @ColumnInfo(name = "importancia") var importancia: String="importancia",
     @ColumnInfo(name = "comentarios") var comentarios: String="comentarios",

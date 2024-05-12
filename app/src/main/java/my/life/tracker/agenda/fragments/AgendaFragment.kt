@@ -30,6 +30,7 @@ class AgendaFragment : Fragment() {
     private val agendaViewModel: AgendaViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
+    var contador = 0
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi")
     override fun onCreateView(
@@ -65,8 +66,8 @@ class AgendaFragment : Fragment() {
 
 
     private fun addLine(){
-
-        val newActividad = Actividad("", "", "", "", "100", "")
+        contador++
+        val newActividad = Actividad(contador.toString(), "", "", "", "100", "")
         newActividad.id = agendaViewModel.addActividad(newActividad)
         (binding.layoutAgenda.adapter as AgendaAdapter).addLinea(newActividad)
         //agendaViewModel.addActividadToScreen(newActividad)
