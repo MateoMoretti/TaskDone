@@ -3,5 +3,11 @@
 
     <declare-styleable name="Celda">
         <attr name="isSelectable" format="boolean" />
+        <attr name="cellType" format="enum">
+            <enum name="TEXTO" value="0"/>
+            <enum name="SPINNER" value="1"/>
+            <enum name="HORA" value="2"/>
+            <enum name="SLIDER" value="3"/>
+        </attr>
     </declare-styleable>
 </resources>

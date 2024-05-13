@@ -15,36 +15,42 @@
             android:id="@+id/actividad"
             android:layout_width="@dimen/celda_width"
             android:layout_height="@dimen/celda_height"
+            app:cellType="SPINNER"
             android:hint="@string/actividad" />
 
         <my.life.tracker.components.Celda
             android:id="@+id/tipo"
             android:layout_width="@dimen/celda_width"
             android:layout_height="@dimen/celda_height"
+            app:cellType="SPINNER"
             android:hint="@string/tipo" />
 
         <my.life.tracker.components.Celda
             android:id="@+id/comienzo"
             android:layout_width="@dimen/celda_width"
             android:layout_height="@dimen/celda_height"
+            app:cellType="HORA"
             android:hint="@string/comienzo" />
 
         <my.life.tracker.components.Celda
             android:id="@+id/fin"
             android:layout_width="@dimen/celda_width"
             android:layout_height="@dimen/celda_height"
+            app:cellType="HORA"
             android:hint="@string/fin" />
 
         <my.life.tracker.components.Celda
             android:id="@+id/importancia"
             android:layout_width="@dimen/celda_width"
             android:layout_height="@dimen/celda_height"
+            app:cellType="SLIDER"
             android:hint="@string/importancia" />
 
         <my.life.tracker.components.Celda
             android:id="@+id/comentarios"
             android:layout_width="@dimen/celda_width"
             android:layout_height="@dimen/celda_height"
+            app:cellType="TEXTO"
             android:hint="@string/comentarios" />
     </TableRow>
 

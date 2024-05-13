@@ -1,27 +1,26 @@
 package my.life.tracker.components
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnKeyListener
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import my.life.tracker.R
+import my.life.tracker.agenda.model.CellType
 import my.life.tracker.databinding.CeldaBinding
 
 
 class Celda : LinearLayout {
 
+    var hasIgnoredFirstTrigger = false
     var isAlreadySelected = false
     private var isSelectable = false
+    private lateinit var cellType : CellType
     private var listOfHints = arrayListOf<String>()
     private val colorSelectable = R.color.borders
 
@@ -34,8 +33,11 @@ class Celda : LinearLayout {
         val attributes = context?.obtainStyledAttributes(attrs, R.styleable.Celda);
         if (attributes != null) {
             isSelectable = attributes.getBoolean(R.styleable.Celda_isSelectable, true)
+            cellType = CellType.entries.toTypedArray()[attributes.getInt(R.styleable.Celda_cellType, 0)]
             attributes.recycle()
         }
+
+        if(cellType == CellType.SPINNER) binding.celdaTv.visibility = INVISIBLE
     }
     constructor(context: Context?) : super(context){
         isSelectable = true
@@ -99,8 +101,11 @@ class Celda : LinearLayout {
         binding.celdaSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
-                    valorCelda = listOfHints[i]
-                    saveData()
+                    if(hasIgnoredFirstTrigger) {
+                        valorCelda = listOfHints[i]
+                        saveData()
+                    }
+                    hasIgnoredFirstTrigger = true
                 }
 
                 override fun onNothingSelected(adapterView: AdapterView<*>?) {//
