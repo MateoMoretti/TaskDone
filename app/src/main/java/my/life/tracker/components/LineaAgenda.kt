@@ -3,13 +3,7 @@ package my.life.tracker.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.findFragment
-import my.life.tracker.R
-import my.life.tracker.agenda.model.Actividad
-import my.life.tracker.agenda.viewmodels.AgendaViewModel
 import my.life.tracker.databinding.LineaAgendaBinding
 
 class LineaAgenda : LinearLayout {

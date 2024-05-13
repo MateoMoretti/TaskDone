@@ -4,14 +4,17 @@ import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import my.life.tracker.R
 import my.life.tracker.Utils
 import my.life.tracker.finanzas.interfaces.RecordInterface
 import my.life.tracker.finanzas.model.Tag
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
-open class BaseRecordViewModel : ViewModel(), RecordInterface {
+@HiltViewModel
+open class BaseRecordViewModel@Inject constructor() : ViewModel(), RecordInterface {
 
     private val _tagsSelected = MutableLiveData<ArrayList<Tag>>().apply { postValue(ArrayList()) }
     val tagsSelected:LiveData<ArrayList<Tag>> get() = _tagsSelected

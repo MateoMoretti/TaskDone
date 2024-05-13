@@ -9,16 +9,20 @@ import androidx.fragment.app.findFragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import my.life.tracker.App
 import my.life.tracker.R
+import my.life.tracker.agenda.interfaces.ActividadDao
 import my.life.tracker.agenda.model.Actividad
+import my.life.tracker.database.LifeTrackerDataBase
+import javax.inject.Inject
 
 
-class AgendaViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val database = (app as App).lifeTrackerDataBase
+@HiltViewModel
+class AgendaViewModel@Inject constructor(private val actividadDao: ActividadDao) : ViewModel () {
 
     private val _actividades = MutableLiveData<ArrayList<Actividad>>()
     val actividades:LiveData<ArrayList<Actividad>> get() = _actividades
@@ -45,7 +49,7 @@ class AgendaViewModel(app: Application) : AndroidViewModel(app) {
         _actividades.value!!.add(actividad)
     }
     fun addActividad(actividad: Actividad): Long {
-        val newActividad = database.actividadDao.addActividad(actividad)
+        val newActividad = actividadDao.addActividad(actividad)
         return newActividad
     }
 

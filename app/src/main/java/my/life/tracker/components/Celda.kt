@@ -1,11 +1,18 @@
 package my.life.tracker.components
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.View.OnKeyListener
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import my.life.tracker.R
 import my.life.tracker.databinding.CeldaBinding
@@ -15,7 +22,7 @@ class Celda : LinearLayout {
 
     var isAlreadySelected = false
     private var isSelectable = false
-    private var hint = ""
+    private var listOfHints = arrayListOf<String>()
     private val colorSelectable = R.color.borders
 
     private val blockCharacterSet = "/n"
@@ -45,6 +52,7 @@ class Celda : LinearLayout {
 
         binding.celdaEd.setOnKeyListener(OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                valorCelda = binding.celdaEd.text.toString()
                 saveData()
                 return@OnKeyListener true
             }
@@ -53,6 +61,7 @@ class Celda : LinearLayout {
     }
 
     fun saveData(){
+        binding.celdaTv.text = valorCelda
         binding.celdaTv.text = binding.celdaEd.text
         binding.celdaTv.visibility = VISIBLE
         binding.celdaEd.visibility = INVISIBLE
@@ -73,6 +82,30 @@ class Celda : LinearLayout {
         isAlreadySelected=false
         binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         saveData()
+    }
+
+    //Hints concatenadas con caracter "_"
+    fun setHints(hints:String){
+        listOfHints.add(0, valorCelda)
+        listOfHints.addAll(hints.split("_"))
+        listOfHints.add("+")
+        val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
+            context,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOfHints as List<String?>
+        ) {}
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown)
+        binding.celdaSpinner.adapter = spinnerArrayAdapter
+        binding.celdaSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
+                    valorCelda = listOfHints[i]
+                    saveData()
+                }
+
+                override fun onNothingSelected(adapterView: AdapterView<*>?) {//
+                }
+            }
     }
 
 }

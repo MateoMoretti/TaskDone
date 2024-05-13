@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity("Actividad")
 data class Actividad (
+    @ColumnInfo(name = "dia") var dia: String="día",
     @ColumnInfo(name = "actividad") var actividad: String="actividad",
     @ColumnInfo(name = "tipo") var tipo: String="tipo",
     @ColumnInfo(name = "comienzo") var comienzo: String="comienzo",

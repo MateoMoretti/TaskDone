@@ -8,8 +8,10 @@ import android.content.Context
 import my.life.tracker.R
 import android.widget.TextView
 import android.content.DialogInterface
+import android.os.Build
 import android.view.Gravity
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -18,13 +20,8 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 object Utils {
-    @SuppressLint("StaticFieldLeak")
-    private var context: Context? = null
-    fun setContext(context: Context?) {
-        Utils.context = context
-    }
 
-    fun getDia(fecha: String): String {
+    fun getDia(fecha: String, context: Context?): String {
         val idioma = Preferences.getPreferenceString(context, "idioma")
         val locale = Locale(idioma)
         val df: DateFormat
@@ -44,7 +41,7 @@ object Utils {
         return dia.substring(0, 1).uppercase(Locale.getDefault()) + dia.substring(1)
     }
 
-    fun getMesPorNumero(num: Int): String {
+    fun getMesPorNumero(context: Context?, num: Int): String {
         var month = "wrong"
         val idioma = Preferences.getPreferenceString(context, "idioma")
         val locale = Locale(idioma)
@@ -145,6 +142,7 @@ object Utils {
         return df.parse(s)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun diferenciaDeDias(from: Date, to: Date): Long {
         return ChronoUnit.DAYS.between(from.toInstant(), to.toInstant()) + 1
     }

@@ -2,18 +2,20 @@ package my.life.tracker.agenda.adapters
 
 import android.content.Context
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import my.life.tracker.R
-import my.life.tracker.agenda.interfaces.ClickableInterface
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.components.Celda
 import my.life.tracker.components.LineaAgenda
 
 
-class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>) : RecyclerView.Adapter <AgendaAdapter.AgendaViewHolder>(), ClickableInterface{
+class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
+                    val hintsActividades:String,
+                    val hintsTipos:String) : RecyclerView.Adapter <AgendaAdapter.AgendaViewHolder>(){
 
     var celdaSelected:Celda? = null
+
     class AgendaViewHolder(val lineaAgenda: LineaAgenda) : RecyclerView.ViewHolder(lineaAgenda) {
     }
     private val colorSelectable = R.color.azul_notificacion
@@ -44,11 +46,13 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>) : Recy
             it.binding.celdaTv.text = data[position].actividad
             it.binding.celdaEd.setText(data[position].actividad)
             it.binding.celdaTv.setOnClickListener { selectCell(celdaActividad)}
+            it.setHints(hintsActividades)
         }
         celdaTipo.let {
             it.binding.celdaTv.text = data[position].tipo
             it.binding.celdaEd.setText(data[position].tipo)
             it.binding.celdaTv.setOnClickListener { selectCell(celdaTipo)}
+            it.setHints(hintsTipos)
         }
         celdaComienzo.let {
             it.binding.celdaTv.text = data[position].comienzo
@@ -81,10 +85,4 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>) : Recy
     fun clearCells(){
         celdaSelected?.unselectCell()
     }
-
-    override fun OnClick(celda: Celda) {
-        clearCells()
-        celdaSelected = celda
-    }
-
 }

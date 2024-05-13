@@ -91,7 +91,7 @@ class FinanzasHistorialFragment : Fragment() {
                 val layoutItems = view.findViewById<LinearLayout>(R.id.layout_item_historial)
                 binding.layoutHistorial.addView(view)
                 val fecha = view.findViewById<TextView>(R.id.fecha)
-                fecha.text = Utils.getDia(allDates[x])
+                fecha.text = Utils.getDia(allDates[x], context)
 
                 val recordsInDate = data.filter { it.date == allDates[x] }
 

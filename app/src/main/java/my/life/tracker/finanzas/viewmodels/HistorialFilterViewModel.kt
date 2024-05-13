@@ -4,12 +4,15 @@ import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import my.life.tracker.R
 import my.life.tracker.Utils
 import java.util.*
+import javax.inject.Inject
 
 
-class HistorialFilterViewModel : ViewModel() {
+@HiltViewModel
+class HistorialFilterViewModel@Inject constructor() : ViewModel() {
 
     private val _date_desde = MutableLiveData<Date>()
     val dateDesde: LiveData<Date> get() = _date_desde

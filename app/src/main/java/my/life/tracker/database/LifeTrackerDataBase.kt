@@ -2,6 +2,7 @@ package my.life.tracker.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import my.life.tracker.agenda.AgendaPreferences
 import my.life.tracker.agenda.interfaces.ActividadDao
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.finanzas.interfaces.CurrencyDao
@@ -22,11 +23,11 @@ import my.life.tracker.finanzas.model.TagRecord
 abstract class LifeTrackerDataBase : RoomDatabase() {
 
     //AGENDA
-    abstract val actividadDao: ActividadDao
+    abstract fun actividadDao() : ActividadDao
 
     //FINANZAS
-    abstract val tagDao: TagDao
-    abstract val tagRecordDao: TagRecordDao
-    abstract val recordDao: RecordDao
-    abstract val currencyDao: CurrencyDao
+    abstract fun tagDao() : TagDao
+    abstract fun tagRecordDao() : TagRecordDao
+    abstract fun recordDao() : RecordDao
+    abstract fun currencyDao() : CurrencyDao
 }

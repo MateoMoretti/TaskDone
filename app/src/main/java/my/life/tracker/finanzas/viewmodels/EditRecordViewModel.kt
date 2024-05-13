@@ -2,10 +2,13 @@ package my.life.tracker.finanzas.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import my.life.tracker.finanzas.model.Record
+import javax.inject.Inject
 
 
-class EditRecordViewModel : BaseRecordViewModel() {
+@HiltViewModel
+class EditRecordViewModel@Inject constructor() : BaseRecordViewModel() {
 
     private val _record = MutableLiveData<Record?>()
     val record: LiveData<Record?> get() = _record

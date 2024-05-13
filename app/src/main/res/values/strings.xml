@@ -127,6 +127,10 @@
     <string name="comienzo">Comienzo</string>
     <string name="importancia">Importancia</string>
     <string name="comentarios">Comentarios</string>
+    <string name="previous_day">Día anterior</string>
+    <string name="next_day">Día siguiente</string>
+    <string name="previous_year">Año anterior</string>
+    <string name="next_year">Año siguiente</string>
 
 
 

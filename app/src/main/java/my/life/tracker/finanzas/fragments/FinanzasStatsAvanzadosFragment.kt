@@ -194,7 +194,7 @@ class FinanzasStatsAvanzadosFragment : Fragment() {
         binding.spinnerYear.setSelection(Calendar.getInstance()[Calendar.YEAR] - 2021)
         val meses = ArrayList<String>()
         for (x in 0..11) {
-            meses.add(Utils.getMesPorNumero(x))
+            meses.add(Utils.getMesPorNumero(context, x))
         }
         val adapterSpinnerMeses: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             requireActivity(),
