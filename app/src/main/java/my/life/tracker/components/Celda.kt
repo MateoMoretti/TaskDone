@@ -76,13 +76,15 @@ class Celda : LinearLayout {
             binding.celdaEd.setSelection(binding.celdaEd.length())
         } else {
             isAlreadySelected = true
-            binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, colorSelectable))
+            binding.celdaTv.isSelected = true
+            //binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, colorSelectable))
         }
     }
 
     fun unselectCell(){
         isAlreadySelected=false
-        binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        binding.celdaTv.isSelected = false
+        //binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         saveData()
     }
 
@@ -96,7 +98,7 @@ class Celda : LinearLayout {
             android.R.layout.simple_spinner_dropdown_item,
             listOfHints as List<String?>
         ) {}
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown)
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_agenda)
         binding.celdaSpinner.adapter = spinnerArrayAdapter
         binding.celdaSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
