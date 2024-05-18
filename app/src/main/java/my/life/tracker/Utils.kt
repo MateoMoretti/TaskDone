@@ -177,7 +177,7 @@ object Utils {
         builder.setView(vista)
             .setPositiveButton(
                 c.resources.getString(R.string.aceptar)
-            ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+            ) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
         builder.setCancelable(true)
         val dialog: Dialog = builder.create()
         val window = dialog.window

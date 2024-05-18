@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -64,19 +66,19 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(fragment){
             R.id.agendaFragment -> {
                 center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.agenda)
-                iconStats!!.mutate().setColorFilter(getColor(R.color.azul_agenda), PorterDuff.Mode.SRC_IN)
+                iconStats!!.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(getColor(R.color.azul_agenda), BlendModeCompat.SRC_ATOP)
                 right.icon = iconStats
                 left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
             }
             R.id.finanzasFragment -> {
                 center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.signo_pesos)
-                iconStats!!.mutate().setColorFilter(getColor(R.color.naranja_finanzas), PorterDuff.Mode.SRC_IN)
+                iconStats!!.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(getColor(R.color.naranja_finanzas), BlendModeCompat.SRC_ATOP)
                 right.icon = iconStats
                 left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
             }
             R.id.comidasFragment -> {
                 center.icon = ContextCompat.getDrawable(applicationContext, R.drawable.comidas)
-                iconStats!!.mutate().setColorFilter(getColor(R.color.violeta_comidas), PorterDuff.Mode.SRC_IN)
+                iconStats!!.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(getColor(R.color.violeta_comidas), BlendModeCompat.SRC_ATOP)
                 right.icon = iconStats
                 left.icon = ContextCompat.getDrawable(applicationContext, R.drawable.historial)
             }

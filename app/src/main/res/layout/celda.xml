@@ -6,16 +6,6 @@
     android:layout_height="wrap_content">
 
 
-    <Spinner
-        android:id="@+id/celda_spinner"
-        style="@style/ItemAgenda"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:context="my.life.tracker.agenda.fragments.AgendaFragment"
-        tools:text="Actividad" />
-
     <TextView
         android:id="@+id/celda_tv"
         style="@style/ItemAgenda"
@@ -24,6 +14,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context="my.life.tracker.agenda.fragments.AgendaFragment" />
+
+    <Spinner
+        android:id="@+id/celda_spinner"
+        style="@style/ItemAgenda"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context="my.life.tracker.agenda.fragments.AgendaFragment"
+        tools:text="Actividad" />
 
     <EditText
         android:id="@+id/celda_ed"

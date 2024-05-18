@@ -18,7 +18,6 @@ import my.life.tracker.agenda.adapters.AgendaAdapter
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.viewmodels.AgendaViewModel
 import my.life.tracker.databinding.FragmentAgendaBinding
-import my.life.tracker.finanzas.viewmodels.DatabaseFinanzasViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -31,11 +30,9 @@ class AgendaFragment : Fragment() {
     @Inject
     lateinit var agendaPreferences: AgendaPreferences
 
-    private val databaseViewModel: DatabaseFinanzasViewModel by activityViewModels()
     private val agendaViewModel: AgendaViewModel by activityViewModels()
 
     var tags: ArrayList<String>? = null
-    var contador = 0
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables", "RestrictedApi")
     override fun onCreateView(
@@ -53,25 +50,24 @@ class AgendaFragment : Fragment() {
     private fun setListeners(){
         val defaultActividades = agendaPreferences.getPreferenceString(requireContext(), AgendaPreferences.ACTIViDADES)
         val defaultTipos = agendaPreferences.getPreferenceString(requireContext(), AgendaPreferences.TIPOS)
-        binding.addLine.setOnClickListener(){
+        binding.addLine.setOnClickListener {
             addLine()
         }
         val adapter = AgendaAdapter(requireContext(),
-            arrayListOf(Actividad()),
+            arrayListOf(),
             agendaPreferences.getActividades(requireContext()),
             agendaPreferences.getTipos(requireContext())
 
         )
 
-        binding.layoutAgenda.setLayoutManager(LinearLayoutManager(context));
+        binding.layoutAgenda.setLayoutManager(LinearLayoutManager(context))
         binding.layoutAgenda.adapter = adapter
     }
 
-
     private fun addLine(){
-        contador++
-        val newActividad = Actividad(contador.toString(), "", "", "", "100", "")
+        val newActividad = Actividad()
         newActividad.id = agendaViewModel.addActividad(newActividad)
         (binding.layoutAgenda.adapter as AgendaAdapter).addLinea(newActividad)
     }
+
 }

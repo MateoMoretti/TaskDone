@@ -9,8 +9,8 @@ import android.view.View.OnKeyListener
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import my.life.tracker.R
+import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.CellType
 import my.life.tracker.databinding.CeldaBinding
 
@@ -21,19 +21,20 @@ class Celda : LinearLayout {
     var isAlreadySelected = false
     private var isSelectable = false
     private lateinit var cellType : CellType
+    private var isTitle = false
     private var listOfHints = arrayListOf<String>()
     private val colorSelectable = R.color.borders
-
-    private val blockCharacterSet = "/n"
+    private var celdaClickListener: CeldaClickListener? = null
 
      var valorCelda = ""
 
     var binding: CeldaBinding = CeldaBinding.inflate(LayoutInflater.from(context), this, true)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){
-        val attributes = context?.obtainStyledAttributes(attrs, R.styleable.Celda);
+        val attributes = context?.obtainStyledAttributes(attrs, R.styleable.Celda)
         if (attributes != null) {
             isSelectable = attributes.getBoolean(R.styleable.Celda_isSelectable, true)
             cellType = CellType.entries.toTypedArray()[attributes.getInt(R.styleable.Celda_cellType, 0)]
+            isTitle = attributes.getBoolean(R.styleable.Celda_isTitle, false)
             attributes.recycle()
         }
 
@@ -44,7 +45,8 @@ class Celda : LinearLayout {
     }
 
     init {
-        binding.celdaEd.setOnEditorActionListener { v, actionId, event ->
+        binding.celdaTv.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
+        binding.celdaEd.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
                 saveData()
                 return@setOnEditorActionListener true
@@ -52,7 +54,7 @@ class Celda : LinearLayout {
             false
         }
 
-        binding.celdaEd.setOnKeyListener(OnKeyListener { v, keyCode, event ->
+        binding.celdaEd.setOnKeyListener(OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 valorCelda = binding.celdaEd.text.toString()
                 saveData()
@@ -64,27 +66,24 @@ class Celda : LinearLayout {
 
     fun saveData(){
         binding.celdaTv.text = valorCelda
-        binding.celdaTv.text = binding.celdaEd.text
+        binding.celdaEd.setText(valorCelda)
+
         binding.celdaTv.visibility = VISIBLE
         binding.celdaEd.visibility = INVISIBLE
     }
     fun selectCell(){
-        if(isAlreadySelected){
+        if(isSelected){
             binding.celdaTv.visibility = INVISIBLE
             binding.celdaEd.visibility = VISIBLE
             binding.celdaEd.requestFocus()
             binding.celdaEd.setSelection(binding.celdaEd.length())
         } else {
-            isAlreadySelected = true
-            binding.celdaTv.isSelected = true
-            //binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, colorSelectable))
+            isSelected = true
         }
     }
 
     fun unselectCell(){
-        isAlreadySelected=false
-        binding.celdaTv.isSelected = false
-        //binding.celdaTv.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        isSelected=false
         saveData()
     }
 
@@ -115,4 +114,11 @@ class Celda : LinearLayout {
             }
     }
 
+    fun setText(text:String){
+        valorCelda = text
+        saveData()
+    }
+    fun addClickListener(celdaClickListener: CeldaClickListener){
+        this.celdaClickListener = celdaClickListener
+    }
 }

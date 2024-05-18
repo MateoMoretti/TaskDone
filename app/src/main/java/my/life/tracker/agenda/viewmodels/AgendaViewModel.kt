@@ -48,9 +48,6 @@ class AgendaViewModel@Inject constructor(private val actividadDao: ActividadDao)
     fun addActividadToScreen(actividad: Actividad,){
         _actividades.value!!.add(actividad)
     }
-    fun addActividad(actividad: Actividad): Long {
-        val newActividad = actividadDao.addActividad(actividad)
-        return newActividad
-    }
+    fun addActividad(actividad: Actividad): Long = actividadDao.addActividad(actividad)
 
 }
