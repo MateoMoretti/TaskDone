@@ -3,6 +3,7 @@ package my.life.tracker.agenda.adapters
 import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.ColumnInfo
 import my.life.tracker.R
 import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.Actividad
@@ -16,13 +17,12 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
 {
 
     var celdaSelected:Celda? = null
+    var setupDone = false
 
     init {
         addLinea(Actividad())
     }
-    class AgendaViewHolder(val lineaAgenda: LineaAgenda) : RecyclerView.ViewHolder(lineaAgenda) {
-    }
-    private val colorSelectable = R.color.azul_notificacion
+    class AgendaViewHolder(val lineaAgenda: LineaAgenda) : RecyclerView.ViewHolder(lineaAgenda)
 
     override fun getItemCount(): Int {
         return data.size
@@ -30,7 +30,7 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
     fun addLinea(actividad: Actividad) {
         data.add(data.size, actividad)
         clearCells()
-        notifyDataSetChanged()
+        notifyItemChanged(data.size)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AgendaViewHolder {
         val v = LineaAgenda(context, this)
@@ -39,29 +39,17 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
     }
 
     override fun onBindViewHolder(holder: AgendaViewHolder, position: Int) {
-        holder.lineaAgenda.setActividad(data[position])
+        if(!setupDone) holder.lineaAgenda.setActividad(Actividad(
+            "día",
+            "actividad",
+            "tipo",
+            "comienzo",
+            "fin" ,
+            "importancia",
+            "comentarios"), false)
 
-        val celdaActividad = holder.lineaAgenda.binding.actividad
-        val celdaTipo = holder.lineaAgenda.binding.tipo
-        val celdaComienzo = holder.lineaAgenda.binding.comienzo
-        val celdaFin = holder.lineaAgenda.binding.fin
-        val celdaImportancia = holder.lineaAgenda.binding.importancia
-        val celdaComentarios = holder.lineaAgenda.binding.comentarios
-
-        /*celdaActividad.let {
-            it.binding.celdaTv.setOnClickListener { selectCell(celdaActividad)}
-            it.setHints(hintsActividades)
-        }
-        celdaTipo.let {
-            it.binding.celdaTv.setOnClickListener { selectCell(celdaTipo)}
-            it.setHints(hintsTipos)
-        }
-        celdaComienzo.binding.celdaTv.setOnClickListener { selectCell(celdaComienzo)}
-        celdaFin.binding.celdaTv.setOnClickListener { selectCell(celdaFin)}
-        celdaImportancia.binding.celdaTv.setOnClickListener { selectCell(celdaImportancia)}
-        celdaImportancia.binding.celdaTv.setOnClickListener { selectCell(celdaImportancia)}
-        celdaComentarios.binding.celdaTv.setOnClickListener { selectCell(celdaComentarios)}*/
-
+        else holder.lineaAgenda.setActividad(data[position], true)
+        setupDone= true
     }
 
     fun clearCells(){

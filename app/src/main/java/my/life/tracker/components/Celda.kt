@@ -9,7 +9,11 @@ import android.view.View.OnKeyListener
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.TimePicker
+import my.life.tracker.ActivityMain
+import my.life.tracker.HourPickerFragment
 import my.life.tracker.R
+import my.life.tracker.Utils
 import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.CellType
 import my.life.tracker.databinding.CeldaBinding
@@ -17,16 +21,13 @@ import my.life.tracker.databinding.CeldaBinding
 
 class Celda : LinearLayout {
 
-    var hasIgnoredFirstTrigger = false
-    var isAlreadySelected = false
-    private var isSelectable = false
-    private lateinit var cellType : CellType
-    private var isTitle = false
-    private var listOfHints = arrayListOf<String>()
-    private val colorSelectable = R.color.borders
-    private var celdaClickListener: CeldaClickListener? = null
 
-     var valorCelda = ""
+    private var valorCelda = ""
+    private var isSelectable = true
+    private var listOfHints = arrayListOf<String>()
+    private var hasIgnoredFirstTrigger = false
+    private var celdaClickListener: CeldaClickListener? = null
+    private var cellType = CellType.TEXTO
 
     var binding: CeldaBinding = CeldaBinding.inflate(LayoutInflater.from(context), this, true)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){
@@ -34,18 +35,42 @@ class Celda : LinearLayout {
         if (attributes != null) {
             isSelectable = attributes.getBoolean(R.styleable.Celda_isSelectable, true)
             cellType = CellType.entries.toTypedArray()[attributes.getInt(R.styleable.Celda_cellType, 0)]
-            isTitle = attributes.getBoolean(R.styleable.Celda_isTitle, false)
             attributes.recycle()
         }
-
-        if(cellType == CellType.SPINNER) binding.celdaTv.visibility = INVISIBLE
+        setup()
     }
-    constructor(context: Context?) : super(context){
-        isSelectable = true
-    }
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, valorCelda:String, cellType: CellType, isSelectable:Boolean,celdaClickListener: CeldaClickListener, hints: ArrayList<String> = arrayListOf()) : super(context){
+        this.celdaClickListener = celdaClickListener
+        this.valorCelda = valorCelda
+        this.cellType = cellType
+        this.isSelectable = isSelectable
+        listOfHints = hints
 
-    init {
+        if(isSelectable) {
+            if (valorCelda in listOfHints) {
+                listOfHints.remove(valorCelda)
+            }
+            listOfHints.add(0, valorCelda)
+            listOfHints.add(listOfHints.size, "add_new_value")
+
+            setup()
+        }
+        saveData()
+    }
+    fun setup(){
+        saveData()
+        when(cellType){
+            CellType.SPINNER -> {
+                addHints()
+            }
+            else -> {
+
+            }
+        }
         binding.celdaTv.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
+        binding.celdaEd.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
+
         binding.celdaEd.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
                 saveData()
@@ -70,13 +95,28 @@ class Celda : LinearLayout {
 
         binding.celdaTv.visibility = VISIBLE
         binding.celdaEd.visibility = INVISIBLE
+        binding.celdaSpinner.visibility = INVISIBLE
     }
     fun selectCell(){
         if(isSelected){
-            binding.celdaTv.visibility = INVISIBLE
-            binding.celdaEd.visibility = VISIBLE
-            binding.celdaEd.requestFocus()
-            binding.celdaEd.setSelection(binding.celdaEd.length())
+            when(cellType){
+                CellType.TEXTO -> {
+                    binding.celdaTv.visibility = INVISIBLE
+                    binding.celdaEd.visibility = VISIBLE
+                    binding.celdaEd.requestFocus()
+                    binding.celdaEd.setSelection(binding.celdaEd.length())
+                }
+                CellType.HORA -> {
+                    showHourPicker()
+                }
+                CellType.SPINNER -> {
+                    binding.celdaTv.visibility = INVISIBLE
+                    binding.celdaSpinner.visibility = VISIBLE
+                    binding.celdaSpinner.performClick()
+                }
+                CellType.SLIDER -> {
+                }
+            }
         } else {
             isSelected = true
         }
@@ -88,13 +128,10 @@ class Celda : LinearLayout {
     }
 
     //Hints concatenadas con caracter "_"
-    fun setHints(hints:String){
-        listOfHints.add(0, valorCelda)
-        listOfHints.addAll(hints.split("_"))
-        listOfHints.add("+")
+    fun addHints(){
         val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             context,
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.spinner_dropdown_agenda,
             listOfHints as List<String?>
         ) {}
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_agenda)
@@ -113,12 +150,34 @@ class Celda : LinearLayout {
                 }
             }
     }
-
+    private fun showHourPicker() {
+        var defaultHour = 0
+        var defaultMinutes = 0
+        try {
+            defaultHour = valorCelda.substring(0, 2).toInt()
+            defaultMinutes = valorCelda.substring(3, 5).toInt()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+        HourPickerFragment.newInstance({ _: TimePicker?, hour: Int, minutes ->
+            val selectedHour = Utils.twoDigits(hour) + ":" + Utils.twoDigits(minutes)
+            valorCelda = selectedHour
+            saveData()
+        }, defaultHour, defaultMinutes)
+            .show(
+                ActivityMain.instance.supportFragmentManager,
+                "hourPicker"
+            )
+    }
     fun setText(text:String){
         valorCelda = text
         saveData()
     }
-    fun addClickListener(celdaClickListener: CeldaClickListener){
-        this.celdaClickListener = celdaClickListener
+    fun hideAll(){
+        binding.celdaTv.visibility = INVISIBLE
+        binding.celdaEd.visibility = INVISIBLE
+        binding.celdaSpinner.visibility = INVISIBLE
     }
+
+
 }

@@ -2,7 +2,6 @@
 <resources>
 
     <declare-styleable name="Celda">
-        <attr name="isTitle" format="boolean" />
         <attr name="isSelectable" format="boolean" />
         <attr name="cellType" format="enum">
             <enum name="TEXTO" value="0"/>

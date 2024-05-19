@@ -6,18 +6,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import my.life.tracker.ActivityMain
+import my.life.tracker.DatePickerFragment
 import my.life.tracker.R
+import my.life.tracker.Utils
 import my.life.tracker.agenda.AgendaPreferences
 import my.life.tracker.agenda.adapters.AgendaAdapter
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.viewmodels.AgendaViewModel
 import my.life.tracker.databinding.FragmentAgendaBinding
+import my.life.tracker.finanzas.model.Record
 import java.util.*
 import javax.inject.Inject
 
@@ -60,14 +65,16 @@ class AgendaFragment : Fragment() {
 
         )
 
-        binding.layoutAgenda.setLayoutManager(LinearLayoutManager(context))
-        binding.layoutAgenda.adapter = adapter
+        binding.recyclerAgenda.setLayoutManager(LinearLayoutManager(context))
+        binding.recyclerAgenda.adapter = adapter
     }
 
     private fun addLine(){
         val newActividad = Actividad()
         newActividad.id = agendaViewModel.addActividad(newActividad)
-        (binding.layoutAgenda.adapter as AgendaAdapter).addLinea(newActividad)
+        (binding.recyclerAgenda.adapter as AgendaAdapter).addLinea(newActividad)
     }
+
+
 
 }

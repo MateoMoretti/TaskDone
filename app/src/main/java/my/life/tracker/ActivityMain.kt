@@ -27,10 +27,17 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private var fragment = R.id.finanzasFragment
 
+    companion object{
+        lateinit var instance: ActivityMain
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        instance = this
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
         navController = navHostFragment!!.navController
@@ -199,4 +206,5 @@ class ActivityMain : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mTimePicker.setTitle("Selecciona la hora")
         mTimePicker.show()
     }
+
 }
