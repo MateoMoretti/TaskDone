@@ -25,6 +25,7 @@ import my.life.tracker.agenda.viewmodels.AgendaViewModel
 import my.life.tracker.databinding.FragmentAgendaBinding
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -85,12 +86,29 @@ class AgendaFragment : Fragment() {
         mainHandler.removeCallbacksAndMessages(null);
     }
 
+    private fun loadActividades(){
+        val adapter = AgendaAdapter(requireContext(),
+            (agendaViewModel.getActividades() as ArrayList),
+            agendaPreferences.getActividades(requireContext()),
+            agendaPreferences.getTipos(requireContext())
+        )
+
+        binding.recyclerAgenda.setLayoutManager(LinearLayoutManager(context))
+        binding.recyclerAgenda.adapter = adapter
+    }
+
     private fun setListeners(){
+        loadActividades()
         val defaultActividades = agendaPreferences.getPreferenceString(requireContext(), AgendaPreferences.ACTIViDADES)
         val defaultTipos = agendaPreferences.getPreferenceString(requireContext(), AgendaPreferences.TIPOS)
 
         agendaViewModel.date.observe(viewLifecycleOwner){
             binding.dia.text = Utils.getDia(agendaViewModel.getCalendar(), context)
+            loadActividades()
+        }
+
+        binding.root.setOnClickListener{
+            (binding.recyclerAgenda.adapter as AgendaAdapter).clearCells()
         }
 
         binding.previousDay.setOnTouchListener { view, event ->
@@ -126,15 +144,6 @@ class AgendaFragment : Fragment() {
         binding.addLine.setOnClickListener {
             addLine()
         }
-        val adapter = AgendaAdapter(requireContext(),
-            arrayListOf(),
-            agendaPreferences.getActividades(requireContext()),
-            agendaPreferences.getTipos(requireContext())
-
-        )
-
-        binding.recyclerAgenda.setLayoutManager(LinearLayoutManager(context))
-        binding.recyclerAgenda.adapter = adapter
     }
 
     private fun addLine(){

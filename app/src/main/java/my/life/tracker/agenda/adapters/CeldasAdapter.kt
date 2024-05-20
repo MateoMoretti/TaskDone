@@ -40,4 +40,8 @@ class CeldasAdapter(val context: Context, var data: ArrayList<String>,
         if(celda != celdaSelected) celdaSelected?.unselectCell()
         celdaSelected = celda
     }
+
+    override fun onValueSelected(celda: Celda) {
+        TODO("Not yet implemented")
+    }
 }

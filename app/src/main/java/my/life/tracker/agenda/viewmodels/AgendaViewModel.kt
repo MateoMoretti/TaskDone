@@ -5,10 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import my.life.tracker.Utils
 import my.life.tracker.agenda.interfaces.ActividadDao
 import my.life.tracker.agenda.model.Actividad
+import my.life.tracker.finanzas.model.Record
 import java.util.Calendar
 import java.util.Date
+import java.util.stream.Stream
 import javax.inject.Inject
 
 
@@ -37,34 +40,18 @@ class AgendaViewModel@Inject constructor(private val actividadDao: ActividadDao)
 
     fun getCalendar() = calendar
 
-    fun setDate(date: Int){
-        calendar.set(Calendar.DATE, date)
-        _date.value = calendar.time
-    }
     fun setDay(day: Int){
         calendar.set(Calendar.DAY_OF_MONTH, day)
         _date.value = calendar.time
     }
-    fun setMonth(month: Int){
-        calendar.set(Calendar.MONTH, month)
-        _date.value = calendar.time
-    }
 
-    fun setYear(year: Int) {
-        calendar.set(Calendar.YEAR, year)
-        _date.value = calendar.time
+    fun addActividad(actividad: Actividad): Long {
+        //if(actividad.isEmpty()) return 0
+        actividad.date = Utils.dateToString(calendar.time)
+        return actividadDao.addActividad(actividad)
     }
-
-    fun selectLine(view: View){
-        if(_idLineSelected.value != null){
-            _idPreviousLineSelected.value = view
-        }
-       _idLineSelected.value = view
+    fun getActividades(): List<Actividad> {
+        return actividadDao.getActividades(Utils.dateToString(calendar.time), Utils.dateToString(calendar.time))
     }
-
-    fun addActividadToScreen(actividad: Actividad,){
-        _actividades.value!!.add(actividad)
-    }
-    fun addActividad(actividad: Actividad): Long = actividadDao.addActividad(actividad)
 
 }

@@ -10,11 +10,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TimePicker
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import my.life.tracker.ActivityMain
 import my.life.tracker.HourPickerFragment
 import my.life.tracker.R
 import my.life.tracker.Utils
 import my.life.tracker.agenda.interfaces.CeldaClickListener
+import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.model.CellType
 import my.life.tracker.databinding.CeldaBinding
 
@@ -22,7 +25,9 @@ import my.life.tracker.databinding.CeldaBinding
 class Celda : LinearLayout {
 
 
-    private var valorCelda = ""
+    private val _valorCelda = MutableLiveData<String>().apply { value = "" }
+    val valorCelda: LiveData<String> get() = _valorCelda
+
     private var isSelectable = true
     private var listOfHints = arrayListOf<String>()
     private var hasIgnoredFirstTrigger = false
@@ -42,7 +47,7 @@ class Celda : LinearLayout {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, valorCelda:String, cellType: CellType, isSelectable:Boolean,celdaClickListener: CeldaClickListener, hints: ArrayList<String> = arrayListOf()) : super(context){
         this.celdaClickListener = celdaClickListener
-        this.valorCelda = valorCelda
+        this._valorCelda.value = valorCelda
         this.cellType = cellType
         this.isSelectable = isSelectable
         listOfHints = hints
@@ -56,10 +61,14 @@ class Celda : LinearLayout {
 
             setup()
         }
-        saveData()
+    }
+
+    init {
+        valorCelda.observe(ActivityMain.instance){
+            updateData()
+        }
     }
     fun setup(){
-        saveData()
         when(cellType){
             CellType.SPINNER -> {
                 addHints()
@@ -73,7 +82,7 @@ class Celda : LinearLayout {
 
         binding.celdaEd.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
-                saveData()
+                _valorCelda.value = binding.celdaEd.text.toString()
                 return@setOnEditorActionListener true
             }
             false
@@ -81,17 +90,18 @@ class Celda : LinearLayout {
 
         binding.celdaEd.setOnKeyListener(OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                valorCelda = binding.celdaEd.text.toString()
-                saveData()
+                _valorCelda.value = binding.celdaEd.text.toString()
                 return@OnKeyListener true
             }
             false
         })
     }
-
-    fun saveData(){
-        binding.celdaTv.text = valorCelda
-        binding.celdaEd.setText(valorCelda)
+    fun updateData(){
+        if(binding.celdaEd.visibility == VISIBLE){
+            _valorCelda.value = binding.celdaEd.text.toString()
+        }
+        binding.celdaTv.text = valorCelda.value
+        binding.celdaEd.setText(valorCelda.value)
 
         binding.celdaTv.visibility = VISIBLE
         binding.celdaEd.visibility = INVISIBLE
@@ -124,7 +134,7 @@ class Celda : LinearLayout {
 
     fun unselectCell(){
         isSelected=false
-        saveData()
+        updateData()
     }
 
     //Hints concatenadas con caracter "_"
@@ -140,8 +150,8 @@ class Celda : LinearLayout {
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                     if(hasIgnoredFirstTrigger) {
-                        valorCelda = listOfHints[i]
-                        saveData()
+                        _valorCelda.value = listOfHints[i]
+                        updateData()
                     }
                     hasIgnoredFirstTrigger = true
                 }
@@ -154,15 +164,14 @@ class Celda : LinearLayout {
         var defaultHour = 0
         var defaultMinutes = 0
         try {
-            defaultHour = valorCelda.substring(0, 2).toInt()
-            defaultMinutes = valorCelda.substring(3, 5).toInt()
+            defaultHour = valorCelda.value!!.substring(0, 2).toInt()
+            defaultMinutes = valorCelda.value!!.substring(3, 5).toInt()
         }catch (e:Exception){
             e.printStackTrace()
         }
         HourPickerFragment.newInstance({ _: TimePicker?, hour: Int, minutes ->
             val selectedHour = Utils.twoDigits(hour) + ":" + Utils.twoDigits(minutes)
-            valorCelda = selectedHour
-            saveData()
+            _valorCelda.value = selectedHour
         }, defaultHour, defaultMinutes)
             .show(
                 ActivityMain.instance.supportFragmentManager,
@@ -170,8 +179,7 @@ class Celda : LinearLayout {
             )
     }
     fun setText(text:String){
-        valorCelda = text
-        saveData()
+        _valorCelda.value = text
     }
     fun hideAll(){
         binding.celdaTv.visibility = INVISIBLE

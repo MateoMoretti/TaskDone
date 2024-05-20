@@ -4,7 +4,6 @@ import androidx.room.*
 import my.life.tracker.agenda.model.Actividad
 
 
-
 @Dao
 interface ActividadDao {
 
@@ -23,4 +22,7 @@ interface ActividadDao {
 
     @Query("SELECT * FROM Actividad WHERE Actividad.id IN (:actividades)")
     fun getActividadesByIdList(actividades:List<Long>) : List<Actividad>
+
+    @Query("SELECT * FROM Actividad WHERE Actividad.date BETWEEN :from AND :to ORDER BY Actividad.date DESC")
+    fun getActividades(from: String, to: String) : List<Actividad>
 }

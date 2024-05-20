@@ -5,4 +5,5 @@ import my.life.tracker.components.Celda
 interface CeldaClickListener {
 
     fun onCeldaClicked(celda: Celda) : Unit
+    fun onValueSelected(celda: Celda) : Unit
 }

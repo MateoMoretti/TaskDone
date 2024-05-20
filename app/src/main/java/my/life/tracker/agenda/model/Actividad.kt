@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity("Actividad")
-data class Actividad (
-    @ColumnInfo(name = "dia") var dia: String="",
+class Actividad (
+    @ColumnInfo(name = "date") var date: String="",
     @ColumnInfo(name = "actividad") var actividad: String="",
     @ColumnInfo(name = "tipo") var tipo: String="",
     @ColumnInfo(name = "comienzo") var comienzo: String="",
@@ -15,4 +15,9 @@ data class Actividad (
     @ColumnInfo(name = "comentarios") var comentarios: String="",
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") var id: Long = 0
-)
+){
+
+    fun isEmpty(): Boolean {
+        return actividad == "" && tipo == "" && comienzo == "" && fin == "" && importancia == "" && comentarios == ""
+    }
+}
