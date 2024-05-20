@@ -1,23 +1,14 @@
 package my.life.tracker.agenda.viewmodels
 
-import android.app.Application
-import android.content.Context
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager.findFragment
-import androidx.fragment.app.findFragment
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import my.life.tracker.App
-import my.life.tracker.R
 import my.life.tracker.agenda.interfaces.ActividadDao
 import my.life.tracker.agenda.model.Actividad
-import my.life.tracker.database.LifeTrackerDataBase
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 
@@ -33,10 +24,36 @@ class AgendaViewModel@Inject constructor(private val actividadDao: ActividadDao)
     private val _idLineSelected = MutableLiveData<View>()
     val idLineSelected:LiveData<View> get() = _idLineSelected
 
+    private val calendar = Calendar.getInstance()
+
+    private val _date = MutableLiveData<Date>().default(calendar.time)
+    val date:LiveData<Date> get() = _date
+
     init {
         _actividades.value = arrayListOf()
     }
 
+    private fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { setValue(initialValue) }
+
+    fun getCalendar() = calendar
+
+    fun setDate(date: Int){
+        calendar.set(Calendar.DATE, date)
+        _date.value = calendar.time
+    }
+    fun setDay(day: Int){
+        calendar.set(Calendar.DAY_OF_MONTH, day)
+        _date.value = calendar.time
+    }
+    fun setMonth(month: Int){
+        calendar.set(Calendar.MONTH, month)
+        _date.value = calendar.time
+    }
+
+    fun setYear(year: Int) {
+        calendar.set(Calendar.YEAR, year)
+        _date.value = calendar.time
+    }
 
     fun selectLine(view: View){
         if(_idLineSelected.value != null){

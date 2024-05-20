@@ -21,6 +21,22 @@ import java.util.*
 
 object Utils {
 
+    fun getDia(calendar: Calendar, context: Context?): String {
+        val idioma = Preferences.getPreferenceString(context, "idioma")
+        val locale = Locale(idioma)
+        val df: DateFormat = if (idioma == "") {
+            Locale.setDefault(Locale.getDefault())
+            DateFormat.getDateInstance(
+                DateFormat.FULL,
+                context!!.resources.configuration.locale
+            )
+        } else {
+            DateFormat.getDateInstance(DateFormat.FULL, locale)
+        }
+        val dia = df.format(calendar.time)
+        return dia.substring(0, 1).uppercase(Locale.getDefault()) + dia.substring(1)
+    }
+
     fun getDia(fecha: String, context: Context?): String {
         val idioma = Preferences.getPreferenceString(context, "idioma")
         val locale = Locale(idioma)

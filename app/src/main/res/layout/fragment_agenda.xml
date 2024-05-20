@@ -19,98 +19,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/previous_year"
-            android:layout_width="48dp"
-            android:layout_height="0dp"
-            android:background="@drawable/buton_selector"
-            android:contentDescription="@string/previous_year"
-            android:scaleType="fitStart"
-            android:src="@drawable/arrow_left"
-            app:layout_constraintBottom_toBottomOf="@+id/year"
-            app:layout_constraintEnd_toStartOf="@+id/year"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/year"
-            app:tint="@color/gray" />
-
-        <TextView
-            android:id="@+id/year"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:text="2009"
-            android:textAlignment="center"
-            android:textColor="@color/text"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/next_year"
-            android:layout_width="48dp"
-            android:layout_height="0dp"
-            android:background="@drawable/buton_selector"
-            android:contentDescription="@string/next_year"
-            android:scaleType="fitEnd"
-            android:src="@drawable/arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/year"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/year"
-            app:layout_constraintTop_toTopOf="@+id/year"
-            app:tint="@color/gray" />
-
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="@+id/dia"
-            app:layout_constraintStart_toStartOf="@+id/dia"
-            app:layout_constraintTop_toBottomOf="@+id/year" />
 
         <ImageButton
             android:id="@+id/previous_day"
             android:layout_width="48dp"
             android:layout_height="0dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/buton_selector"
             android:contentDescription="@string/previous_day"
             android:scaleType="fitStart"
             android:src="@drawable/arrow_left"
             app:layout_constraintBottom_toBottomOf="@+id/dia"
-            app:layout_constraintEnd_toStartOf="@+id/dia"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/dia"
             app:tint="@color/gray" />
 
         <TextView
             android:id="@+id/dia"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Jueves 23 de Mayo"
             android:textAlignment="center"
             android:textColor="@color/text"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/year" />
+            app:layout_constraintEnd_toStartOf="@+id/next_day"
+            app:layout_constraintStart_toEndOf="@+id/previous_day"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/next_day"
             android:layout_width="48dp"
             android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/buton_selector"
             android:contentDescription="@string/next_day"
-            android:scaleType="fitEnd"
+            android:scaleType="fitStart"
             android:src="@drawable/arrow_right"
             app:layout_constraintBottom_toBottomOf="@+id/dia"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/dia"
             app:layout_constraintTop_toTopOf="@+id/dia"
             app:tint="@color/gray" />
 
