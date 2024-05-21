@@ -22,15 +22,21 @@ class LineaAgenda : LinearLayout {
         this.celdaClickListener = celdaClickListener
     }
 
-    fun setActividad(actividad: Actividad, isSelectable:Boolean){
-        binding.layoutAgenda.addView(Celda(context, actividad.actividad, CellType.SPINNER, isSelectable, celdaClickListener))
-        binding.layoutAgenda.addView(Celda(context, actividad.tipo, CellType.SPINNER, isSelectable, celdaClickListener))
-        binding.layoutAgenda.addView(Celda(context, actividad.comienzo, CellType.HORA, isSelectable, celdaClickListener))
-        binding.layoutAgenda.addView(Celda(context, actividad.fin, CellType.HORA, isSelectable, celdaClickListener))
-        binding.layoutAgenda.addView(Celda(context, actividad.importancia, CellType.SLIDER, isSelectable, celdaClickListener))
-        binding.layoutAgenda.addView(Celda(context, actividad.comentarios, CellType.TEXTO, isSelectable, celdaClickListener))
+    fun setActividad(actividad: Actividad, isSelectable:Boolean, listOfHints: ArrayList<String> = arrayListOf()){
+        var cellType = CellType.TEXTO
+        //Comienza en 1 para no agregar celda de día y termina menos 1 para no agregar celda de ID
+        for (i in 1 until actividad.getAttributes().size-1) {
+            var hints:ArrayList<String> = arrayListOf()
+            if(i < listOfHints.size) hints = listOfHints[i].split("_") as ArrayList<String>
+            when(i){
+                1, 2 -> cellType = CellType.SPINNER
+                3, 4 -> cellType = CellType.HORA
+                5 -> cellType = CellType.SLIDER
+                6 -> cellType = CellType.TEXTO
+            }
 
-
+            binding.layoutAgenda.addView(Celda(context, actividad, i, cellType, isSelectable, celdaClickListener, hints.toTypedArray()))
+        }
     }
 
 }

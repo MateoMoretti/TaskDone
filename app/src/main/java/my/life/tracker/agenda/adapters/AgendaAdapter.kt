@@ -3,8 +3,6 @@ package my.life.tracker.agenda.adapters
 import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.ColumnInfo
-import my.life.tracker.R
 import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.components.Celda
@@ -12,24 +10,29 @@ import my.life.tracker.components.LineaAgenda
 
 
 class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
-                    val hintsActividades:String,
-                    val hintsTipos:String) : RecyclerView.Adapter <AgendaAdapter.AgendaViewHolder>(), CeldaClickListener
+                    val listOfHints: ArrayList<String>) : RecyclerView.Adapter <AgendaAdapter.AgendaViewHolder>(), CeldaClickListener
 {
 
     var celdaSelected:Celda? = null
     var setupDone = false
 
-    init {
-        addLinea(Actividad())
+    private lateinit var overdueCallback : (actividad: Actividad) -> Unit
+
+    fun overdueListener(callback: (actividad: Actividad) -> Unit){
+        overdueCallback = callback
     }
+    init {
+        data.add(0, Actividad())
+    }
+
     class AgendaViewHolder(val lineaAgenda: LineaAgenda) : RecyclerView.ViewHolder(lineaAgenda)
 
     override fun getItemCount(): Int {
         return data.size
     }
     fun addLinea(actividad: Actividad) {
-        data.add(data.size, actividad)
         clearCells()
+        data.add(data.size, actividad)
         notifyItemChanged(data.size)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AgendaViewHolder {
@@ -39,14 +42,17 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
     }
 
     override fun onBindViewHolder(holder: AgendaViewHolder, position: Int) {
-        if(!setupDone) holder.lineaAgenda.setActividad(Actividad(
-            "día",
-            "actividad",
-            "tipo",
-            "comienzo",
-            "fin" ,
-            "importancia",
-            "comentarios"), false)
+        if(!setupDone) {
+            holder.lineaAgenda.setActividad(Actividad(
+                "día",
+                "actividad",
+                "tipo",
+                "comienzo",
+                "fin" ,
+                "importancia",
+                "comentarios"),
+                false)
+        }
 
         else holder.lineaAgenda.setActividad(data[position], true)
         setupDone= true
@@ -62,7 +68,7 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
         celdaSelected = celda
     }
 
-    override fun onValueSelected(celda: Celda) {
-        TODO("Not yet implemented")
+    override fun onValueSelected(actividad: Actividad) {
+        return overdueCallback(actividad)
     }
 }

@@ -45,13 +45,16 @@ class AgendaViewModel@Inject constructor(private val actividadDao: ActividadDao)
         _date.value = calendar.time
     }
 
-    fun addActividad(actividad: Actividad): Long {
-        //if(actividad.isEmpty()) return 0
-        actividad.date = Utils.dateToString(calendar.time)
+    fun createActividad(): Actividad {
+        val actividad = Actividad(Utils.dateToString(calendar.time))
+        actividad.id = actividadDao.addActividad(actividad)
+        return actividad
+    }
+    fun updateActividad(actividad: Actividad): Long {
         return actividadDao.addActividad(actividad)
     }
-    fun getActividades(): List<Actividad> {
-        return actividadDao.getActividades(Utils.dateToString(calendar.time), Utils.dateToString(calendar.time))
+    fun getActividades(): ArrayList<Actividad> {
+        return actividadDao.getActividades(Utils.dateToString(calendar.time), Utils.dateToString(calendar.time)) as ArrayList
     }
 
 }

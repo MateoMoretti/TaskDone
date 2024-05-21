@@ -20,8 +20,10 @@ import my.life.tracker.R
 import my.life.tracker.Utils
 import my.life.tracker.agenda.AgendaPreferences
 import my.life.tracker.agenda.adapters.AgendaAdapter
+import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.viewmodels.AgendaViewModel
+import my.life.tracker.components.Celda
 import my.life.tracker.databinding.FragmentAgendaBinding
 import java.util.*
 import javax.inject.Inject
@@ -88,13 +90,18 @@ class AgendaFragment : Fragment() {
 
     private fun loadActividades(){
         val adapter = AgendaAdapter(requireContext(),
-            (agendaViewModel.getActividades() as ArrayList),
-            agendaPreferences.getActividades(requireContext()),
-            agendaPreferences.getTipos(requireContext())
+            agendaViewModel.getActividades(),
+            arrayListOf(
+                agendaPreferences.getActividades(requireContext()),
+                agendaPreferences.getTipos(requireContext())
+            )
         )
 
         binding.recyclerAgenda.setLayoutManager(LinearLayoutManager(context))
         binding.recyclerAgenda.adapter = adapter
+        (binding.recyclerAgenda.adapter as AgendaAdapter).overdueListener {
+            agendaViewModel.updateActividad(it)
+        }
     }
 
     private fun setListeners(){
@@ -142,16 +149,7 @@ class AgendaFragment : Fragment() {
         }
 
         binding.addLine.setOnClickListener {
-            addLine()
+            (binding.recyclerAgenda.adapter as AgendaAdapter).addLinea(agendaViewModel.createActividad())
         }
     }
-
-    private fun addLine(){
-        val newActividad = Actividad()
-        newActividad.id = agendaViewModel.addActividad(newActividad)
-        (binding.recyclerAgenda.adapter as AgendaAdapter).addLinea(newActividad)
-    }
-
-
-
 }

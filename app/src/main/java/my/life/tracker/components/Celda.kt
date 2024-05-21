@@ -28,9 +28,12 @@ class Celda : LinearLayout {
     private val _valorCelda = MutableLiveData<String>().apply { value = "" }
     val valorCelda: LiveData<String> get() = _valorCelda
 
+    private var actividad : Actividad? = null
+    private var indexDefaulValueActividad = 0
     private var isSelectable = true
-    private var listOfHints = arrayListOf<String>()
-    private var hasIgnoredFirstTrigger = false
+    private var listOfHints : Array<String> = arrayOf()
+    private var hasIgnoredFirstTriggerObserver = false
+    private var hasIgnoredFirstTriggerSpinner = false
     private var celdaClickListener: CeldaClickListener? = null
     private var cellType = CellType.TEXTO
 
@@ -45,28 +48,34 @@ class Celda : LinearLayout {
         setup()
     }
     constructor(context: Context?) : super(context)
-    constructor(context: Context?, valorCelda:String, cellType: CellType, isSelectable:Boolean,celdaClickListener: CeldaClickListener, hints: ArrayList<String> = arrayListOf()) : super(context){
+    constructor(context: Context?,
+                actividad: Actividad,
+                indexDefaulValueActividad: Int,
+                cellType: CellType,
+                isSelectable:Boolean,celdaClickListener: CeldaClickListener,
+                listOfHints: Array<String> = arrayOf()
+    ) : super(context)
+    {
         this.celdaClickListener = celdaClickListener
-        this._valorCelda.value = valorCelda
+        this.indexDefaulValueActividad = indexDefaulValueActividad
+        this.actividad = actividad
+        this._valorCelda.value = actividad.getAttributes()[indexDefaulValueActividad]
         this.cellType = cellType
         this.isSelectable = isSelectable
-        listOfHints = hints
+        this.listOfHints = listOfHints
 
         if(isSelectable) {
-            if (valorCelda in listOfHints) {
-                listOfHints.remove(valorCelda)
+            valorCelda.observe(ActivityMain.instance){
+                if(hasIgnoredFirstTriggerObserver) {
+                    updateData()
+                    saveData()
+                }
+                hasIgnoredFirstTriggerObserver = true
             }
-            listOfHints.add(0, valorCelda)
-            listOfHints.add(listOfHints.size, "add_new_value")
 
             setup()
         }
-    }
-
-    init {
-        valorCelda.observe(ActivityMain.instance){
-            updateData()
-        }
+        updateData()
     }
     fun setup(){
         when(cellType){
@@ -106,6 +115,10 @@ class Celda : LinearLayout {
         binding.celdaTv.visibility = VISIBLE
         binding.celdaEd.visibility = INVISIBLE
         binding.celdaSpinner.visibility = INVISIBLE
+        actividad?.setAttributes(indexDefaulValueActividad, valorCelda.value!!)
+    }
+    fun saveData(){
+        celdaClickListener?.onValueSelected(actividad!!)
     }
     fun selectCell(){
         if(isSelected){
@@ -132,6 +145,7 @@ class Celda : LinearLayout {
         }
     }
 
+
     fun unselectCell(){
         isSelected=false
         updateData()
@@ -139,26 +153,32 @@ class Celda : LinearLayout {
 
     //Hints concatenadas con caracter "_"
     fun addHints(){
+        val hints = arrayListOf<String>()
+
+        if(valorCelda.value !in hints) hints.add(valorCelda.value.toString())
+        hints.addAll(listOfHints)
+        hints.add("Add new value")
         val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             context,
             R.layout.spinner_dropdown_agenda,
-            listOfHints as List<String?>
+            hints as List<String>
         ) {}
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_agenda)
         binding.celdaSpinner.adapter = spinnerArrayAdapter
         binding.celdaSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
-                    if(hasIgnoredFirstTrigger) {
-                        _valorCelda.value = listOfHints[i]
-                        updateData()
+                    if(hasIgnoredFirstTriggerSpinner) {
+                        _valorCelda.value = hints[i]
                     }
-                    hasIgnoredFirstTrigger = true
+                    hasIgnoredFirstTriggerSpinner = true
                 }
 
                 override fun onNothingSelected(adapterView: AdapterView<*>?) {//
                 }
             }
+        binding.celdaSpinner.setSelection(hints.indexOf(valorCelda.value))
+
     }
     private fun showHourPicker() {
         var defaultHour = 0

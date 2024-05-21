@@ -20,4 +20,19 @@ class Actividad (
     fun isEmpty(): Boolean {
         return actividad == "" && tipo == "" && comienzo == "" && fin == "" && importancia == "" && comentarios == ""
     }
+    fun getAttributes(): List<String> = arrayListOf(date, actividad, tipo, comienzo, fin, importancia, comentarios, id.toString())
+
+    fun setAttributes(indexDefaulValueActividad: Int, value: String) {
+        when(indexDefaulValueActividad){
+            0 -> date = value
+            1 -> actividad = value
+            2 -> tipo = value
+            3 -> comienzo = value
+            4 -> fin = value
+            5 -> importancia = value
+            6 -> comentarios = value
+            7 -> id = value.toLong()
+        }
+    }
+
 }

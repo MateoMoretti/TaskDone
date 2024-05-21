@@ -9,6 +9,7 @@ interface ActividadDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addActividad(actividad: Actividad) : Long
+
     @Query("SELECT * FROM Actividad WHERE id = :id")
     fun getActividadById(id:Long): Actividad?
 
