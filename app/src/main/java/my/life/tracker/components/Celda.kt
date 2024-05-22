@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TimePicker
+import androidx.core.view.get
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import my.life.tracker.ActivityMain
@@ -31,7 +32,7 @@ class Celda : LinearLayout {
     private var actividad : Actividad? = null
     private var indexDefaulValueActividad = 0
     private var isSelectable = true
-    private var listOfHints : Array<String> = arrayOf()
+    private var listOfHints : ArrayList<String> = arrayListOf()
     private var hasIgnoredFirstTriggerObserver = false
     private var hasIgnoredFirstTriggerSpinner = false
     private var celdaClickListener: CeldaClickListener? = null
@@ -62,13 +63,15 @@ class Celda : LinearLayout {
         this._valorCelda.value = actividad.getAttributes()[indexDefaulValueActividad]
         this.cellType = cellType
         this.isSelectable = isSelectable
-        this.listOfHints = listOfHints
+        this.listOfHints = listOfHints.toCollection(ArrayList())
 
         if(isSelectable) {
             valorCelda.observe(ActivityMain.instance){
                 if(hasIgnoredFirstTriggerObserver) {
                     updateData()
                     saveData()
+                    addHints()
+
                 }
                 hasIgnoredFirstTriggerObserver = true
             }
@@ -86,6 +89,13 @@ class Celda : LinearLayout {
 
             }
         }
+        binding.celdaTv.setOnLongClickListener {
+            isSelected = false
+            celdaClickListener?.onCeldaClicked(this)
+            binding.celdaSpinner.performClick()
+            true
+        }
+
         binding.celdaTv.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
         binding.celdaEd.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
 
@@ -104,6 +114,7 @@ class Celda : LinearLayout {
             }
             false
         })
+
     }
     fun updateData(){
         if(binding.celdaEd.visibility == VISIBLE){
@@ -134,9 +145,10 @@ class Celda : LinearLayout {
                 }
                 CellType.SPINNER -> {
                     binding.celdaTv.visibility = INVISIBLE
-                    binding.celdaSpinner.visibility = VISIBLE
-                    binding.celdaSpinner.performClick()
-                }
+                    binding.celdaEd.visibility = VISIBLE
+                    binding.celdaEd.requestFocus()
+                    binding.celdaEd.setSelection(binding.celdaEd.length())
+                    }
                 CellType.SLIDER -> {
                 }
             }
@@ -153,11 +165,12 @@ class Celda : LinearLayout {
 
     //Hints concatenadas con caracter "_"
     fun addHints(){
+        hasIgnoredFirstTriggerSpinner = false
         val hints = arrayListOf<String>()
 
         if(valorCelda.value !in hints) hints.add(valorCelda.value.toString())
         hints.addAll(listOfHints)
-        hints.add("Add new value")
+        hints.add("new")
         val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
             context,
             R.layout.spinner_dropdown_agenda,
@@ -169,7 +182,12 @@ class Celda : LinearLayout {
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                     if(hasIgnoredFirstTriggerSpinner) {
-                        _valorCelda.value = hints[i]
+                        if(i == hints.size - 1){
+                            addNewValueSpinner()
+                        }
+                        else {
+                            _valorCelda.value = hints[i]
+                        }
                     }
                     hasIgnoredFirstTriggerSpinner = true
                 }
@@ -179,6 +197,13 @@ class Celda : LinearLayout {
             }
         binding.celdaSpinner.setSelection(hints.indexOf(valorCelda.value))
 
+    }
+
+    private fun addNewValueSpinner(){
+        binding.celdaSpinner.visibility = INVISIBLE
+        binding.celdaEd.visibility = VISIBLE
+        binding.celdaEd.requestFocus()
+        binding.celdaEd.setSelection(binding.celdaEd.length())
     }
     private fun showHourPicker() {
         var defaultHour = 0
@@ -198,14 +223,4 @@ class Celda : LinearLayout {
                 "hourPicker"
             )
     }
-    fun setText(text:String){
-        _valorCelda.value = text
-    }
-    fun hideAll(){
-        binding.celdaTv.visibility = INVISIBLE
-        binding.celdaEd.visibility = INVISIBLE
-        binding.celdaSpinner.visibility = INVISIBLE
-    }
-
-
 }

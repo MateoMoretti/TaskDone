@@ -2,5 +2,6 @@
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="@style/ItemAgenda"
+    android:drawablePadding="20dp"
     android:ellipsize="marquee"
     android:singleLine="true" />
