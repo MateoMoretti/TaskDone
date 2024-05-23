@@ -6,6 +6,9 @@
 
     </item>
 
+    <item android:state_pressed="true" android:drawable="@drawable/shape_rectangulo_selected">
+
+    </item>
     <item android:drawable="@drawable/shape_rectangulo">
 
     </item>

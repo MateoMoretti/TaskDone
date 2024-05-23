@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TimePicker
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,10 +18,13 @@ import my.life.tracker.ActivityMain
 import my.life.tracker.HourPickerFragment
 import my.life.tracker.R
 import my.life.tracker.Utils
+import my.life.tracker.agenda.adapters.IconSpinnerAdapter
 import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.model.CellType
+import my.life.tracker.agenda.model.IconText
 import my.life.tracker.databinding.CeldaBinding
+import my.life.tracker.databinding.SpinnerDropdownAgendaBinding
 
 
 class Celda : LinearLayout {
@@ -78,6 +82,9 @@ class Celda : LinearLayout {
 
             setup()
         }
+        else{
+            binding.celdaTv.background = ContextCompat.getDrawable(context!!, R.drawable.shape_rectangulo)
+        }
         updateData()
     }
     fun setup(){
@@ -90,9 +97,16 @@ class Celda : LinearLayout {
             }
         }
         binding.celdaTv.setOnLongClickListener {
-            isSelected = false
+            isSelected = true
             celdaClickListener?.onCeldaClicked(this)
-            binding.celdaSpinner.performClick()
+            when(cellType){
+                CellType.SPINNER -> {
+                    binding.celdaSpinner.performClick()
+                }
+                else -> {
+                    Unit
+                }
+            }
             true
         }
 
@@ -166,18 +180,17 @@ class Celda : LinearLayout {
     //Hints concatenadas con caracter "_"
     fun addHints(){
         hasIgnoredFirstTriggerSpinner = false
-        val hints = arrayListOf<String>()
+        val hints = arrayListOf<IconText>()
 
-        if(valorCelda.value !in hints) hints.add(valorCelda.value.toString())
-        hints.addAll(listOfHints)
-        hints.add("new")
-        val spinnerArrayAdapter: ArrayAdapter<String?> = object : ArrayAdapter<String?>(
-            context,
-            R.layout.spinner_dropdown_agenda,
-            hints as List<String>
-        ) {}
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_agenda)
-        binding.celdaSpinner.adapter = spinnerArrayAdapter
+        if(valorCelda.value !in listOfHints) hints.add(IconText(valorCelda.value!!))
+        hints.addAll(listOfHints.map { IconText(it) })
+
+
+        hints.add(IconText("", ContextCompat.getDrawable(context!! , android.R.drawable.ic_input_add)))
+        val adapter = IconSpinnerAdapter(context, hints)
+
+        binding.celdaSpinner.adapter = adapter
+        //spinnerArrayAdapter.getView(spinnerArrayAdapter.count - 1, null, this) as SpinnerDropdownAgendaBinding
         binding.celdaSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
@@ -186,7 +199,7 @@ class Celda : LinearLayout {
                             addNewValueSpinner()
                         }
                         else {
-                            _valorCelda.value = hints[i]
+                            _valorCelda.value = hints[i].text
                         }
                     }
                     hasIgnoredFirstTriggerSpinner = true
@@ -195,7 +208,7 @@ class Celda : LinearLayout {
                 override fun onNothingSelected(adapterView: AdapterView<*>?) {//
                 }
             }
-        binding.celdaSpinner.setSelection(hints.indexOf(valorCelda.value))
+        binding.celdaSpinner.setSelection(hints.map { it.text }.indexOf(valorCelda.value))
 
     }
 
