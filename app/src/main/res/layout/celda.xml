@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="Actividad"
         tools:context="my.life.tracker.agenda.fragments.AgendaFragment" />
 
     <Spinner
@@ -30,6 +31,8 @@
     <EditText
         android:id="@+id/celda_ed"
         style="@style/ItemAgenda"
+        android:autofillHints=""
+        android:hint="@string/comidas"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:visibility="invisible"
@@ -38,5 +41,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context="my.life.tracker.agenda.fragments.AgendaFragment" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/celda_slider"
+        style="@style/ItemAgenda"
+        android:theme="@style/MyMaterialTheme"
+        android:stepSize="1.0"
+        android:valueFrom="0.0"
+        android:valueTo="100.0"
+        android:visibility="gone"
+        android:contentDescription="@string/slider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@
     <color name="almost_black">#202020</color>
 
     <color name="light_violet">#9E85FA</color>
-    <color name="green">#61945B</color>
     <color name="verde">#61945B</color>
     <color name="verde_claro">#93C127</color>
     <color name="verde_ingreso">#12A601</color>
@@ -28,5 +27,17 @@
     <color name="azul_detalles">#B5D4EC</color>
 
     <color name="text">#121010</color>
+
+
+    <color name="slider_0">#2B9D2B</color>
+    <color name="slider_10">#60B22B</color>
+    <color name="slider_20">#95C72B</color>
+    <color name="slider_30">#CADC2B</color>
+    <color name="slider_40">#FFF12B</color>
+    <color name="slider_60">#FFC032</color>
+    <color name="slider_70">#FF8E39</color>
+    <color name="slider_80">#FF5D40</color>
+    <color name="slider_90">#FF2B47</color>
+
 
 </resources>

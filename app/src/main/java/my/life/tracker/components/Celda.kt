@@ -1,6 +1,7 @@
 package my.life.tracker.components
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.slider.Slider
 import my.life.tracker.ActivityMain
 import my.life.tracker.HourPickerFragment
 import my.life.tracker.R
@@ -30,7 +32,7 @@ class Celda : LinearLayout {
 
 
     private val _valorCelda = MutableLiveData<String>().apply { value = "" }
-    val valorCelda: LiveData<String> get() = _valorCelda
+    private val valorCelda: LiveData<String> get() = _valorCelda
 
     private var actividad : Actividad? = null
     private var indexDefaulValueActividad = 0
@@ -73,7 +75,6 @@ class Celda : LinearLayout {
                 if(hasIgnoredFirstTriggerObserver) {
                     updateData()
                     saveData()
-                    addHints()
 
                 }
                 hasIgnoredFirstTriggerObserver = true
@@ -86,59 +87,106 @@ class Celda : LinearLayout {
         }
         updateData()
     }
-    fun setup(){
+    private fun setup(){
         when(cellType){
-            CellType.SPINNER -> {
-                addHints()
+            CellType.SLIDER -> {
+                try {
+                    binding.celdaSlider.value = valorCelda.value!!.toFloat()
+                }catch (e:Exception){
+                    e.printStackTrace()
+                    binding.celdaSlider.value = 50f
+                }
+
+
+                binding.celdaSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                    override fun onStartTrackingTouch(slider: Slider) {
+                        celdaClickListener?.onCeldaClicked(this@Celda)
+                    }
+
+                    override fun onStopTrackingTouch(slider: Slider) {
+                        unselectCell()
+                    }
+                })
+
+                binding.celdaSlider.addOnChangeListener { _, value, _ ->
+                    _valorCelda.value = value.toString()
+                    var color = R.color.slider_0
+                    //binding.celdaSlider.setCustomThumbDrawable(ContextCompat.getDrawable(context!! , R.drawable.comidas)!!)
+                    when(value){
+                        in 0.0..10.0 -> { color = R.color.slider_0 }
+                        in 10.0..20.0 -> { color = R.color.slider_10 }
+                        in 20.0..30.0 -> { color = R.color.slider_20 }
+                        in 30.0..40.0 -> { color = R.color.slider_30 }
+                        in 40.0..60.0 -> { color = R.color.slider_40 }
+                        in 60.0..70.0 -> { color = R.color.slider_60 }
+                        in 70.0..80.0 -> { color = R.color.slider_70 }
+                        in 80.0..90.0 -> { color = R.color.slider_80 }
+                        in 90.0..100.0 -> { color = R.color.slider_90 }
+                    }
+                    binding.celdaSlider.haloTintList = ColorStateList.valueOf(resources.getColor(color, null ))
+                    binding.celdaSlider.trackTintList = ColorStateList.valueOf(resources.getColor(color, null))
+                }
+            }
+            CellType.TEXTO, CellType.SPINNER -> {
+                binding.celdaTv.setOnLongClickListener {
+                    celdaClickListener?.onCeldaLongClicked(this)
+                    openHintsOnLongClick()
+                    true
+                }
+
+                binding.celdaTv.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
+                binding.celdaEd.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
+
+                binding.celdaEd.setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                        _valorCelda.value = binding.celdaEd.text.toString()
+                        return@setOnEditorActionListener true
+                    }
+                    false
+                }
+
+                binding.celdaEd.setOnKeyListener(OnKeyListener { _, keyCode, event ->
+                    if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                        _valorCelda.value = binding.celdaEd.text.toString()
+                        return@OnKeyListener true
+                    }
+                    false
+                })
+            }
+            CellType.HORA -> {
+            }
+        }
+
+    }
+    private fun updateData(){
+        when(cellType){
+            CellType.SLIDER -> {
+                binding.celdaSlider.visibility = VISIBLE
+                binding.celdaTv.visibility = INVISIBLE
+                binding.celdaEd.visibility = INVISIBLE
+                binding.celdaSpinner.visibility = INVISIBLE
+                refreshHints()
             }
             else -> {
+                closeKeyboard()
+                if(binding.celdaEd.visibility == VISIBLE){
+                    _valorCelda.value = binding.celdaEd.text.toString()
+                }
+                binding.celdaTv.text = valorCelda.value
+                binding.celdaEd.setText(valorCelda.value)
 
+                binding.celdaTv.visibility = VISIBLE
+                binding.celdaEd.visibility = INVISIBLE
+                binding.celdaSpinner.visibility = INVISIBLE
+                actividad?.setAttributes(indexDefaulValueActividad, valorCelda.value!!)
             }
         }
-        binding.celdaTv.setOnLongClickListener {
-            celdaClickListener?.onCeldaLongClicked(this)
-            openHintsOnLongClick()
-            true
-        }
-
-        binding.celdaTv.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
-        binding.celdaEd.setOnClickListener { celdaClickListener?.onCeldaClicked(this) }
-
-        binding.celdaEd.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
-                _valorCelda.value = binding.celdaEd.text.toString()
-                return@setOnEditorActionListener true
-            }
-            false
-        }
-
-        binding.celdaEd.setOnKeyListener(OnKeyListener { _, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                _valorCelda.value = binding.celdaEd.text.toString()
-                return@OnKeyListener true
-            }
-            false
-        })
-
     }
-    fun updateData(){
-        closeKeyboard()
-        if(binding.celdaEd.visibility == VISIBLE){
-            _valorCelda.value = binding.celdaEd.text.toString()
-        }
-        binding.celdaTv.text = valorCelda.value
-        binding.celdaEd.setText(valorCelda.value)
-
-        binding.celdaTv.visibility = VISIBLE
-        binding.celdaEd.visibility = INVISIBLE
-        binding.celdaSpinner.visibility = INVISIBLE
-        actividad?.setAttributes(indexDefaulValueActividad, valorCelda.value!!)
-    }
-    fun saveData(){
+    private fun saveData(){
         celdaClickListener?.onValueSelected(actividad!!)
     }
 
-    fun openHintsOnLongClick() {
+    private fun openHintsOnLongClick() {
         when (cellType) {
             CellType.SPINNER -> {
                 binding.celdaSpinner.performClick()
@@ -152,11 +200,11 @@ class Celda : LinearLayout {
         }
     }
 
-    fun closeKeyboard(){
+    private fun closeKeyboard(){
         val inputMethodManager = getSystemService(context, InputMethodManager::class.java) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.celdaEd.windowToken, 0)
     }
-    fun showKeyboard(){
+    private fun showKeyboard(){
         val inputMethodManager = getSystemService(context, InputMethodManager::class.java) as InputMethodManager
         inputMethodManager.showSoftInput(binding.celdaEd, InputMethodManager.SHOW_IMPLICIT)
     }
@@ -179,8 +227,9 @@ class Celda : LinearLayout {
                     binding.celdaEd.setSelection(binding.celdaEd.length())
                     binding.celdaEd.requestFocus()
                     showKeyboard()
-                    }
+                }
                 CellType.SLIDER -> {
+
                 }
             }
         } else {
@@ -195,19 +244,17 @@ class Celda : LinearLayout {
     }
 
     //Hints concatenadas con caracter "_"
-    fun addHints(){
+    private fun refreshHints(){
         hasIgnoredFirstTriggerSpinner = false
         val hints = arrayListOf<IconText>()
 
         if(valorCelda.value !in listOfHints) hints.add(IconText(valorCelda.value!!))
         hints.addAll(listOfHints.map { IconText(it) })
 
-
         hints.add(IconText("", ContextCompat.getDrawable(context!! , android.R.drawable.ic_input_add)))
         val adapter = IconSpinnerAdapter(context, hints)
 
         binding.celdaSpinner.adapter = adapter
-        //spinnerArrayAdapter.getView(spinnerArrayAdapter.count - 1, null, this) as SpinnerDropdownAgendaBinding
         binding.celdaSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {

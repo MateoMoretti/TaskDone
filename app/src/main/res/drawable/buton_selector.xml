@@ -39,7 +39,7 @@
                 <shape>
                     <padding android:bottom="5dp"/>
                     <gradient
-                        android:startColor="@color/green"
+                        android:startColor="@color/verde"
                         android:endColor="@color/very_light_green"
                         android:angle="270" />
                     <corners

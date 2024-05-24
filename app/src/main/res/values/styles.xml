@@ -62,6 +62,12 @@
 
     </style>
 
+    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Add attributes here -->
+        <item name="colorPrimary">@color/slider_40</item>
+    </style>
+
+
 
 
 
