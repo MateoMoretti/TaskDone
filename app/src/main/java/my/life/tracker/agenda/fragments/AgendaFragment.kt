@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import my.life.tracker.ActivityMain
+import my.life.tracker.IndexValue
 import my.life.tracker.R
 import my.life.tracker.Utils
 import my.life.tracker.agenda.AgendaPreferences
@@ -91,23 +92,20 @@ class AgendaFragment : Fragment() {
     private fun loadActividades(){
         val adapter = AgendaAdapter(requireContext(),
             agendaViewModel.getActividades(),
-            arrayListOf(
-                agendaPreferences.getActividades(requireContext()),
-                agendaPreferences.getTipos(requireContext())
-            )
+            agendaPreferences
         )
 
-        binding.recyclerAgenda.setLayoutManager(LinearLayoutManager(context))
-        binding.recyclerAgenda.adapter = adapter
-        (binding.recyclerAgenda.adapter as AgendaAdapter).overdueListener {
-            agendaViewModel.updateActividad(it)
+        binding.recyclerAgenda.let{ view ->
+
+            view.setLayoutManager(LinearLayoutManager(context))
+            view.adapter = adapter
+            (view.adapter as AgendaAdapter).overdueListener { agendaViewModel.updateActividad(it) }
+            (view.adapter as AgendaAdapter).addHintListener { agendaPreferences.addCeldaHints(it.index, it.value) }
         }
     }
 
     private fun setListeners(){
         loadActividades()
-        val defaultActividades = agendaPreferences.getPreferenceString(requireContext(), AgendaPreferences.ACTIViDADES)
-        val defaultTipos = agendaPreferences.getPreferenceString(requireContext(), AgendaPreferences.TIPOS)
 
         agendaViewModel.date.observe(viewLifecycleOwner){
             binding.dia.text = Utils.getDia(agendaViewModel.getCalendar(), context)

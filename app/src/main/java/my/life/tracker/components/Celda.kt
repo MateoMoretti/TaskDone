@@ -1,5 +1,6 @@
 package my.life.tracker.components
 
+import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
@@ -7,9 +8,12 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnKeyListener
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -18,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.material.slider.Slider
 import my.life.tracker.ActivityMain
 import my.life.tracker.HourPickerFragment
+import my.life.tracker.IndexValue
 import my.life.tracker.R
 import my.life.tracker.Utils
 import my.life.tracker.agenda.adapters.IconSpinnerAdapter
@@ -73,9 +78,8 @@ class Celda : LinearLayout {
         if(isSelectable) {
             valorCelda.observe(ActivityMain.instance){
                 if(hasIgnoredFirstTriggerObserver) {
-                    updateData()
+                    unselectCell()
                     saveData()
-
                 }
                 hasIgnoredFirstTriggerObserver = true
             }
@@ -128,7 +132,7 @@ class Celda : LinearLayout {
                     binding.celdaSlider.thumbTintList = ColorStateList.valueOf(resources.getColor(color, null))
                 }
             }
-            CellType.TEXTO, CellType.SPINNER -> {
+            else -> {
                 binding.celdaTv.setOnLongClickListener {
                     celdaClickListener?.onCeldaClicked(this)
                     openHintsOnLongClick()
@@ -154,8 +158,6 @@ class Celda : LinearLayout {
                     false
                 })
             }
-            CellType.HORA -> {
-            }
         }
 
     }
@@ -168,7 +170,6 @@ class Celda : LinearLayout {
                 binding.celdaSpinner.visibility = INVISIBLE
             }
             else -> {
-                refreshHints()
                 closeKeyboard()
                 if(binding.celdaEd.visibility == VISIBLE){
                     _valorCelda.value = binding.celdaEd.text.toString()
@@ -190,6 +191,7 @@ class Celda : LinearLayout {
     private fun openHintsOnLongClick() {
         when (cellType) {
             CellType.SPINNER -> {
+                loadSpinner()
                 binding.celdaSpinner.performClick()
             }
             CellType.HORA -> {
@@ -244,16 +246,22 @@ class Celda : LinearLayout {
         updateData()
     }
 
+    fun setHints(listOfHints: ArrayList<String>) {
+        this.listOfHints = listOfHints
+    }
+
     //Hints concatenadas con caracter "_"
-    private fun refreshHints(){
+    private fun loadSpinner(){
+        val hintsCopy = listOfHints.toMutableList()
         hasIgnoredFirstTriggerSpinner = false
         val hints = arrayListOf<IconText>()
-
-        if(valorCelda.value !in listOfHints) hints.add(IconText(valorCelda.value!!))
-        hints.addAll(listOfHints.map { IconText(it) })
+        hintsCopy.remove(valorCelda.value!!)
+        hints.add(0, IconText(valorCelda.value!!))
+        hints.addAll(hintsCopy.map { IconText(it) })
 
         hints.add(IconText("", ContextCompat.getDrawable(context!! , android.R.drawable.ic_input_add)))
         val adapter = IconSpinnerAdapter(context, hints)
+        binding.celdaSpinner.setSelection(hints.map { it.text }.indexOf(valorCelda.value))
 
         binding.celdaSpinner.adapter = adapter
         binding.celdaSpinner.onItemSelectedListener =
@@ -270,18 +278,11 @@ class Celda : LinearLayout {
                     hasIgnoredFirstTriggerSpinner = true
                 }
 
-                override fun onNothingSelected(adapterView: AdapterView<*>?) {//
+                override fun onNothingSelected(adapterView: AdapterView<*>?) {
+                    unselectCell()
                 }
             }
-        binding.celdaSpinner.setSelection(hints.map { it.text }.indexOf(valorCelda.value))
 
-    }
-
-    private fun addNewValueSpinner(){
-        binding.celdaSpinner.visibility = INVISIBLE
-        binding.celdaEd.visibility = VISIBLE
-        binding.celdaEd.requestFocus()
-        binding.celdaEd.setSelection(binding.celdaEd.length())
     }
     private fun showHourPicker() {
         var defaultHour = 0
@@ -300,5 +301,29 @@ class Celda : LinearLayout {
                 ActivityMain.instance.supportFragmentManager,
                 "hourPicker"
             )
+    }
+
+    private fun addNewValueSpinner() {
+        val dialog = Dialog(ActivityMain.instance)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.window_add_hint)
+
+        val tv: TextView = dialog.findViewById(R.id.title)
+        val ed: TextView = dialog.findViewById(R.id.edittext)
+
+        val yesBtn: Button = dialog.findViewById(R.id.btn_accept)
+        yesBtn.setOnClickListener {
+            celdaClickListener?.onHintAdded(IndexValue(indexDefaulValueActividad, ed.text.toString()))
+            _valorCelda.value = ed.text.toString()
+            dialog.dismiss()
+        }
+
+        val noBtn: Button = dialog.findViewById(R.id.btn_cancel)
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

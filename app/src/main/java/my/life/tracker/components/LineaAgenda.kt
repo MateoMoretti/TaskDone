@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import my.life.tracker.agenda.AgendaPreferences
 import my.life.tracker.agenda.interfaces.CeldaClickListener
 import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.model.CellType
@@ -15,29 +16,43 @@ class LineaAgenda : LinearLayout{
 
     lateinit var celdaClickListener: CeldaClickListener
 
+    lateinit var agendaPreferences: AgendaPreferences
+
     lateinit var actividad: Actividad
 
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
-    constructor(context: Context?, celdaClickListener: CeldaClickListener) : super(context){
+    constructor(context: Context?, celdaClickListener: CeldaClickListener, agendaPreferences: AgendaPreferences) : super(context){
         this.celdaClickListener = celdaClickListener
+        this.agendaPreferences = agendaPreferences
     }
 
-    fun setActividad(actividad: Actividad, isSelectable:Boolean, listOfHints: ArrayList<String> = arrayListOf()) {
+    fun setTitle(){
+        setActividad(Actividad(
+            "día",
+            "actividad",
+            "tipo",
+            "comienzo",
+            "fin" ,
+            "importancia",
+            "comentarios"),
+        false)
+    }
+
+    fun setActividad(actividad: Actividad, isSelectable:Boolean) {
         var cellType = CellType.TEXTO
         this.actividad = actividad
-        //Comienza en 1 para no agregar celda de día y termina menos 1 para no agregar celda de ID
-        for (i in 1 until actividad.getAttributes().size - 1) {
+        //Comienza en 1 para no agregar celda de día y termina menos 2 para no agregar celda de Día ni ID
+        for (i in 0 until actividad.getAttributes().size - 2) {
             var hints: ArrayList<String> = arrayListOf()
-
             if (isSelectable) {
-                if (i < listOfHints.size) hints = listOfHints[i].split("_") as ArrayList<String>
+                hints = agendaPreferences.getCeldaHints(i)
                 when (i) {
-                    1, 2 -> cellType = CellType.SPINNER
-                    3, 4 -> cellType = CellType.HORA
-                    5 -> cellType = CellType.SLIDER
-                    6 -> cellType = CellType.TEXTO
+                    0, 1 -> cellType = CellType.SPINNER
+                    2, 3 -> cellType = CellType.HORA
+                    4 -> cellType = CellType.SLIDER
+                    5 -> cellType = CellType.TEXTO
                 }
             }
 

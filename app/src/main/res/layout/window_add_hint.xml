@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/ItemAgenda"
+        android:longClickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context="my.life.tracker.agenda.fragments.AgendaFragment"
+        tools:text="Actividad" />
+
+    <EditText
+        android:id="@+id/edittext"
+        style="@style/ItemAgenda"
+        android:autofillHints=""
+        android:hint="@string/hint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:context="my.life.tracker.agenda.fragments.AgendaFragment" />
+
+    <Button
+        android:id="@+id/btn_accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aceptar"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/edittext" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcelar"
+        app:layout_constraintEnd_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/edittext" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

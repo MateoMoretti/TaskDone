@@ -32,7 +32,6 @@
         android:id="@+id/celda_ed"
         style="@style/ItemAgenda"
         android:autofillHints=""
-        android:hint="@string/comidas"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:visibility="invisible"
