@@ -10,25 +10,21 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import my.life.tracker.ActivityMain
-import my.life.tracker.IndexValue
 import my.life.tracker.R
 import my.life.tracker.Utils
 import my.life.tracker.agenda.AgendaPreferences
 import my.life.tracker.agenda.adapters.AgendaAdapter
-import my.life.tracker.agenda.interfaces.CeldaClickListener
-import my.life.tracker.agenda.model.Actividad
+import my.life.tracker.agenda.callbacks.SimpleItemTouchHelperCallback
 import my.life.tracker.agenda.viewmodels.AgendaViewModel
-import my.life.tracker.components.Celda
 import my.life.tracker.databinding.FragmentAgendaBinding
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -94,19 +90,19 @@ class AgendaFragment : Fragment() {
             agendaViewModel.getActividades(),
             agendaPreferences
         )
+        adapter.overdueListener { agendaViewModel.updateActividad(it) }
+        adapter.addHintListener { agendaPreferences.addCeldaHints(it.index, it.value) }
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
 
-        binding.recyclerAgenda.let{ view ->
-
-            view.setLayoutManager(LinearLayoutManager(context))
-            view.adapter = adapter
-            (view.adapter as AgendaAdapter).overdueListener { agendaViewModel.updateActividad(it) }
-            (view.adapter as AgendaAdapter).addHintListener { agendaPreferences.addCeldaHints(it.index, it.value) }
+        binding.recyclerAgenda.let{
+            touchHelper.attachToRecyclerView(it)
+            it.setLayoutManager(LinearLayoutManager(context))
+            it.adapter = adapter
         }
     }
 
     private fun setListeners(){
-        loadActividades()
-
         agendaViewModel.date.observe(viewLifecycleOwner){
             binding.dia.text = Utils.getDia(agendaViewModel.getCalendar(), context)
             loadActividades()

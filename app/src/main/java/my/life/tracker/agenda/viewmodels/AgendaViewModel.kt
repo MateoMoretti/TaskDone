@@ -46,7 +46,7 @@ class AgendaViewModel@Inject constructor(private val actividadDao: ActividadDao)
     }
 
     fun createActividad(): Actividad {
-        val actividad = Actividad(Utils.dateToString(calendar.time))
+        val actividad = Actividad(date = Utils.dateToString(calendar.time))
         actividad.id = actividadDao.addActividad(actividad)
         return actividad
     }

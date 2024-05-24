@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnKeyListener
+import android.view.ViewGroup
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -67,29 +68,41 @@ class Celda : LinearLayout {
                 listOfHints: Array<String> = arrayOf()
     ) : super(context)
     {
-        this.celdaClickListener = celdaClickListener
-        this.indexDefaulValueActividad = indexDefaulValueActividad
-        this.actividad = actividad
-        this._valorCelda.value = actividad.getAttributes()[indexDefaulValueActividad]
         this.cellType = cellType
-        this.isSelectable = isSelectable
-        this.listOfHints = listOfHints.toCollection(ArrayList())
+        this.indexDefaulValueActividad = indexDefaulValueActividad
 
-        if(isSelectable) {
-            valorCelda.observe(ActivityMain.instance){
-                if(hasIgnoredFirstTriggerObserver) {
-                    unselectCell()
-                    saveData()
-                }
-                hasIgnoredFirstTriggerObserver = true
-            }
-
-            setup()
+        if(indexDefaulValueActividad == 0){
+            binding.celdaTv.visibility = GONE
+            if(isSelectable) binding.celdaImageview.visibility = VISIBLE
+            else
+                binding.root.layoutParams = LayoutParams(
+                    resources.getDimension(R.dimen.celda_height).toInt(),
+                    resources.getDimension(R.dimen.celda_height).toInt()
+                )
         }
         else{
-            binding.celdaTv.background = ContextCompat.getDrawable(context!!, R.drawable.shape_rectangulo)
+            this.celdaClickListener = celdaClickListener
+            this.actividad = actividad
+            this._valorCelda.value = actividad.getAttributes()[indexDefaulValueActividad]
+            this.isSelectable = isSelectable
+            this.listOfHints = listOfHints.toCollection(ArrayList())
+
+            if(isSelectable) {
+                valorCelda.observe(ActivityMain.instance){
+                    if(hasIgnoredFirstTriggerObserver) {
+                        unselectCell()
+                        saveData()
+                    }
+                    hasIgnoredFirstTriggerObserver = true
+                }
+
+                setup()
+            }
+            else{
+                binding.celdaTv.background = ContextCompat.getDrawable(context!!, R.drawable.shape_rectangulo)
+            }
+            updateData()
         }
-        updateData()
     }
     private fun setup(){
         when(cellType){
@@ -249,6 +262,9 @@ class Celda : LinearLayout {
                 }
                 CellType.SLIDER -> {
 
+                }
+
+                CellType.DRAG_IMAGE -> {
                 }
             }
         } else {
