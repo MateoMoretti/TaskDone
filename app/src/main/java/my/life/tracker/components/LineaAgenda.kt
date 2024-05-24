@@ -30,7 +30,6 @@ class LineaAgenda : LinearLayout{
 
     fun setTitle(){
         setActividad(Actividad(
-            "día",
             "actividad",
             "tipo",
             "comienzo",

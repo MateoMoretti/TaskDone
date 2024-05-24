@@ -94,47 +94,41 @@ class Celda : LinearLayout {
     private fun setup(){
         when(cellType){
             CellType.SLIDER -> {
+                binding.root.setOnLongClickListener {
+                    openHintsOnLongClick()
+                    true
+                }
+                var defaultValueSlider = 50f
                 try {
-                    binding.celdaSlider.value = valorCelda.value!!.toFloat()
+                    defaultValueSlider = valorCelda.value!!.toFloat()
                 }catch (e:Exception){
                     e.printStackTrace()
-                    binding.celdaSlider.value = 50f
+                }
+                binding.celdaSlider.value = defaultValueSlider
+                setColorSlider(defaultValueSlider)
+
+                binding.root.setOnClickListener {
+                    celdaClickListener?.onCeldaClicked(this)
+                    binding.celdaSlider.isEnabled = true
                 }
 
 
                 binding.celdaSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                     override fun onStartTrackingTouch(slider: Slider) {
-                        celdaClickListener?.onCeldaClicked(this@Celda)
                     }
 
                     override fun onStopTrackingTouch(slider: Slider) {
-                        unselectCell()
+                        binding.celdaSlider.isEnabled = false
                     }
                 })
 
                 binding.celdaSlider.addOnChangeListener { _, value, _ ->
                     _valorCelda.value = value.toString()
-                    var color = R.color.slider_0
-                    //binding.celdaSlider.setCustomThumbDrawable(ContextCompat.getDrawable(context!! , R.drawable.comidas)!!)
-                    when(value){
-                        in 0.0..10.0 -> { color = R.color.slider_0 }
-                        in 10.0..20.0 -> { color = R.color.slider_10 }
-                        in 20.0..30.0 -> { color = R.color.slider_20 }
-                        in 30.0..40.0 -> { color = R.color.slider_30 }
-                        in 40.0..60.0 -> { color = R.color.slider_40 }
-                        in 60.0..70.0 -> { color = R.color.slider_60 }
-                        in 70.0..80.0 -> { color = R.color.slider_70 }
-                        in 80.0..90.0 -> { color = R.color.slider_80 }
-                        in 90.0..100.0 -> { color = R.color.slider_90 }
-                    }
-                    binding.celdaSlider.haloTintList = ColorStateList.valueOf(resources.getColor(color, null ))
-                    binding.celdaSlider.trackTintList = ColorStateList.valueOf(resources.getColor(color, null))
-                    binding.celdaSlider.thumbTintList = ColorStateList.valueOf(resources.getColor(color, null))
+                    setColorSlider(value)
                 }
             }
             else -> {
                 binding.celdaTv.setOnLongClickListener {
-                    celdaClickListener?.onCeldaClicked(this)
                     openHintsOnLongClick()
                     true
                 }
@@ -159,7 +153,25 @@ class Celda : LinearLayout {
                 })
             }
         }
+    }
 
+    private fun setColorSlider(value: Float){
+        var color = R.color.slider_0
+        //binding.celdaSlider.setCustomThumbDrawable(ContextCompat.getDrawable(context!! , R.drawable.comidas)!!)
+        when(value){
+            in 0.0..10.0 -> { color = R.color.slider_0 }
+            in 10.0..20.0 -> { color = R.color.slider_10 }
+            in 20.0..30.0 -> { color = R.color.slider_20 }
+            in 30.0..40.0 -> { color = R.color.slider_30 }
+            in 40.0..60.0 -> { color = R.color.slider_40 }
+            in 60.0..70.0 -> { color = R.color.slider_60 }
+            in 70.0..80.0 -> { color = R.color.slider_70 }
+            in 80.0..90.0 -> { color = R.color.slider_80 }
+            in 90.0..100.0 -> { color = R.color.slider_90 }
+        }
+        binding.celdaSlider.haloTintList = ColorStateList.valueOf(resources.getColor(color, null ))
+        binding.celdaSlider.trackTintList = ColorStateList.valueOf(resources.getColor(color, null))
+        binding.celdaSlider.thumbTintList = ColorStateList.valueOf(resources.getColor(color, null))
     }
     private fun updateData(){
         when(cellType){
@@ -189,6 +201,7 @@ class Celda : LinearLayout {
     }
 
     private fun openHintsOnLongClick() {
+        celdaClickListener?.onCeldaClicked(this)
         when (cellType) {
             CellType.SPINNER -> {
                 loadSpinner()
@@ -196,6 +209,9 @@ class Celda : LinearLayout {
             }
             CellType.HORA -> {
                 showHourPicker()
+            }
+            CellType.SLIDER -> {
+                binding.celdaSlider.isEnabled = true
             }
             else -> {
                 Unit
