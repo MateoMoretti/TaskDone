@@ -130,7 +130,7 @@ class Celda : LinearLayout {
             }
             CellType.TEXTO, CellType.SPINNER -> {
                 binding.celdaTv.setOnLongClickListener {
-                    celdaClickListener?.onCeldaLongClicked(this)
+                    celdaClickListener?.onCeldaClicked(this)
                     openHintsOnLongClick()
                     true
                 }
@@ -166,9 +166,9 @@ class Celda : LinearLayout {
                 binding.celdaTv.visibility = INVISIBLE
                 binding.celdaEd.visibility = INVISIBLE
                 binding.celdaSpinner.visibility = INVISIBLE
-                refreshHints()
             }
             else -> {
+                refreshHints()
                 closeKeyboard()
                 if(binding.celdaEd.visibility == VISIBLE){
                     _valorCelda.value = binding.celdaEd.text.toString()
@@ -179,9 +179,9 @@ class Celda : LinearLayout {
                 binding.celdaTv.visibility = VISIBLE
                 binding.celdaEd.visibility = INVISIBLE
                 binding.celdaSpinner.visibility = INVISIBLE
-                actividad?.setAttributes(indexDefaulValueActividad, valorCelda.value!!)
             }
         }
+        actividad?.setAttributes(indexDefaulValueActividad, valorCelda.value!!)
     }
     private fun saveData(){
         celdaClickListener?.onValueSelected(actividad!!)

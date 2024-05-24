@@ -9,11 +9,13 @@ import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.model.CellType
 import my.life.tracker.databinding.LineaAgendaBinding
 
-class LineaAgenda : LinearLayout {
+class LineaAgenda : LinearLayout{
 
     var binding: LineaAgendaBinding = LineaAgendaBinding.inflate(LayoutInflater.from(context), this, true)
 
     lateinit var celdaClickListener: CeldaClickListener
+
+    lateinit var actividad: Actividad
 
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -24,7 +26,7 @@ class LineaAgenda : LinearLayout {
 
     fun setActividad(actividad: Actividad, isSelectable:Boolean, listOfHints: ArrayList<String> = arrayListOf()) {
         var cellType = CellType.TEXTO
-
+        this.actividad = actividad
         //Comienza en 1 para no agregar celda de día y termina menos 1 para no agregar celda de ID
         for (i in 1 until actividad.getAttributes().size - 1) {
             var hints: ArrayList<String> = arrayListOf()
