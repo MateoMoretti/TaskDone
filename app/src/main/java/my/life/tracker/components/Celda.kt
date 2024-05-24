@@ -125,6 +125,7 @@ class Celda : LinearLayout {
                     }
                     binding.celdaSlider.haloTintList = ColorStateList.valueOf(resources.getColor(color, null ))
                     binding.celdaSlider.trackTintList = ColorStateList.valueOf(resources.getColor(color, null))
+                    binding.celdaSlider.thumbTintList = ColorStateList.valueOf(resources.getColor(color, null))
                 }
             }
             CellType.TEXTO, CellType.SPINNER -> {
