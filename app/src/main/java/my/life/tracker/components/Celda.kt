@@ -6,12 +6,12 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnKeyListener
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import my.life.tracker.ActivityMain
@@ -24,7 +24,6 @@ import my.life.tracker.agenda.model.Actividad
 import my.life.tracker.agenda.model.CellType
 import my.life.tracker.agenda.model.IconText
 import my.life.tracker.databinding.CeldaBinding
-import my.life.tracker.databinding.SpinnerDropdownAgendaBinding
 
 
 class Celda : LinearLayout {
@@ -97,16 +96,8 @@ class Celda : LinearLayout {
             }
         }
         binding.celdaTv.setOnLongClickListener {
-            isSelected = true
-            celdaClickListener?.onCeldaClicked(this)
-            when(cellType){
-                CellType.SPINNER -> {
-                    binding.celdaSpinner.performClick()
-                }
-                else -> {
-                    Unit
-                }
-            }
+            celdaClickListener?.onCeldaLongClicked(this)
+            openHintsOnLongClick()
             true
         }
 
@@ -131,6 +122,7 @@ class Celda : LinearLayout {
 
     }
     fun updateData(){
+        closeKeyboard()
         if(binding.celdaEd.visibility == VISIBLE){
             _valorCelda.value = binding.celdaEd.text.toString()
         }
@@ -145,14 +137,38 @@ class Celda : LinearLayout {
     fun saveData(){
         celdaClickListener?.onValueSelected(actividad!!)
     }
+
+    fun openHintsOnLongClick() {
+        when (cellType) {
+            CellType.SPINNER -> {
+                binding.celdaSpinner.performClick()
+            }
+            CellType.HORA -> {
+                showHourPicker()
+            }
+            else -> {
+                Unit
+            }
+        }
+    }
+
+    fun closeKeyboard(){
+        val inputMethodManager = getSystemService(context, InputMethodManager::class.java) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.celdaEd.windowToken, 0)
+    }
+    fun showKeyboard(){
+        val inputMethodManager = getSystemService(context, InputMethodManager::class.java) as InputMethodManager
+        inputMethodManager.showSoftInput(binding.celdaEd, InputMethodManager.SHOW_IMPLICIT)
+    }
     fun selectCell(){
         if(isSelected){
             when(cellType){
                 CellType.TEXTO -> {
                     binding.celdaTv.visibility = INVISIBLE
                     binding.celdaEd.visibility = VISIBLE
-                    binding.celdaEd.requestFocus()
                     binding.celdaEd.setSelection(binding.celdaEd.length())
+                    binding.celdaEd.requestFocus()
+                    showKeyboard()
                 }
                 CellType.HORA -> {
                     showHourPicker()
@@ -160,8 +176,9 @@ class Celda : LinearLayout {
                 CellType.SPINNER -> {
                     binding.celdaTv.visibility = INVISIBLE
                     binding.celdaEd.visibility = VISIBLE
-                    binding.celdaEd.requestFocus()
                     binding.celdaEd.setSelection(binding.celdaEd.length())
+                    binding.celdaEd.requestFocus()
+                    showKeyboard()
                     }
                 CellType.SLIDER -> {
                 }

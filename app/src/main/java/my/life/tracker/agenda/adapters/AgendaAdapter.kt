@@ -68,6 +68,12 @@ class AgendaAdapter(val context: Context, var data: ArrayList<Actividad>,
         celdaSelected = celda
     }
 
+    override fun onCeldaLongClicked(celda: Celda) {
+        celda.selectCell()
+        if(celda != celdaSelected) celdaSelected?.unselectCell()
+        celdaSelected = celda
+    }
+
     override fun onValueSelected(actividad: Actividad) {
         return overdueCallback(actividad)
     }
